@@ -1,0 +1,169 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+body {
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: linear-gradient(#256900f0, rgba(0, 0, 0, 0.907)), url(ptc.jpg);
+    background-size: cover;
+    backdrop-filter: blur(3px);
+    overflow: hidden;
+}
+
+.Top {
+    position: fixed;
+    top: 0; 
+    right: 0; 
+    left: 0;
+    width: 100%;         
+    height: 10%;
+    max-width: 2000px;
+    background-color: #003300;
+    overflow-x: hidden;   
+    overflow-y: auto;
+    z-index: 500;
+    box-shadow: 0 10px 10px rgba(0, 0, 0, 0.53);
+}
+
+.Top::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: rgba(255, 255, 255, 0.05);
+    transform: skewX(-15deg);
+    transition: 0.5s;
+    pointer-events: none;
+    background-position: center;
+}
+
+.Top h1 {
+    position: fixed;
+    color: #ffffffec;
+    text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;
+    margin-top: 16px;
+    margin-left: 80px;  
+    padding: 0;
+    font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+}
+
+.Top img {
+    position: fixed;
+    max-width: 60px;
+    margin: 5px;
+}
+
+.Center {
+    position: fixed;
+    top: 20%;
+}
+
+.Center h1 {
+    text-align: center;
+    font-size: 50px;
+    color: #ffffffec;
+    margin-bottom: 10px;
+    text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;
+    text-shadow: 0 20px 20px rgba(0, 0, 0, 0.537);
+}
+
+.Center p {
+    font-size: 16px;
+    max-width: 800px;
+    margin-left: 20px;
+    margin-bottom: 30px;
+    text-align: center;
+    color: #ffffffec;
+    text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;
+    text-shadow: 0 20px 20px rgba(0, 0, 0, 0.678);
+}
+
+.Lost {
+    width: 300px;
+    padding: 15px;
+    background: #cccccc;
+    border-color: 2px solid #272727;
+    outline: none;
+    margin-top: 10px;
+    margin-left: 40px;
+    border-radius: 35px;
+    color: #000000;
+    font-size: 16px;
+    text-align: center;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 15px 25px rgba(0, 0, 0, 0.1);
+}
+
+.Lost:hover {
+    background: #003300;
+    color: #ffffff;
+    transform: translateY(-3px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+}
+
+.Found {
+    width: 300px;
+    padding: 15px;
+    background: #cccccc;
+    border-color: 2px solid #272727;
+    outline: none;
+    margin-top: 10px;
+    margin-left: 50px;
+    border-radius: 35px;
+    color: #000000;
+    font-size: 16px;
+    text-align: center;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 15px 25px rgba(0, 0, 0, 0.1);
+}
+
+.Found:hover {
+    background: #003300;
+    color: #ffffff;
+    transform: translateY(-3px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+}
+
+.Bottom {
+    position: fixed;
+    width: 1910px;
+    height: 500px;
+    padding: 40px;
+    margin-top: 100px;
+    margin-left: -955px;
+    background-color: #ffffffec;
+    box-shadow: 0 -10px 10px rgba(0, 0, 0, 0.53);
+}
+
+.Bottom p {
+    font-size: 16px;
+    max-width: 1450px;
+    margin: 80px;
+    margin-top: 20px;
+    margin-left: 200px;
+    text-align: justify;
+}
+
+.pic {
+    display: flex;
+    margin-top: -20px;
+    justify-content: center;
+    align-items: center;
+}
+
+.pic img {
+    max-width: 110px;
+    margin-left: 20px;
+}
