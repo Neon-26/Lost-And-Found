@@ -1,0 +1,186 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+body {
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: linear-gradient(#256900f0, rgba(0, 0, 0, 0.907)), url(ptc.jpg);
+    background-size: cover;
+    backdrop-filter: blur(3px);
+    overflow: hidden;
+}
+
+.container {
+    position: relative;
+    width: 800px;
+    max-height: 90vh;
+    padding: 40px;
+    border-radius: 20px;
+    backdrop-filter: blur(15px);
+    background: rgba(255, 255, 255, 0.478);
+    border: 1px solid rgba(255, 255, 255, 0.4);
+    box-shadow: 0 25px 45px rgba(0, 0, 0, 0.4);
+    z-index: 10;
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
+.container::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: rgba(255, 255, 255, 0.05);
+    transform: skewX(-15deg);
+    transition: 0.5s;
+    pointer-events: none;
+}
+
+.container:hover::before {
+    left: 120%;
+}
+
+.container h1 {
+    color: #1b1b1b;
+    font-size: 28px;
+    font-weight: 600;
+    text-align: center;
+    letter-spacing: 1px;
+    margin-top: -10px;
+    margin-bottom: 20px;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.Input {
+    position: relative;
+    margin-bottom: 30px;
+}
+
+.Input input {
+    width: 100%;
+    padding: 15px 20px;
+    background: rgba(255, 255, 255, 0.2);
+    border: none;
+    outline: none;
+    border-radius: 35px;
+    font-size: 16px;
+    color: #272727;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+    transition: all 0.3s ease;
+    resize: none;
+}
+
+.Input input::placeholder {
+    color: rgba(0, 0, 0, 0.7);
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 1rem;
+}
+    
+thead {
+    background: #003300;
+    color: white;
+}
+
+thead th, tbody td {
+    padding: 1rem;
+    text-align: left;
+}
+
+tbody tr {
+    border-bottom: 1px solid #ddd;
+    transition: background-color 0.3s ease;
+}
+    
+tbody tr:hover {
+    background-color: #f1faff;
+}
+
+.Match-btn {
+    width: 80px;
+    padding: 15px;
+    background: #cccccc;
+    border-color: 2px solid #272727;
+    outline: none;
+    border-radius: 35px;
+    color: #000000;
+    font-size: 16px;
+    text-align: center;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 15px 25px rgba(0, 0, 0, 0.1);
+}
+
+.Match-btn:hover {
+    background: #003300;
+    color: #ffffff;
+    transform: translateY(-3px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+}
+
+.popup {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.05);
+    display: none;
+    justify-content: center;
+    align-items: center;
+    z-index: 500;
+}
+
+.popup-content {
+    position: relative;
+    width: 500px;
+    text-align: center;
+    font-size: 20px;
+    max-height: 90vh;
+    margin-bottom: 20px;
+    padding: 40px;
+    border-radius: 20px;
+    backdrop-filter: blur(15px);
+    background: rgba(255, 255, 255, 0.478);
+    border: 1px solid rgba(255, 255, 255, 0.4);
+    box-shadow: 0 25px 45px rgba(0, 0, 0, 0.4);
+    z-index: 10;
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
+.popup-content button {
+    width: 200px;
+    padding: 15px;
+    background: #cccccc;
+    border-color: 2px solid #272727;
+    outline: none;
+    margin-top: 10px;
+    border-radius: 35px;
+    color: #000000;
+    font-size: 16px;
+    text-align: center;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 15px 25px rgba(0, 0, 0, 0.1);
+}
+
+.popup-content button:hover {
+    background: #003300;
+    color: #ffffff;
+    transform: translateY(-3px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+}
