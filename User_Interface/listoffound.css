@@ -18,8 +18,8 @@ body {
 
 .container {
     position: relative;
-    width: 800px;
-    max-height: 90vh;
+    width: 1000px;
+    max-height: 97vh;
     padding: 40px;
     border-radius: 20px;
     backdrop-filter: blur(15px);
@@ -27,7 +27,7 @@ body {
     border: 1px solid rgba(255, 255, 255, 0.4);
     box-shadow: 0 25px 45px rgba(0, 0, 0, 0.4);
     z-index: 10;
-    overflow-y: auto;
+    overflow-y: hidden;
     overflow-x: hidden;
 }
 
@@ -54,14 +54,14 @@ body {
     font-weight: 600;
     text-align: center;
     letter-spacing: 1px;
-    margin-top: -10px;
-    margin-bottom: 20px;
+    margin-top: -20px;
+    margin-bottom: 10px;
     text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
 
 .Input {
     position: relative;
-    margin-bottom: 30px;
+    margin-bottom: 10px;
 }
 
 .Input input {
@@ -87,7 +87,7 @@ table {
     border-collapse: collapse;
     margin-top: 1rem;
 }
-    
+
 thead {
     background: #003300;
     color: white;
@@ -102,7 +102,7 @@ tbody tr {
     border-bottom: 1px solid #ddd;
     transition: background-color 0.3s ease;
 }
-    
+
 tbody tr:hover {
     background-color: #f1faff;
 }
@@ -183,4 +183,45 @@ tbody tr:hover {
     color: #ffffff;
     transform: translateY(-3px);
     box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+}
+
+#paginationControls {
+    text-align: center;
+    margin-top: 1px;
+}
+
+#paginationControls button {
+    margin: 2px;
+    padding: 5px 10px;
+    border-radius: 5px;
+    background: #003300;
+    color: #ffffff;
+    border: 2px solid #272727;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+#paginationControls button:hover {
+    background: #44be01d6;
+    color: #000000;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+}
+
+#paginationControls button.active {
+    background: #44be01d6;
+    color: #000000;
+    font-weight: bold;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+}
+
+#paginationControls button:disabled {
+    background: #cccccc;
+    color: #666666;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
 }

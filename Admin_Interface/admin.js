@@ -1,0 +1,466 @@
+let currentButton = null;
+let currentTable = "";
+let currentFilterLost = "";
+let currentFilterFound = "";
+let visibleRowsLost = [];
+let visibleRowsFound = [];
+
+let currentFilterClaims = "";
+let visibleRowsClaims = [];
+let currentPageClaims = 1;
+let rowsPerPageClaims = 4;
+
+let isEditModeClaims = false;
+
+let currentFilterMatches = "";
+let visibleRowsMatches = [];
+let currentPageMatches = 1;
+let rowsPerPageMatches = 4;
+let isEditModeMatches = false;
+
+function searchItem(table) {
+    const input = table === 'lost' ? document.getElementById("searchBarLost") : document.getElementById("searchBarFound");
+    if (table === 'lost') {
+        currentFilterLost = input.value.toLowerCase();
+        updateVisibleRows('lost');
+        updateRowsAndPagination('lost');
+    } else {
+        currentFilterFound = input.value.toLowerCase();
+        updateVisibleRows('found');
+        updateRowsAndPagination('found');
+    }
+}
+
+function updateVisibleRows(table) {
+    const rows = table === 'lost' ? Array.from(lostTableBody.getElementsByTagName("tr")) : Array.from(foundTableBody.getElementsByTagName("tr"));
+    const filter = table === 'lost' ? currentFilterLost : currentFilterFound;
+    const visibleRows = table === 'lost' ? visibleRowsLost : visibleRowsFound;
+    visibleRows.length = 0;
+    rows.forEach(row => {
+        const itemCell = row.getElementsByTagName("td")[0];
+        if (itemCell) {
+            const textValue = itemCell.textContent || itemCell.innerText;
+            if (textValue.toLowerCase().indexOf(filter) > -1) {
+                visibleRows.push(row);
+            }
+        }
+    });
+}
+
+let lostTableBody = document.getElementById("lostTableBody");
+let foundTableBody = document.getElementById("foundTableBody");
+
+let currentPageLost = 1;
+let currentPageFound = 1;
+let rowsPerPage = 5;
+
+function displayTable(table) {
+    const visibleRows = table === 'lost' ? visibleRowsLost : visibleRowsFound;
+    const currentPage = table === 'lost' ? currentPageLost : currentPageFound;
+    const tableBody = table === 'lost' ? lostTableBody : foundTableBody;
+
+    Array.from(tableBody.getElementsByTagName("tr")).forEach(row => row.style.display = "none");
+
+    let start = (currentPage - 1) * rowsPerPage;
+    let end = start + rowsPerPage;
+    visibleRows.slice(start, end).forEach(row => row.style.display = "");
+    renderPagination(table);
+}
+
+function renderPagination(table) {
+    const visibleRows = table === 'lost' ? visibleRowsLost : visibleRowsFound;
+    const currentPage = table === 'lost' ? currentPageLost : currentPageFound;
+    const pagination = table === 'lost' ? document.getElementById("paginationLost") : document.getElementById("paginationFound");
+    let pageCount = Math.ceil(visibleRows.length / rowsPerPage);
+    pagination.innerHTML = "";
+    for (let i = 1; i <= pageCount; i++) {
+        let btn = document.createElement("button");
+        btn.textContent = i;
+        btn.onclick = function() {
+            if (table === 'lost') {
+                currentPageLost = i;
+            } else {
+                currentPageFound = i;
+            }
+            displayTable(table);
+        };
+        if (i === currentPage) btn.style.background = "#4CAF50";
+        pagination.appendChild(btn);
+    }
+}
+
+function updateRowsAndPagination(table) {
+    updateVisibleRows(table);
+    const visibleRows = table === 'lost' ? visibleRowsLost : visibleRowsFound;
+    const currentPage = table === 'lost' ? currentPageLost : currentPageFound;
+    let pageCount = Math.ceil(visibleRows.length / rowsPerPage);
+    if (currentPage > pageCount && pageCount > 0) {
+        if (table === 'lost') {
+            currentPageLost = pageCount;
+        } else {
+            currentPageFound = pageCount;
+        }
+    } else if (pageCount === 0) {
+        if (table === 'lost') {
+            currentPageLost = 1;
+        } else {
+            currentPageFound = 1;
+        }
+    }
+    displayTable(table);
+    updateDashboard(); 
+}
+
+function showPopup(message, yesAction, noAction, table) {
+    const overlay = table === 'lost' ? document.getElementById("popupOverlayLost") : table === 'found' ? document.getElementById("popupOverlayFound") : table === 'claims' ? document.getElementById("popupOverlayClaims") : document.getElementById("popupOverlayMatches");
+    const msg = table === 'lost' ? document.getElementById("popupMessageLost") : table === 'found' ? document.getElementById("popupMessageFound") : table === 'claims' ? document.getElementById("popupMessageClaims") : document.getElementById("popupMessageMatches");
+    const btns = table === 'lost' ? document.getElementById("popupButtonsLost") : table === 'found' ? document.getElementById("popupButtonsFound") : table === 'claims' ? document.getElementById("popupButtonsClaims") : document.getElementById("popupButtonsMatches");
+
+    msg.textContent = message;
+    btns.innerHTML = "";
+
+    const yesBtn = document.createElement("button");
+    yesBtn.textContent = "Yes";
+    yesBtn.className = "yes";
+    yesBtn.onclick = () => { overlay.style.display = "none"; yesAction(); };
+
+    const noBtn = document.createElement("button");
+    noBtn.textContent = "No";
+    noBtn.className = "no";
+    noBtn.onclick = () => { overlay.style.display = "none"; noAction(); };
+
+    btns.appendChild(yesBtn);
+    btns.appendChild(noBtn);
+
+    overlay.style.display = "flex";
+}
+
+function startValidation(button, table) {
+    currentButton = button;
+    currentTable = table;
+    const reportType = table === 'lost' ? 'Lost' : 'Found';
+    showPopup(`Is the ${reportType} Report Valid?`, () => approveReport(), () => askRemove(), table);
+}
+
+function approveReport() {
+    const row = currentButton.closest("tr");
+    const actionCell = row.querySelector("td:last-child");
+    actionCell.innerHTML = "<button class='Valid-btn'>Approved</button>";
+    
+    const reportType = currentTable === 'lost' ? 'Lost' : 'Found';
+    updateRowsAndPagination(currentTable);
+    alertBox(`${reportType} Report Approved.`, currentTable);
+}
+
+function askRemove() {
+    const tableType = currentTable === 'lost' ? 'lost items' : 'found items';
+    showPopup(`Do you want to remove this from the ${tableType} table?`, 
+        () => removeItem(), 
+        () => addRemoveButton(), currentTable);
+}
+
+function removeItem() {
+    const row = currentButton.closest("tr");
+    row.remove();
+    updateRowsAndPagination(currentTable);
+    const tableType = currentTable === 'lost' ? 'lost items' : 'found items';
+    alertBox(`Item removed from ${tableType} table.`, currentTable);
+}
+
+function addRemoveButton() {
+    const td = currentButton.parentElement;
+    if (!td.querySelector(".remove-btn")) {
+        const removeBtn = document.createElement("button");
+        removeBtn.textContent = "Remove";
+        removeBtn.className = "remove-btn";
+        removeBtn.onclick = function() {
+            const row = this.closest("tr");
+            row.remove();
+            updateRowsAndPagination(currentTable);
+            const tableType = currentTable === 'lost' ? 'lost items' : 'found items';
+            alertBox(`Item removed from ${tableType} table.`, currentTable);
+        };
+        td.appendChild(removeBtn);
+    }
+    const tableType = currentTable === 'lost' ? 'lost items' : 'found items';
+    alertBox(`Remove button added beside Valid in ${tableType} table.`, currentTable);
+}
+
+function alertBox(message, table) {
+    const overlay = table === 'lost' ? document.getElementById("popupOverlayLost") : table === 'found' ? document.getElementById("popupOverlayFound") : table === 'claims' ? document.getElementById("popupOverlayClaims") : document.getElementById("popupOverlayMatches");
+    const msg = table === 'lost' ? document.getElementById("popupMessageLost") : table === 'found' ? document.getElementById("popupMessageFound") : table === 'claims' ? document.getElementById("popupMessageClaims") : document.getElementById("popupMessageMatches");
+    const btns = table === 'lost' ? document.getElementById("popupButtonsLost") : table === 'found' ? document.getElementById("popupButtonsFound") : table === 'claims' ? document.getElementById("popupButtonsClaims") : document.getElementById("popupButtonsMatches");
+
+    msg.textContent = message;
+    btns.innerHTML = "";
+
+    const okBtn = document.createElement("button");
+    okBtn.textContent = "OK";
+    okBtn.className = "yes";
+    okBtn.onclick = () => overlay.style.display = "none";
+
+    btns.appendChild(okBtn);
+    overlay.style.display = "flex";
+}
+
+const logOutBtn = document.querySelector('a[href="/index.html"]');
+
+function showPage(pageId) {
+    document.querySelectorAll('.page').forEach(page => {
+        page.classList.remove('active');
+    });
+
+    document.querySelectorAll('.sidebar a').forEach(link => {
+        link.classList.remove('active');
+    });
+
+    document.getElementById(pageId).classList.add('active');
+    event.target.classList.add('active');
+
+    if (pageId === 'listofl') {
+        updateRowsAndPagination('lost');
+    } else if (pageId === 'listoff') {
+        updateRowsAndPagination('found');
+    } else if (pageId === 'claimrequests') {
+        updateRowsAndPaginationClaims();
+    } else if (pageId === 'matchrequests') {
+        updateRowsAndPaginationMatches();
+    }
+}
+
+logOutBtn.addEventListener('click', (e) => {
+    e.preventDefault();
+    window.location.href = '/index.html';
+});
+
+function updateVisibleRowsClaims() {
+    const claimRequests = JSON.parse(localStorage.getItem('claimRequests')) || [];
+    visibleRowsClaims.length = 0;
+    claimRequests.forEach(request => {
+        visibleRowsClaims.push(request);
+    });
+}
+
+function displayTableClaims() {
+    const tbody = document.getElementById('claimRequestsBody');
+    const noClaimsMsg = document.getElementById('noClaimsMessage');
+    const removeColumnHeader = document.getElementById('removeColumnHeader');
+    tbody.innerHTML = '';
+
+    if (visibleRowsClaims.length === 0) {
+        noClaimsMsg.style.display = 'block';
+        removeColumnHeader.style.display = 'none';
+        return;
+    }
+    noClaimsMsg.style.display = 'none';
+    removeColumnHeader.style.display = isEditModeClaims ? '' : 'none';
+
+    let start = (currentPageClaims - 1) * rowsPerPageClaims;
+    let end = start + rowsPerPageClaims;
+    visibleRowsClaims.slice(start, end).forEach((request, index) => {
+        const row = document.createElement('tr');
+        const removeCell = isEditModeClaims ? `<td><button class="Valid-btn" onclick="removeClaimRequest(${start + index})" style="background: red; color: white;">X</button></td>` : '';
+        row.innerHTML = `
+            <td>${request.itemName}</td>
+            <td>${request.description}</td>
+            <td>${request.location}</td>
+            <td>${request.date}</td>
+            <td>${request.type}</td>
+            <td>${request.user}</td>
+            <td>${request.status || 'Pending'}</td>
+            <td>
+                <button class="Valid-btn" onclick="updateClaimStatus(${start + index}, 'Approved')">Approve</button>
+                <button class="Valid-btn" onclick="updateClaimStatus(${start + index}, 'Rejected')">Reject</button>
+            </td>
+            ${removeCell}
+        `;
+        tbody.appendChild(row);
+    });
+    renderPaginationClaims();
+}
+
+function renderPaginationClaims() {
+    const pagination = document.getElementById("paginationClaims");
+    if (!pagination) return;
+    let pageCount = Math.ceil(visibleRowsClaims.length / rowsPerPageClaims);
+    pagination.innerHTML = "";
+    for (let i = 1; i <= pageCount; i++) {
+        let btn = document.createElement("button");
+        btn.textContent = i;
+        btn.onclick = function() {
+            currentPageClaims = i;
+            displayTableClaims();
+        };
+        if (i === currentPageClaims) btn.style.background = "#4CAF50";
+        pagination.appendChild(btn);
+    }
+}
+
+function updateRowsAndPaginationClaims() {
+    updateVisibleRowsClaims();
+    let pageCount = Math.ceil(visibleRowsClaims.length / rowsPerPageClaims);
+    if (currentPageClaims > pageCount && pageCount > 0) {
+        currentPageClaims = pageCount;
+    } else if (pageCount === 0) {
+        currentPageClaims = 1;
+    }
+    displayTableClaims();
+    updateDashboard(); 
+}
+
+function updateClaimStatus(index, status) {
+    const claimRequests = JSON.parse(localStorage.getItem('claimRequests')) || [];
+    if (claimRequests[index]) {
+        claimRequests[index].status = status;
+        localStorage.setItem('claimRequests', JSON.stringify(claimRequests));
+        updateRowsAndPaginationClaims();
+        alertBox(`Claim request ${status.toLowerCase()}.`, 'claims');
+    }
+}
+
+function toggleEditModeClaims() {
+    isEditModeClaims = !isEditModeClaims;
+    const editBtn = document.getElementById('editClaimsBtn');
+    editBtn.textContent = isEditModeClaims ? 'Done' : 'Edit';
+    updateRowsAndPaginationClaims();
+}
+
+function removeClaimRequest(index) {
+    const claimRequests = JSON.parse(localStorage.getItem('claimRequests')) || [];
+    if (claimRequests[index]) {
+        claimRequests.splice(index, 1);
+        localStorage.setItem('claimRequests', JSON.stringify(claimRequests));
+        updateRowsAndPaginationClaims();
+        alertBox('Claim request removed.', 'claims');
+    }
+}
+
+document.getElementById('editClaimsBtn').addEventListener('click', toggleEditModeClaims);
+
+function updateVisibleRowsMatches() {
+    const matchRequests = JSON.parse(localStorage.getItem('matchRequests')) || [];
+    visibleRowsMatches.length = 0;
+    matchRequests.forEach(request => {
+        visibleRowsMatches.push(request);
+    });
+}
+
+function displayTableMatches() {
+    const tbody = document.getElementById('matchRequestsBody');
+    const noMatchesMsg = document.getElementById('noMatchesMessage');
+    const removeColumnHeader = document.getElementById('removeMatchColumnHeader');
+    tbody.innerHTML = '';
+
+    if (visibleRowsMatches.length === 0) {
+        noMatchesMsg.style.display = 'block';
+        removeColumnHeader.style.display = 'none';
+        return;
+    }
+    noMatchesMsg.style.display = 'none';
+    removeColumnHeader.style.display = isEditModeMatches ? '' : 'none';
+
+    let start = (currentPageMatches - 1) * rowsPerPageMatches;
+    let end = start + rowsPerPageMatches;
+    visibleRowsMatches.slice(start, end).forEach((request, index) => {
+        const row = document.createElement('tr');
+        const removeCell = isEditModeMatches ? `<td><button class="Valid-btn" onclick="removeMatchRequest(${start + index})" style="background: red; color: white;">X</button></td>` : '';
+        row.innerHTML = `
+            <td>${request.itemName}</td>
+            <td>${request.description}</td>
+            <td>${request.location}</td>
+            <td>${request.date}</td>
+            <td>${request.type}</td>
+            <td>${request.user}</td>
+            <td>${request.status || 'Pending'}</td>
+            <td>
+                <button class="Valid-btn" onclick="updateMatchStatus(${start + index}, 'Approved')">Approve</button>
+                <button class="Valid-btn" onclick="updateMatchStatus(${start + index}, 'Rejected')">Reject</button>
+            </td>
+            ${removeCell}
+        `;
+        tbody.appendChild(row);
+    });
+    renderPaginationMatches();
+}
+
+function renderPaginationMatches() {
+    const pagination = document.getElementById("paginationMatches");
+    if (!pagination) return;
+    let pageCount = Math.ceil(visibleRowsMatches.length / rowsPerPageMatches);
+    pagination.innerHTML = "";
+    for (let i = 1; i <= pageCount; i++) {
+        let btn = document.createElement("button");
+        btn.textContent = i;
+        btn.onclick = function() {
+            currentPageMatches = i;
+            displayTableMatches();
+        };
+        if (i === currentPageMatches) btn.style.background = "#4CAF50";
+        pagination.appendChild(btn);
+    }
+}
+
+function updateRowsAndPaginationMatches() {
+    updateVisibleRowsMatches();
+    let pageCount = Math.ceil(visibleRowsMatches.length / rowsPerPageMatches);
+    if (currentPageMatches > pageCount && pageCount > 0) {
+        currentPageMatches = pageCount;
+    } else if (pageCount === 0) {
+        currentPageMatches = 1;
+    }
+    displayTableMatches();
+    updateDashboard(); 
+}
+
+function updateMatchStatus(index, status) {
+    const matchRequests = JSON.parse(localStorage.getItem('matchRequests')) || [];
+    if (matchRequests[index]) {
+        matchRequests[index].status = status;
+        localStorage.setItem('matchRequests', JSON.stringify(matchRequests));
+        updateRowsAndPaginationMatches();
+        alertBox(`Match request ${status.toLowerCase()}.`, 'matches');
+    }
+}
+
+function toggleEditModeMatches() {
+    isEditModeMatches = !isEditModeMatches;
+    const editBtn = document.getElementById('editMatchesBtn');
+    editBtn.textContent = isEditModeMatches ? 'Done' : 'Edit';
+    updateRowsAndPaginationMatches();
+}
+
+function removeMatchRequest(index) {
+    const matchRequests = JSON.parse(localStorage.getItem('matchRequests')) || [];
+    if (matchRequests[index]) {
+        matchRequests.splice(index, 1);
+        localStorage.setItem('matchRequests', JSON.stringify(matchRequests));
+        updateRowsAndPaginationMatches();
+        alertBox('Match request removed.', 'matches');
+    }
+}
+
+document.getElementById('editMatchesBtn').addEventListener('click', toggleEditModeMatches);
+
+function updateDashboard() {
+
+    const totalLost = document.getElementById("lostTableBody").getElementsByTagName("tr").length;
+    document.getElementById("totalLost").textContent = totalLost;
+
+    const totalFound = document.getElementById("foundTableBody").getElementsByTagName("tr").length;
+    document.getElementById("totalFound").textContent = totalFound;
+
+    const claimRequests = JSON.parse(localStorage.getItem('claimRequests')) || [];
+    document.getElementById("totalClaims").textContent = claimRequests.length;
+
+    const matchRequests = JSON.parse(localStorage.getItem('matchRequests')) || [];
+    document.getElementById("totalMatches").textContent = matchRequests.length;
+
+    const totalStudents = document.getElementById("inventoryTableBody").getElementsByTagName("tr").length;
+    document.getElementById("totalStudents").textContent = totalStudents;
+}
+
+updateRowsAndPagination('lost');
+updateRowsAndPagination('found');
+updateRowsAndPaginationClaims();
+updateRowsAndPaginationMatches();
+updateDashboard();

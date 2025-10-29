@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="admin.css">
+    <link rel="icon" href="logo.png" type="image/x-icon">
+    <title>Admin</title>
+</head>
+<body>
+    <div class="Top">
+        <img src="logo.png" alt="Logo" />
+        <h1>Pateros Technological College</h1>
+    </div>
+
+    <div class="container">
+        <aside class="sidebar">
+            <h2>Admin Panel</h2>
+            <nav>
+                <ul>
+                    <li><a href="#" class="active" class="Valid-btn" onclick="showPage('dashboard')">Dashboard</a></li>
+                    <li><a href="#" class="active" class="Valid-btn" onclick="showPage('listofl')">List of Lost Items</a></li>
+                    <li><a href="#" class="active" class="Valid-btn" onclick="showPage('listoff')">List of Found Items</a></li>
+                    <li><a href="#" class="active" class="Valid-btn" onclick="showPage('claimrequests')">List of Claim Requests</a></li>
+                    <li><a href="#" class="active" class="Valid-btn" onclick="showPage('matchrequests')">List of Match Requests</a></li>
+                    <li><a href="#" class="active" class="Valid-btn" onclick="showPage('student')">Student Profile</a></li>
+                    <li><a href="#" class="active" class="Valid-btn" onclick="showPage('about')">About</a></li>
+                    <li><a href="/index.html" class="active">LogOut</a></li>
+                </ul>
+            </nav>
+        </aside>
+
+        <main class="main-content">
+            <section id="dashboard" class="page active">
+                <h1>Dashboard</h1>
+                <p>Here is an overview of the system.</p>
+                <div class="stats">
+                    <div class="stat-card">
+                        <h3>Total Lost Items</h3>
+                        <p id="totalLost">0</p>
+                    </div>
+                    <div class="stat-card">
+                        <h3>Total Found Items</h3>
+                        <p id="totalFound">0</p>
+                    </div>
+                    <div class="stat-card">
+                        <h3>Claim Requests</h3>
+                        <p id="totalClaims">0</p>
+                    </div>
+                    <div class="stat-card">
+                        <h3>Match Requests</h3>
+                        <p id="totalMatches">0</p>
+                    </div>
+                    <div class="stat-card">
+                        <h3>Students</h3>
+                        <p id="totalStudents">0</p>
+                    </div>
+                </div>
+            </section>
+
+            <section id="student" class="page">
+                <h1>Student Profile</h1>
+                <p>Here you can manage student profiles.</p>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Name</th>
+                            <th>Course</th>
+                            <th>Year Level</th>
+                        </tr>
+                    </thead>
+                    <tbody id="inventoryTableBody">
+                        <tr>
+                            <td>001</td>
+                            <td>Charles Adrian Gaviola</td>
+                            <td>BSIT</td>
+                            <td>3rd Year</td>
+                        </tr>
+                        <tr>
+                            <td>002</td>
+                            <td>Jericho Lejano</td>
+                            <td>BSIT</td>
+                            <td>3rd Year</td>
+                        </tr>
+                        <tr>
+                            <td>003</td>
+                            <td>Elyza Dizon</td>
+                            <td>BSIT</td>
+                            <td>3rd Year</td>
+                        </tr>
+                        <tr>
+                            <td>004</td>
+                            <td>Jheno Vien Calagos</td>
+                            <td>BSIT</td>
+                            <td>3rd Year</td>
+                        </tr>
+                        <tr>
+                            <td>005</td>
+                            <td>Denosta Norwellyn Grace</td>
+                            <td>BSIT</td>
+                            <td>3rd Year</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </section>
+
+            <section id="listofl" class="page">
+                <h1>List of Lost Items</h1>
+                <p></p>
+                <input type="text" id="searchBarLost" placeholder="Search Item Name..." onkeyup="searchItem('lost')" />
+                <table id="reportTableLost">
+                    <thead>
+                        <tr>
+                            <th>Item Name</th>
+                            <th>Description</th>
+                            <th>Location</th>
+                            <th>Date Lost</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody id="lostTableBody">
+                        <tr>
+                            <td>Java Programming Book</td>
+                            <td>Blue cover, slightly worn, used in class</td>
+                            <td>School Library</td>
+                            <td>09/26/2025</td>
+                            <td>
+                        <button class="Valid-btn" onclick="startValidation(this, 'lost')">Valid</button></td>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Black Wallet</td>
+                            <td>Contains ID, ATM card, and some receipts</td>
+                            <td>School Canteen</td>
+                            <td>10/09/2025</td>
+                            <td>
+                        <button class="Valid-btn" onclick="startValidation(this, 'lost')">Valid</button></td>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Umbrella</td>
+                            <td>Black folding umbrella, plain design</td>
+                            <td>School Parking Lot</td>
+                            <td>10/02/2025</td>
+                            <td>
+                        <button class="Valid-btn" onclick="startValidation(this, 'lost')">Valid</button></td>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>USB Flash Drive</td>
+                            <td>32GB Kingston, keychain attached</td>
+                            <td>School Computer Lab</td>
+                            <td>10/17/2025</td>
+                            <td>
+                        <button class="Valid-btn" onclick="startValidation(this, 'lost')">Valid</button></td>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Samsung earbuds</td>
+                            <td>White wireless earbuds in case</td>
+                            <td>School Gym</td>
+                            <td>10/10/2025</td>
+                            <td>
+                        <button class="Valid-btn" onclick="startValidation(this, 'lost')">Valid</button></td>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Keychain</td>
+                            <td>Set of house keys with a red car logo keychain</td>
+                            <td>School Entrance</td>
+                            <td>10/15/2025</td>
+                            <td>
+                        <button class="Valid-btn" onclick="startValidation(this, 'lost')">Valid</button></td>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Powerbank</td>
+                            <td>Small black powerbank (20,000mAh) with a red charging cable</td>
+                            <td>School Classroom</td>
+                            <td>10/05/2025</td>
+                            <td>
+                        <button class="Valid-btn" onclick="startValidation(this, 'lost')">Valid</button></td>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Watch</td>
+                            <td>Gold analog wristwatch with a brown leather strap</td>
+                            <td>School Field</td>
+                            <td>10/23/2025</td>
+                            <td>
+                        <button class="Valid-btn" onclick="startValidation(this, 'lost')">Valid</button></td>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Earphones</td>
+                            <td>White wired earphones wrapped around a small case</td>
+                            <td>School Restroom</td>
+                            <td>10/18/2025</td>
+                            <td>
+                        <button class="Valid-btn" onclick="startValidation(this, 'lost')">Valid</button></td>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>School ID</td>
+                            <td>Student ID card with a blue lanyard</td>
+                            <td>School Office</td>
+                            <td>10/10/2025</td>
+                            <td>
+                        <button class="Valid-btn" onclick="startValidation(this, 'lost')">Valid</button></td>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Mini Fan</td>
+                            <td>Gray mini fan</td>
+                            <td>School Auditorium</td>
+                            <td>10/10/2025</td>
+                            <td>
+                        <button class="Valid-btn" onclick="startValidation(this, 'lost')">Valid</button></td>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <div class="pagination" id="paginationLost"></div>
+
+                <div class="overlay" id="overlayLost"></div>
+
+                <div id="popupOverlayLost" class="popup-overlay">
+                    <div class="popup" id="popupBoxLost">
+                        <h3 id="popupMessageLost">Message here</h3>
+                        <div id="popupButtonsLost"></div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="listoff" class="page">
+                <h1>List of Found Items</h1>
+                <p></p>
+                <input type="text" id="searchBarFound" placeholder="Search Item Name..." onkeyup="searchItem('found')" />
+                <table id="reportTableFound">
+                    <thead>
+                        <tr>
+                            <th>Item Name</th>
+                            <th>Description</th>
+                            <th>Location</th>
+                            <th>Date Found</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody id="foundTableBody">
+                        <tr>
+                            <td>Java Programming Book</td>
+                            <td>Blue cover, slightly worn, used in class</td>
+                            <td>School Library</td>
+                            <td>09/26/2025</td>
+                            <td>
+                        <button class="Valid-btn" onclick="startValidation(this, 'found')">Valid</button></td>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Black Wallet</td>
+                            <td>Contains ID, ATM card, and some receipts</td>
+                            <td>School Canteen</td>
+                            <td>10/09/2025</td>
+                            <td>
+                        <button class="Valid-btn" onclick="startValidation(this, 'found')">Valid</button></td>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Umbrella</td>
+                            <td>Black folding umbrella, plain design</td>
+                            <td>School Parking Lot</td>
+                            <td>10/02/2025</td>
+                            <td>
+                        <button class="Valid-btn" onclick="startValidation(this, 'found')">Valid</button></td>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>USB Flash Drive</td>
+                            <td>32GB Kingston, keychain attached</td>
+                            <td>School Computer Lab</td>
+                            <td>10/17/2025</td>
+                            <td>
+                        <button class="Valid-btn" onclick="startValidation(this, 'found')">Valid</button></td>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Samsung earbuds</td>
+                            <td>White wireless earbuds in case</td>
+                            <td>School Gym</td>
+                            <td>10/10/2025</td>
+                            <td>
+                        <button class="Valid-btn" onclick="startValidation(this, 'found')">Valid</button></td>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Keychain</td>
+                            <td>Set of house keys with a red car logo keychain</td>
+                            <td>School Entrance</td>
+                            <td>10/15/2025</td>
+                            <td>
+                        <button class="Valid-btn" onclick="startValidation(this, 'found')">Valid</button></td>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Powerbank</td>
+                            <td>Small black powerbank (20,000mAh) with a red charging cable</td>
+                            <td>School Classroom</td>
+                            <td>10/05/2025</td>
+                            <td>
+                        <button class="Valid-btn" onclick="startValidation(this, 'found')">Valid</button></td>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Watch</td>
+                            <td>Gold analog wristwatch with a brown leather strap</td>
+                            <td>School Field</td>
+                            <td>10/23/2025</td>
+                            <td>
+                        <button class="Valid-btn" onclick="startValidation(this, 'found')">Valid</button></td>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Earphones</td>
+                            <td>White wired earphones wrapped around a small case</td>
+                            <td>School Restroom</td>
+                            <td>10/18/2025</td>
+                            <td>
+                        <button class="Valid-btn" onclick="startValidation(this, 'found')">Valid</button></td>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>School ID</td>
+                            <td>Student ID card with a blue lanyard</td>
+                            <td>School Office</td>
+                            <td>10/10/2025</td>
+                            <td>
+                        <button class="Valid-btn" onclick="startValidation(this, 'found')">Valid</button></td>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Mini Fan</td>
+                            <td>Gray mini fan</td>
+                            <td>School Auditorium</td>
+                            <td>10/10/2025</td>
+                            <td>
+                        <button class="Valid-btn" onclick="startValidation(this, 'found')">Valid</button></td>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <div class="pagination" id="paginationFound"></div>
+
+                <div class="overlay" id="overlayFound"></div>
+
+                <div id="popupOverlayFound" class="popup-overlay">
+                    <div class="popup" id="popupBoxFound">
+                        <h3 id="popupMessageFound">Message here</h3>
+                        <div id="popupButtonsFound"></div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="claimrequests" class="page">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                    <h1>List of Claim Requests</h1>
+                    <button id="editClaimsBtn" class="edit-btn" style="margin-left: auto;">Edit</button>
+                </div>
+                <p>Manage incoming claim requests from users.</p>
+                <table id="claimRequestsTable">
+                <thead>
+                    <tr>
+                        <th>Item Name</th>
+                        <th>Description</th>
+                        <th>Location</th>
+                        <th>Date</th>
+                        <th>Type</th>
+                        <th>User</th>
+                        <th>Status</th>
+                        <th>Action</th>
+                        <th id="removeColumnHeader" style="display: none;">Remove</th>
+                    </tr>
+                </thead>
+                <tbody id="claimRequestsBody">
+                </tbody>
+                </table>
+                    <div class="pagination" id="paginationClaims"></div>
+                    <p id="noClaimsMessage" style="display: none; text-align: center;">No claim requests available.</p>
+                    <div id="popupOverlayClaims" class="popup-overlay" style="display: none;">
+                        <div class="popup-content">
+                            <p id="popupMessageClaims"></p>
+                            <div id="popupButtonsClaims"></div>
+                        </div>
+                    </div>
+            </section>
+
+            <section id="matchrequests" class="page">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                    <h1>List of Match Requests</h1>
+                    <button id="editMatchesBtn" class="edit-btn" style="margin-left: auto;">Edit</button>
+                </div>
+                <p>Manage incoming match requests from users.</p>
+                <table id="matchRequestsTable">
+                <thead>
+                    <tr>
+                        <th>Item Name</th>
+                        <th>Description</th>
+                        <th>Location</th>
+                        <th>Date</th>
+                        <th>Type</th>
+                        <th>User</th>
+                        <th>Status</th>
+                        <th>Action</th>
+                        <th id="removeMatchColumnHeader" style="display: none;">Remove</th>
+                    </tr>
+                </thead>
+                <tbody id="matchRequestsBody">
+                </tbody>
+                </table>
+                    <div class="pagination" id="paginationMatches"></div>
+                    <p id="noMatchesMessage" style="display: none; text-align: center;">No match requests available.</p>
+                    <div id="popupOverlayMatches" class="popup-overlay" style="display: none;">
+                        <div class="popup-content">
+                            <p id="popupMessageMatches"></p>
+                            <div id="popupButtonsMatches"></div>
+                        </div>
+                    </div>
+            </section>
+
+            <section id="about" class="page">
+                <h1>About</h1>
+            </section>
+        </main>
+    </div>
+<script src="admin.js"></script>
+</body>
+</html>

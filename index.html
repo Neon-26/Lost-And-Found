@@ -11,10 +11,8 @@
     <img src="logo.png" alt="logo" class="logo">
     <div class="login">
         <h1>Login</h1>
-        
-        <form action="site.html" method="get">
             <div class="Input">
-                <input type="text" required>
+                <input type="text" id="username" required>
                 <label>Username</label>
             </div>
 
@@ -27,7 +25,8 @@
                 </svg>
             </div>
         
-            <button type="submit" class="Login-btn">Login</button>
+            <button onclick="login()" class="Login-btn">Login</button>
+            <p class="error" id="error"></p>
     </div>
 <script src="login.js"></script>
 </body>

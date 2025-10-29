@@ -50,5 +50,40 @@
         e.preventDefault();
         popup.classList.add('hidden');
         popupOverlay.classList.add('hidden');
-        window.location.href = 'site.html';
+        window.location.href = 'user.html';
+});
+
+
+form.addEventListener('submit', function (e) {
+    e.preventDefault();
+
+    successMessage.textContent = '';
+    successMessage.style.color = '';
+
+    if (!form.checkValidity()) {
+        form.reportValidity();
+        return;
+    }
+
+    const formData = {
+        itemName: form.itemName.value.trim(),
+        location: form.location.value.trim(),
+        date: form.date.value,
+        notes: form.notes.value.trim()
+    };
+
+    const foundItems = JSON.parse(localStorage.getItem('foundItems')) || [];
+    foundItems.push({
+        itemName: formData.itemName,
+        description: formData.notes,
+        location: formData.location,
+        dateAdded: formData.date,
+        status: 'Not Matched'
+    });
+    localStorage.setItem('foundItems', JSON.stringify(foundItems));
+
+    popupText.textContent = `Found Item successfully reported.`;
+    popup.classList.remove('hidden');
+    popupOverlay.classList.remove('hidden');
+    form.querySelector('button[type="submit"]').disabled = true;
 });
