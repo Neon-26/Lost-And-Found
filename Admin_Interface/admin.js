@@ -203,8 +203,6 @@ function alertBox(message, table) {
     overlay.style.display = "flex";
 }
 
-const logOutBtn = document.querySelector('a[href="/index.html"]');
-
 function showPage(pageId) {
     document.querySelectorAll('.page').forEach(page => {
         page.classList.remove('active');
@@ -227,11 +225,6 @@ function showPage(pageId) {
         updateRowsAndPaginationMatches();
     }
 }
-
-logOutBtn.addEventListener('click', (e) => {
-    e.preventDefault();
-    window.location.href = '/index.html';
-});
 
 function updateVisibleRowsClaims() {
     const claimRequests = JSON.parse(localStorage.getItem('claimRequests')) || [];
@@ -459,6 +452,100 @@ function updateDashboard() {
     document.getElementById("totalStudents").textContent = totalStudents;
 }
 
+function updateUserMenu() {
+    const username = localStorage.getItem('username');
+    const usernameSpan = document.getElementById('username');
+    const dropdown = document.getElementById('userMenuDropdown');
+
+    if (username) {
+        usernameSpan.textContent = username;
+    } else {
+        usernameSpan.textContent = 'Login';
+        window.location.href = '../index.html';
+    }
+}
+
+document.getElementById('logoutLink').addEventListener('click', (e) => {
+    e.preventDefault();
+    localStorage.removeItem('username');
+    updateUserMenu();
+});
+
+document.getElementById('userMenuButton').addEventListener('click', () => {
+    const username = localStorage.getItem('username');
+    if (username) {
+        document.getElementById('userMenuDropdown').classList.toggle('show');
+    } else {
+    }
+});
+
+document.addEventListener('click', (event) => {
+    const button = document.getElementById('userMenuButton');
+    const dropdown = document.getElementById('userMenuDropdown');
+    if (!button.contains(event.target) && !dropdown.contains(event.target)) {
+        dropdown.classList.remove('show');
+    }
+});
+
+let studentTableBody = document.getElementById("studentTableBody");
+let currentFilterStudent = "";
+let visibleRowsStudent = [];
+let currentPageStudent = 1;
+let rowsPerPageStudent = 10;
+
+function renderPaginationStudent() {
+    const pagination = document.getElementById("paginationStudent");
+    if (!pagination) return;
+    let pageCount = Math.ceil(visibleRowsStudent.length / rowsPerPageStudent);
+    pagination.innerHTML = "";
+    for (let i = 1; i <= pageCount; i++) {
+        let btn = document.createElement("button");
+        btn.textContent = i;
+        btn.onclick = function() {
+            currentPageStudent = i;
+            displayTableStudent();
+        };
+        if (i === currentPageStudent) btn.style.background = "#4CAF50";
+        pagination.appendChild(btn);
+    }
+}
+
+function updateVisibleRowsStudent() {
+    visibleRowsStudent = Array.from(studentTableBody.rows);
+
+}
+
+function displayTableStudent() {
+
+    visibleRowsStudent.forEach(row => row.style.display = "none");
+
+    let start = (currentPageStudent - 1) * rowsPerPageStudent;
+    let end = start + rowsPerPageStudent;
+
+    for (let i = start; i < end && i < visibleRowsStudent.length; i++) {
+        visibleRowsStudent[i].style.display = "";
+    }
+
+    renderPaginationStudent();
+}
+
+function updateRowsAndPaginationStudent() {
+    updateVisibleRowsStudent();
+    let pageCount = Math.ceil(visibleRowsStudent.length / rowsPerPageStudent);
+    if (currentPageStudent > pageCount && pageCount > 0) {
+        currentPageStudent = pageCount;
+    } else if (pageCount === 0) {
+        currentPageStudent = 1;
+    }
+    displayTableStudent();
+    updateDashboard();
+}
+
+document.addEventListener("DOMContentLoaded", function() {
+    updateRowsAndPaginationStudent();
+});
+
+updateUserMenu();
 updateRowsAndPagination('lost');
 updateRowsAndPagination('found');
 updateRowsAndPaginationClaims();

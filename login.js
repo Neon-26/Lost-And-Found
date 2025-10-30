@@ -13,15 +13,17 @@ function login() {
     const errorMsg = document.getElementById("error");
 
     const admin = { user: "admin", pass: "admin123" };
-    const user = { user: "user" , pass: "user123" };
+    const admin1 = { user: "Jericho", pass: "lejano26" };
+    const user = { user: "user", pass: "user123" };
+    const user1 = { user: "Charles", pass: "gaviola" };
 
-    if (username === admin.user && password === admin.pass) {
+    if ((username === admin.user && password === admin.pass) || (username === admin1.user && password === admin1.pass)) {
+        localStorage.setItem('username', username);
         window.location.href = "Admin_Interface/admin.html";
-    }
-    else if (username === user.user && password === user.pass) {
+    } else if ((username === user.user && password === user.pass) || (username === user1.user && password === user1.pass)) {
+        localStorage.setItem('username', username);
         window.location.href = "User_Interface/user.html";
-    }
-    else {
+    } else {
         errorMsg.textContent = "Invalid username or password!";
     }
 }

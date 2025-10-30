@@ -397,3 +397,118 @@ table th {
     font-weight: bold;
     color: #003300;
 }
+
+.user-menu-container {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    z-index: 1000;
+}
+
+.user-menu-button {
+    background: #44be01d6;
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    border-radius: 5px;
+    color: #000000;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 5px 15px #0000007d;
+    border-color: 5px solid #272727;
+    outline: none;
+}
+
+.user-menu-button:hover {
+    background: #003300;
+    color: #dfdfdf;
+    transform: translateY(-3px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+    border: 1px solid #dfdfdf8d;
+}
+
+.user-icon {
+    width: 20px;
+    height: 20px;
+    fill: white;
+}
+
+.user-menu-dropdown {
+    display: none;
+    position: absolute;
+    top: 100%;
+    right: 0;
+    background: white;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    min-width: 150px;
+    z-index: 1001;
+}
+
+.user-menu-dropdown.show {
+    display: block;
+}
+
+.user-menu-item {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.user-menu-item a {
+    display: block;
+    padding: 10px 15px;
+    text-decoration: none;
+    color: #333;
+    border-bottom: 1px solid #eee;
+}
+
+.user-menu-item a:hover {
+    background: #f8f9fa;
+}
+
+.user-menu-item:last-child a {
+    border-bottom: none;
+}
+
+.pic {
+    display: flex;
+    margin-top: 10px;
+    justify-content: center;
+    align-items: center;
+}
+
+.pic img {
+    max-width: 110px;
+    margin-left: 20px;
+    margin-bottom: 80px;
+}
+
+.Text h1 {
+    position: fixed;
+    color: #000000ec;
+    text-shadow: -1px 0 rgb(255, 255, 255), 0 1px rgb(255, 255, 255), 1px 0 rgb(255, 255, 255), 0 -1px rgb(255, 255, 255);
+    margin-top: -5px;
+    margin-left: 340px;  
+    margin-bottom: 20px;
+    font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+}
+
+.Text p {
+    position: relative;
+    top: 10vh;
+    text-indent: 50px;
+    font-size: 20px;
+    max-width: 1450px;
+    margin: 80px;
+    margin-top: -50px;
+    margin-left: 100px;
+    text-align: justify;
+    font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+}
