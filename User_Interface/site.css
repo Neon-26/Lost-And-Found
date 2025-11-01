@@ -294,6 +294,9 @@ body {
 }
 
 @media (max-width: 767px) {
+    .Top {
+        max-width: 390px;
+    }
     .Top img {
         margin-top: 10px;
     }
