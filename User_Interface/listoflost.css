@@ -316,12 +316,12 @@ tbody tr:hover {
     box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
 }
 
-@media (max-width: 768px) {
+@media (max-width: 480px) {
     .container {
-        margin-top: 15px;
+        margin-top: 30px;
         width: 100vw;
         padding: 20px;
-        height: 185vw;
+        height: 170vw;
     }
     .container h1 {
         margin-top: 10px;
@@ -336,8 +336,8 @@ tbody tr:hover {
         padding: 4px 8px;
     }
     .back-btn {
-        margin-top: -750px;
-        margin-left: -320px;
+        margin-top: -790px;
+        margin-left: -350px;
         width: 60px;
         font-size: 14px;
     }

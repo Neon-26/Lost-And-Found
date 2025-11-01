@@ -293,9 +293,9 @@ body {
     }
 }
 
-@media (max-width: 767px) {
+@media (max-width: 480px) {
     .Top {
-        max-width: 390px;
+        max-width: 430px;
     }
     .Top img {
         margin-top: 10px;
@@ -309,32 +309,80 @@ body {
         top: 20px;
     }
     .Center p {
+        font-size: 17px;
         max-width: 360px;
-        margin-left: 15px;
+        margin-left: 30px;
     }
     .Lost {
         width: 150px;
-        margin-left: 35px;
+        margin-left: 50px;
     }
     .Found {
         width: 150px;
         margin-left: 20px;
     }
     .Bottom {
-        width: 400px;
+        width: 420px;
         height: 500px;
         margin-top: 100px;
-        margin-left: -200px;
+        margin-left: -210px;
     }
     .pic img {
         max-width: 80px;
         margin-left: 10px;
     }
     .Bottom p {
-        font-size: 13px;
-        width: 350px;
+        font-size: 14px;
+        width: 380px;
         margin: 80px;
         margin-top: 20px;
-        margin-left: -15px;
+        margin-left: -20px;
+    }
+}
+
+@media (min-width: 481px) and (max-width: 768px) {
+    .Top {
+        max-width: 430px;
+    }
+    .Top img {
+        margin-top: 10px;
+    }
+    .Top h1 {
+        font-size: 20px;
+        max-width: 150px;
+        margin-top: 2px;
+    }
+    .user-menu-container {
+        top: 20px;
+    }
+    .Center p {
+        font-size: 17px;
+        max-width: 360px;
+        margin-left: 30px;
+    }
+    .Lost {
+        width: 150px;
+        margin-left: 50px;
+    }
+    .Found {
+        width: 150px;
+        margin-left: 20px;
+    }
+    .Bottom {
+        width: 420px;
+        height: 500px;
+        margin-top: 100px;
+        margin-left: -210px;
+    }
+    .pic img {
+        max-width: 80px;
+        margin-left: 10px;
+    }
+    .Bottom p {
+        font-size: 14px;
+        width: 380px;
+        margin: 80px;
+        margin-top: 20px;
+        margin-left: -20px;
     }
 }
