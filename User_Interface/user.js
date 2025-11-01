@@ -1,5 +1,5 @@
 function updateUserMenu() {
-    const username = localStorage.getItem('username');
+    const username = sessionStorage.getItem('userUsername');  
     const usernameSpan = document.getElementById('username');
     const dropdown = document.getElementById('userMenuDropdown');
 
@@ -13,12 +13,12 @@ function updateUserMenu() {
 
 document.getElementById('logoutLink').addEventListener('click', (e) => {
     e.preventDefault();
-    localStorage.removeItem('username');
+    sessionStorage.removeItem('userUsername'); 
     updateUserMenu();
 });
 
 document.getElementById('userMenuButton').addEventListener('click', () => {
-    const username = localStorage.getItem('username');
+    const username = sessionStorage.getItem('userUsername'); 
     if (username) {
         document.getElementById('userMenuDropdown').classList.toggle('show');
     } else {

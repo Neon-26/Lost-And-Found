@@ -72,6 +72,7 @@
             <section id="student" class="page">
                 <h1>Student Profile</h1>
                 <p>Here you can manage student profiles.</p>
+                <input type="text" id="searchBarStudent" placeholder="Search Student Name..." onkeyup="searchItem('student')" />
                 <table>
                     <thead>
                         <tr>
@@ -149,7 +150,6 @@
 
             <section id="listofl" class="page">
                 <h1>List of Lost Items</h1>
-                <p></p>
                 <input type="text" id="searchBarLost" placeholder="Search Item Name..." onkeyup="searchItem('lost')" />
                 <table id="reportTableLost">
                     <thead>
@@ -158,116 +158,95 @@
                             <th>Description</th>
                             <th>Location</th>
                             <th>Date Lost</th>
+                            <th>Image</th>
                             <th>Action</th>
                         </tr>
                     </thead>
                     <tbody id="lostTableBody">
                         <tr>
-                            <td>Java Programming Book</td>
-                            <td>Blue cover, slightly worn, used in class</td>
-                            <td>School Library</td>
+                            <td>Java programming Book</td>
+                            <td>Book with blue cover, slightly worn</td>
+                            <td>School</td>
                             <td>09/26/2025</td>
-                            <td>
-                        <button class="Valid-btn" onclick="startValidation(this, 'lost')">Valid</button></td>
-                            </td>
+                            <td><button class="view-btn" data-image="Java Book.jpeg">View</button></td>
+                            <td><button class="Valid-btn" onclick="startValidation(this, 'lost')">Valid</button></td>
                         </tr>
                         <tr>
                             <td>Black Wallet</td>
-                            <td>Contains ID, ATM card, and some receipts</td>
-                            <td>School Canteen</td>
+                            <td>Contains ID, ATM card, and receipts</td>
+                            <td>School</td>
                             <td>10/09/2025</td>
-                            <td>
-                        <button class="Valid-btn" onclick="startValidation(this, 'lost')">Valid</button></td>
-                            </td>
+                            <td><button class="view-btn" data-image="Wallet.jpeg">View</button></td>
+                            <td><button class="Valid-btn" onclick="startValidation(this, 'lost')">Valid</button></td>
                         </tr>
                         <tr>
                             <td>Umbrella</td>
                             <td>Black folding umbrella, plain design</td>
-                            <td>School Parking Lot</td>
+                            <td>School</td>
                             <td>10/02/2025</td>
-                            <td>
-                        <button class="Valid-btn" onclick="startValidation(this, 'lost')">Valid</button></td>
-                            </td>
+                            <td><button class="view-btn" data-image="Umbrella.jpeg">View</button></td>
+                            <td><button class="Valid-btn" onclick="startValidation(this, 'lost')">Valid</button></td>
                         </tr>
                         <tr>
                             <td>USB Flash Drive</td>
-                            <td>32GB Kingston, keychain attached</td>
-                            <td>School Computer Lab</td>
+                            <td>32GB Kingston</td>
+                            <td>School</td>
                             <td>10/17/2025</td>
-                            <td>
-                        <button class="Valid-btn" onclick="startValidation(this, 'lost')">Valid</button></td>
-                            </td>
+                            <td><button class="view-btn" data-image="Flash Drive.jpeg">View</button></td>
+                            <td><button class="Valid-btn" onclick="startValidation(this, 'lost')">Valid</button></td>
                         </tr>
                         <tr>
                             <td>Samsung earbuds</td>
                             <td>White wireless earbuds in case</td>
-                            <td>School Gym</td>
+                            <td>School</td>
                             <td>10/10/2025</td>
-                            <td>
-                        <button class="Valid-btn" onclick="startValidation(this, 'lost')">Valid</button></td>
-                            </td>
+                            <td><button class="view-btn" data-image="Samsung earpods.jpeg">View</button></td>
+                            <td><button class="Valid-btn" onclick="startValidation(this, 'lost')">Valid</button></td>
                         </tr>
                         <tr>
-                            <td>Keychain</td>
-                            <td>Set of house keys with a red car logo keychain</td>
-                            <td>School Entrance</td>
+                            <td>Key</td>
+                            <td>House key with a cat logo keychain</td>
+                            <td>School</td>
                             <td>10/15/2025</td>
-                            <td>
-                        <button class="Valid-btn" onclick="startValidation(this, 'lost')">Valid</button></td>
-                            </td>
+                            <td><button class="view-btn" data-image="Key.jpeg">View</button></td>
+                            <td><button class="Valid-btn" onclick="startValidation(this, 'lost')">Valid</button></td>
                         </tr>
                         <tr>
                             <td>Powerbank</td>
                             <td>Small black powerbank (20,000mAh) with a red charging cable</td>
-                            <td>School Classroom</td>
+                            <td>School</td>
                             <td>10/05/2025</td>
-                            <td>
-                        <button class="Valid-btn" onclick="startValidation(this, 'lost')">Valid</button></td>
-                            </td>
+                            <td><button class="view-btn" data-image="Powerbank.jpeg">View</button></td>
+                            <td><button class="Valid-btn" onclick="startValidation(this, 'lost')">Valid</button></td>
                         </tr>
                         <tr>
                             <td>Watch</td>
                             <td>Gold analog wristwatch with a brown leather strap</td>
-                            <td>School Field</td>
+                            <td>School</td>
                             <td>10/23/2025</td>
-                            <td>
-                        <button class="Valid-btn" onclick="startValidation(this, 'lost')">Valid</button></td>
-                            </td>
+                            <td><button class="view-btn" data-image="Watch.jpeg">View</button></td>
+                            <td><button class="Valid-btn" onclick="startValidation(this, 'lost')">Valid</button></td>
                         </tr>
                         <tr>
                             <td>Earphones</td>
                             <td>White wired earphones wrapped around a small case</td>
-                            <td>School Restroom</td>
+                            <td>School</td>
                             <td>10/18/2025</td>
-                            <td>
-                        <button class="Valid-btn" onclick="startValidation(this, 'lost')">Valid</button></td>
-                            </td>
+                            <td><button class="view-btn" data-image="Headset.jpeg">View</button></td>
+                            <td><button class="Valid-btn" onclick="startValidation(this, 'lost')">Valid</button></td>
                         </tr>
                         <tr>
                             <td>School ID</td>
                             <td>Student ID card with a blue lanyard</td>
-                            <td>School Office</td>
+                            <td>School</td>
                             <td>10/10/2025</td>
-                            <td>
-                        <button class="Valid-btn" onclick="startValidation(this, 'lost')">Valid</button></td>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>Mini Fan</td>
-                            <td>Gray mini fan</td>
-                            <td>School Auditorium</td>
-                            <td>10/10/2025</td>
-                            <td>
-                        <button class="Valid-btn" onclick="startValidation(this, 'lost')">Valid</button></td>
-                            </td>
+                            <td><button class="view-btn" data-image="ID.jpeg">View</button></td>
+                            <td><button class="Valid-btn" onclick="startValidation(this, 'lost')">Valid</button></td>
                         </tr>
                     </tbody>
                 </table>
-
                 <div class="pagination" id="paginationLost"></div>
-
                 <div class="overlay" id="overlayLost"></div>
-
                 <div id="popupOverlayLost" class="popup-overlay">
                     <div class="popup" id="popupBoxLost">
                         <h3 id="popupMessageLost">Message here</h3>
@@ -278,7 +257,6 @@
 
             <section id="listoff" class="page">
                 <h1>List of Found Items</h1>
-                <p></p>
                 <input type="text" id="searchBarFound" placeholder="Search Item Name..." onkeyup="searchItem('found')" />
                 <table id="reportTableFound">
                     <thead>
@@ -287,116 +265,95 @@
                             <th>Description</th>
                             <th>Location</th>
                             <th>Date Found</th>
+                            <th>Image</th>
                             <th>Action</th>
                         </tr>
                     </thead>
                     <tbody id="foundTableBody">
                         <tr>
-                            <td>Java Programming Book</td>
-                            <td>Blue cover, slightly worn, used in class</td>
-                            <td>School Library</td>
+                            <td>Java programming Book</td>
+                            <td>Book with blue cover, slightly worn</td>
+                            <td>School</td>
                             <td>09/26/2025</td>
-                            <td>
-                        <button class="Valid-btn" onclick="startValidation(this, 'found')">Valid</button></td>
-                            </td>
+                            <td><button class="view-btn" data-image="Java Book.jpeg">View</button></td>
+                            <td><button class="Valid-btn" onclick="startValidation(this, 'found')">Valid</button></td>
                         </tr>
                         <tr>
                             <td>Black Wallet</td>
-                            <td>Contains ID, ATM card, and some receipts</td>
-                            <td>School Canteen</td>
+                            <td>Contains ID, ATM card, and receipts</td>
+                            <td>School</td>
                             <td>10/09/2025</td>
-                            <td>
-                        <button class="Valid-btn" onclick="startValidation(this, 'found')">Valid</button></td>
-                            </td>
+                            <td><button class="view-btn" data-image="Wallet.jpeg">View</button></td>
+                            <td><button class="Valid-btn" onclick="startValidation(this, 'found')">Valid</button></td>
                         </tr>
                         <tr>
                             <td>Umbrella</td>
                             <td>Black folding umbrella, plain design</td>
-                            <td>School Parking Lot</td>
+                            <td>School</td>
                             <td>10/02/2025</td>
-                            <td>
-                        <button class="Valid-btn" onclick="startValidation(this, 'found')">Valid</button></td>
-                            </td>
+                            <td><button class="view-btn" data-image="Umbrella.jpeg">View</button></td>
+                            <td><button class="Valid-btn" onclick="startValidation(this, 'found')">Valid</button></td>
                         </tr>
                         <tr>
                             <td>USB Flash Drive</td>
-                            <td>32GB Kingston, keychain attached</td>
-                            <td>School Computer Lab</td>
+                            <td>32GB Kingston</td>
+                            <td>School</td>
                             <td>10/17/2025</td>
-                            <td>
-                        <button class="Valid-btn" onclick="startValidation(this, 'found')">Valid</button></td>
-                            </td>
+                            <td><button class="view-btn" data-image="Flash Drive.jpeg">View</button></td>
+                            <td><button class="Valid-btn" onclick="startValidation(this, 'found')">Valid</button></td>
                         </tr>
                         <tr>
                             <td>Samsung earbuds</td>
                             <td>White wireless earbuds in case</td>
-                            <td>School Gym</td>
+                            <td>School</td>
                             <td>10/10/2025</td>
-                            <td>
-                        <button class="Valid-btn" onclick="startValidation(this, 'found')">Valid</button></td>
-                            </td>
+                            <td><button class="view-btn" data-image="Samsung earpods.jpeg">View</button></td>
+                            <td><button class="Valid-btn" onclick="startValidation(this, 'found')">Valid</button></td>
                         </tr>
                         <tr>
-                            <td>Keychain</td>
-                            <td>Set of house keys with a red car logo keychain</td>
-                            <td>School Entrance</td>
+                            <td>Key</td>
+                            <td>House key with a cat logo keychain</td>
+                            <td>School</td>
                             <td>10/15/2025</td>
-                            <td>
-                        <button class="Valid-btn" onclick="startValidation(this, 'found')">Valid</button></td>
-                            </td>
+                            <td><button class="view-btn" data-image="Key.jpeg">View</button></td>
+                            <td><button class="Valid-btn" onclick="startValidation(this, 'found')">Valid</button></td>
                         </tr>
                         <tr>
                             <td>Powerbank</td>
                             <td>Small black powerbank (20,000mAh) with a red charging cable</td>
-                            <td>School Classroom</td>
+                            <td>School</td>
                             <td>10/05/2025</td>
-                            <td>
-                        <button class="Valid-btn" onclick="startValidation(this, 'found')">Valid</button></td>
-                            </td>
+                            <td><button class="view-btn" data-image="Powerbank.jpeg">View</button></td>
+                            <td><button class="Valid-btn" onclick="startValidation(this, 'found')">Valid</button></td>
                         </tr>
                         <tr>
                             <td>Watch</td>
                             <td>Gold analog wristwatch with a brown leather strap</td>
-                            <td>School Field</td>
+                            <td>School</td>
                             <td>10/23/2025</td>
-                            <td>
-                        <button class="Valid-btn" onclick="startValidation(this, 'found')">Valid</button></td>
-                            </td>
+                            <td><button class="view-btn" data-image="Watch.jpeg">View</button></td>
+                            <td><button class="Valid-btn" onclick="startValidation(this, 'found')">Valid</button></td>
                         </tr>
                         <tr>
                             <td>Earphones</td>
                             <td>White wired earphones wrapped around a small case</td>
-                            <td>School Restroom</td>
+                            <td>School</td>
                             <td>10/18/2025</td>
-                            <td>
-                        <button class="Valid-btn" onclick="startValidation(this, 'found')">Valid</button></td>
-                            </td>
+                            <td><button class="view-btn" data-image="Headset.jpeg">View</button></td>
+                            <td><button class="Valid-btn" onclick="startValidation(this, 'found')">Valid</button></td>
                         </tr>
                         <tr>
                             <td>School ID</td>
                             <td>Student ID card with a blue lanyard</td>
-                            <td>School Office</td>
+                            <td>School</td>
                             <td>10/10/2025</td>
-                            <td>
-                        <button class="Valid-btn" onclick="startValidation(this, 'found')">Valid</button></td>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>Mini Fan</td>
-                            <td>Gray mini fan</td>
-                            <td>School Auditorium</td>
-                            <td>10/10/2025</td>
-                            <td>
-                        <button class="Valid-btn" onclick="startValidation(this, 'found')">Valid</button></td>
-                            </td>
+                            <td><button class="view-btn" data-image="ID.jpeg">View</button></td>
+                            <td><button class="Valid-btn" onclick="startValidation(this, 'found')">Valid</button></td>
                         </tr>
                     </tbody>
                 </table>
-
                 <div class="pagination" id="paginationFound"></div>
-
                 <div class="overlay" id="overlayFound"></div>
-
                 <div id="popupOverlayFound" class="popup-overlay">
                     <div class="popup" id="popupBoxFound">
                         <h3 id="popupMessageFound">Message here</h3>
@@ -404,6 +361,13 @@
                     </div>
                 </div>
             </section>
+
+            <div class="popup" id="imagePopup">
+            <div class="popup-Content">
+                    <img id="popupImage" src="" alt="Item Image" class="img-popup">
+                    <button onclick="closeImagePopup()">Close</button>
+                </div>
+            </div>
 
             <section id="claimrequests" class="page">
                 <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">

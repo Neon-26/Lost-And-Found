@@ -18,6 +18,32 @@ let currentPageMatches = 1;
 let rowsPerPageMatches = 4;
 let isEditModeMatches = false;
 
+function searchStudent() {
+    const input = document.getElementById("searchBarStudent");
+    currentFilterStudent = input.value.toLowerCase().trim(); 
+    currentPageStudent = 1; 
+    updateRowsAndPaginationStudent();
+}
+
+function updateVisibleRowsStudent() {
+    const allRows = Array.from(studentTableBody.rows);
+    visibleRowsStudent.length = 0; 
+    allRows.forEach(row => {
+        const nameCell = row.getElementsByTagName("td")[1];
+        if (nameCell) {
+            const nameValue = nameCell.textContent || nameCell.innerText;
+            if (nameValue.toLowerCase().indexOf(currentFilterStudent) > -1) {
+                visibleRowsStudent.push(row);
+            }
+        }
+    });
+}
+
+document.addEventListener("DOMContentLoaded", function() {
+    document.getElementById("searchBarStudent").value = "";
+    updateRowsAndPaginationStudent();
+});
+
 function searchItem(table) {
     const input = table === 'lost' ? document.getElementById("searchBarLost") : document.getElementById("searchBarFound");
     if (table === 'lost') {
@@ -216,8 +242,12 @@ function showPage(pageId) {
     event.target.classList.add('active');
 
     if (pageId === 'listofl') {
+        appendNewItemsToLostAdmin();
+        attachViewButtonListeners();
         updateRowsAndPagination('lost');
     } else if (pageId === 'listoff') {
+        appendNewItemsToFoundAdmin();
+        attachViewButtonListeners();
         updateRowsAndPagination('found');
     } else if (pageId === 'claimrequests') {
         updateRowsAndPaginationClaims();
@@ -225,6 +255,80 @@ function showPage(pageId) {
         updateRowsAndPaginationMatches();
     }
 }
+
+function appendNewItemsToLostAdmin() {
+    const lostItems = JSON.parse(localStorage.getItem('lostItems')) || [];
+    const tbody = document.getElementById("lostTableBody");
+    const existingItemNames = Array.from(tbody.getElementsByTagName("tr")).map(row => row.cells[0].innerText.toLowerCase());
+    
+    lostItems.forEach(item => {
+        if (!existingItemNames.includes(item.itemName.toLowerCase())) {
+            const row = document.createElement("tr");
+            const date = new Date(item.dateAdded);
+            const formattedDate = `${(date.getMonth() + 1).toString().padStart(2, '0')}/${date.getDate().toString().padStart(2, '0')}/${date.getFullYear()}`;
+            
+            const imageCell = item.image ? `<button class="view-btn" data-image="${item.image}">View</button>` : '';
+            
+            row.innerHTML = `
+                <td>${item.itemName}</td>
+                <td>${item.description}</td>
+                <td>${item.location}</td>
+                <td>${formattedDate}</td>
+                <td>${imageCell}</td>
+                <td><button class="Valid-btn" onclick="startValidation(this, 'lost')">Valid</button></td>
+            `;
+            tbody.appendChild(row);
+        }
+    });
+}
+
+function appendNewItemsToFoundAdmin() {
+    const foundItems = JSON.parse(localStorage.getItem('foundItems')) || [];
+    const tbody = document.getElementById("foundTableBody");
+    const existingItemNames = Array.from(tbody.getElementsByTagName("tr")).map(row => row.cells[0].innerText.toLowerCase());
+    
+    foundItems.forEach(item => {
+        if (!existingItemNames.includes(item.itemName.toLowerCase())) {
+            const row = document.createElement("tr");
+            const date = new Date(item.dateAdded);
+            const formattedDate = `${(date.getMonth() + 1).toString().padStart(2, '0')}/${date.getDate().toString().padStart(2, '0')}/${date.getFullYear()}`;
+            
+            const imageCell = item.image ? `<button class="view-btn" data-image="${item.image}">View</button>` : '';
+            
+            row.innerHTML = `
+                <td>${item.itemName}</td>
+                <td>${item.description}</td>
+                <td>${item.location}</td>
+                <td>${formattedDate}</td>
+                <td>${imageCell}</td>
+                <td><button class="Valid-btn" onclick="startValidation(this, 'found')">Valid</button></td>
+            `;
+            tbody.appendChild(row);
+        }
+    });
+}
+
+function attachViewButtonListeners() {
+    document.querySelectorAll(".view-btn").forEach(btn => {
+        btn.addEventListener("click", function() {
+            const imageSrc = this.getAttribute("data-image");
+            document.getElementById("popupImage").src = imageSrc;
+            document.getElementById("imagePopup").style.display = "flex";
+        });
+    });
+}
+
+function closeImagePopup() {
+    document.getElementById("imagePopup").style.display = "none";
+}
+
+document.addEventListener("DOMContentLoaded", function() {
+    const imagePopup = document.getElementById("imagePopup");
+    if (imagePopup) {
+        imagePopup.style.display = "none";
+    }
+});
+
 
 function updateVisibleRowsClaims() {
     const claimRequests = JSON.parse(localStorage.getItem('claimRequests')) || [];
@@ -415,6 +519,13 @@ function updateMatchStatus(index, status) {
     }
 }
 
+function addEventListener() {
+    const td = currentButton.parentElement;
+    if (!td.querySelector(".remove-btn")) {
+        const removeBtn = document.getElementById("Remove")
+    }
+}
+
 function toggleEditModeMatches() {
     isEditModeMatches = !isEditModeMatches;
     const editBtn = document.getElementById('editMatchesBtn');
@@ -448,12 +559,13 @@ function updateDashboard() {
     const matchRequests = JSON.parse(localStorage.getItem('matchRequests')) || [];
     document.getElementById("totalMatches").textContent = matchRequests.length;
 
-    const totalStudents = document.getElementById("inventoryTableBody").getElementsByTagName("tr").length;
+    const totalStudents = document.getElementById("studentTableBody").getElementsByTagName("tr").length;
     document.getElementById("totalStudents").textContent = totalStudents;
 }
 
 function updateUserMenu() {
-    const username = localStorage.getItem('username');
+    const username = sessionStorage.getItem('adminUsername');  
+
     const usernameSpan = document.getElementById('username');
     const dropdown = document.getElementById('userMenuDropdown');
 
@@ -467,12 +579,12 @@ function updateUserMenu() {
 
 document.getElementById('logoutLink').addEventListener('click', (e) => {
     e.preventDefault();
-    localStorage.removeItem('username');
+    sessionStorage.removeItem('adminUsername');
     updateUserMenu();
 });
 
 document.getElementById('userMenuButton').addEventListener('click', () => {
-    const username = localStorage.getItem('username');
+    const username = sessionStorage.getItem('adminUsername');
     if (username) {
         document.getElementById('userMenuDropdown').classList.toggle('show');
     } else {
@@ -486,6 +598,8 @@ document.addEventListener('click', (event) => {
         dropdown.classList.remove('show');
     }
 });
+
+updateUserMenu();
 
 let studentTableBody = document.getElementById("studentTableBody");
 let currentFilterStudent = "";
@@ -545,7 +659,6 @@ document.addEventListener("DOMContentLoaded", function() {
     updateRowsAndPaginationStudent();
 });
 
-updateUserMenu();
 updateRowsAndPagination('lost');
 updateRowsAndPagination('found');
 updateRowsAndPaginationClaims();

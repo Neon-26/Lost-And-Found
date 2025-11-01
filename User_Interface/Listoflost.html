@@ -14,6 +14,8 @@
         <div class="Input">
             <input type="text" id="searchBar" placeholder="Search Lost Items..." aria-label="Search lost items" />
         </div>
+        <div class="outer-wrapper">
+        <div class="table-wrapper">
         <table aria-label="Lost Items Table">
             <thead>
                 <tr>
@@ -22,6 +24,7 @@
                     <th>Location</th>
                     <th>Date Lost</th>
                     <th>Status</th>
+                    <th>Image</th>
                     <th>Action</th>
                 </tr>
             </thead>
@@ -32,6 +35,7 @@
                     <td>School</td>
                     <td>09/26/2025</td>
                     <td>Not Matched</td>
+                    <td><button class="view-btn" data-image="Java Book.jpeg">View</button></td>
                     <td>
                         <button class="Match-btn" title="Match?">Match</button>
                     </td>
@@ -42,6 +46,7 @@
                     <td>School</td>
                     <td>10/09/2025</td>
                     <td>Matched</td>
+                    <td><button class="view-btn" data-image="Wallet.jpeg">View</button></td>
                     <td>
                         <button class="Match-btn" title="Match?">Match</button>
                     </td>
@@ -52,16 +57,18 @@
                     <td>School</td>
                     <td>10/02/2025</td>
                     <td>Pending</td>
+                    <td><button class="view-btn" data-image="Umbrella.jpeg">View</button></td>
                     <td>
                         <button class="Match-btn" title="Match?">Match</button>
                     </td>
                 </tr>
                 <tr data-status="Not Matched">
                     <td>USB Flash Drive</td>
-                    <td>32GB Kingston, keychain attached</td>
+                    <td>32GB Kingston</td>
                     <td>School</td>
                     <td>10/17/2025</td>
                     <td>Not Matched</td>
+                    <td><button class="view-btn" data-image="Flash Drive.jpeg">View</button></td>
                     <td>
                         <button class="Match-btn" title="Match?">Match</button>
                     </td>
@@ -72,26 +79,18 @@
                     <td>School</td>
                     <td>10/10/2025</td>
                     <td>Approved</td>
-                    <td>
-                        <button class="Match-btn" title="Match?">Match</button>
-                    </td>
-                </tr>
-                <tr data-status="Not Matched">
-                    <td>Samsung earbuds</td>
-                    <td>White wireless earbuds in case</td>
-                    <td>School</td>
-                    <td>10/10/2025</td>
-                    <td>Not Matched</td>
+                    <td><button class="view-btn" data-image="Samsung earpods.jpeg">View</button></td>
                     <td>
                         <button class="Match-btn" title="Match?">Match</button>
                     </td>
                 </tr>
                 <tr data-status="Matched">
-                    <td>Keychain</td>
-                    <td>Set of house keys with a red car logo keychain</td>
+                    <td>Key</td>
+                    <td>House key with a cat logo keychain</td>
                     <td>School</td>
                     <td>10/15/2025</td>
                     <td>Matched</td>
+                    <td><button class="view-btn" data-image="Key.jpeg">View</button></td>
                     <td>
                         <button class="Match-btn" title="Match?">Match</button>
                     </td>
@@ -102,6 +101,7 @@
                     <td>School</td>
                     <td>10/05/2025</td>
                     <td>Pending</td>
+                    <td><button class="view-btn" data-image="Powerbank.jpeg">View</button></td>
                     <td>
                         <button class="Match-btn" title="Match?">Match</button>
                     </td>
@@ -112,6 +112,7 @@
                     <td>School</td>
                     <td>10/23/2025</td>
                     <td>Not Matched</td>
+                    <td><button class="view-btn" data-image="Watch.jpeg">View</button></td>
                     <td>
                         <button class="Match-btn" title="Match?">Match</button>
                     </td>
@@ -122,6 +123,7 @@
                     <td>School</td>
                     <td>10/18/2025</td>
                     <td>Matched</td>
+                    <td><button class="view-btn" data-image="Headset.jpeg">View</button></td>
                     <td>
                         <button class="Match-btn" title="Match?">Match</button>
                     </td>
@@ -132,12 +134,15 @@
                     <td>School</td>
                     <td>10/10/2025</td>
                     <td>Approved</td>
+                    <td><button class="view-btn" data-image="ID.jpeg">View</button></td>
                     <td>
                         <button class="Match-btn" title="Match?">Match</button>
                     </td>
                 </tr>
             </tbody>
         </table>
+        </div>
+    </div>
     </div>
 
     <div class="popup" id="confirmPopup">
@@ -174,6 +179,12 @@
         </div>
     </div>
 
+    <div class="popup" id="imagePopup">
+        <div class="popup-content">
+            <img id="popupImage" src="" alt="Item Image" class="img-popup">
+            <button onclick="closeImagePopup()">Close</button>
+        </div>
+    </div>
     <script src="listoflost.js"></script>
 </body>
 </html>

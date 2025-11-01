@@ -21,7 +21,7 @@ body {
     top: 0; 
     right: 0; 
     left: 0;
-    width: 100%;         
+    width: clamp(1920px, 10vw, 767px);         
     height: 10%;
     max-width: 2000px;
     background-color: #003300;
@@ -89,30 +89,6 @@ body {
 
 .top-nav a:hover {
     color: #44be01d6;
-}
-
-.logout {
-    width: 5%;
-    margin-top: 17px;
-    margin-left: 1445px;
-    padding: 10px;
-    background: #44be01d6;
-    border-color: 2px solid #272727;
-    outline: none;
-    border-radius: 15px;
-    color: #000000;
-    font-size: 12px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    box-shadow: 0 5px 15px #0000001a;
-}
-
-.logout:hover {
-    background: rgba(255, 255, 255, 0.851);
-    color: #272727;
-    transform: translateY(-3px);
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
 }
 
 .Center {
@@ -279,13 +255,15 @@ body {
     display: block;
 }
 
-.user-menu-item {
+.user-menu-item,
+.user-menu-item-1 {
     list-style: none;
     margin: 0;
     padding: 0;
 }
 
-.user-menu-item a {
+.user-menu-item a,
+.user-menu-item-1 a{
     display: block;
     padding: 10px 15px;
     text-decoration: none;
@@ -293,10 +271,67 @@ body {
     border-bottom: 1px solid #eee;
 }
 
-.user-menu-item a:hover {
+.user-menu-item a:hover,
+.user-menu-item-1 a:hover {
     background: #f8f9fa;
 }
 
-.user-menu-item:last-child a {
+.user-menu-item:last-child a,
+.user-menu-item-1:last-child a {
     border-bottom: none;
+}
+
+@media (max-width: 768px) {
+    .top-nav {
+        display: none;
+    }
+}
+
+@media (min-width: 769px) {
+    .user-menu-item-1 {
+        display: none;
+    }
+}
+
+@media (max-width: 767px) {
+    .Top img {
+        margin-top: 10px;
+    }
+    .Top h1 {
+        font-size: 20px;
+        max-width: 150px;
+        margin-top: 2px;
+    }
+    .user-menu-container {
+        top: 20px;
+    }
+    .Center p {
+        max-width: 360px;
+        margin-left: 15px;
+    }
+    .Lost {
+        width: 150px;
+        margin-left: 35px;
+    }
+    .Found {
+        width: 150px;
+        margin-left: 20px;
+    }
+    .Bottom {
+        width: 400px;
+        height: 500px;
+        margin-top: 100px;
+        margin-left: -200px;
+    }
+    .pic img {
+        max-width: 80px;
+        margin-left: 10px;
+    }
+    .Bottom p {
+        font-size: 13px;
+        width: 350px;
+        margin: 80px;
+        margin-top: 20px;
+        margin-left: -15px;
+    }
 }

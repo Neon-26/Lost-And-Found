@@ -8,7 +8,6 @@ let selectedItem = {};
 let currentRow = null;
 
 document.addEventListener("DOMContentLoaded", function() {
-
     const tbody = document.getElementById("inventoryTableBody");
     rows = Array.from(tbody.getElementsByTagName("tr"));
     visibleRows = [...rows];
@@ -39,13 +38,20 @@ function appendNewItemsFromStorage() {
         if (!existingItemNames.includes(item.itemName.toLowerCase())) {
             const row = document.createElement("tr");
             row.setAttribute("data-status", item.status);
+
+            const date = new Date(item.dateAdded);
+            const formattedDate = `${(date.getMonth() + 1).toString().padStart(2, '0')}/${date.getDate().toString().padStart(2, '0')}/${date.getFullYear()}`;
+
+            const imageCell = item.image ? `<button class="view-btn" data-image="${item.image}">View</button>` : '';
+            
             row.innerHTML = `
                 <td>${item.itemName}</td>
                 <td>${item.description}</td>
                 <td>${item.location}</td>
-                <td>${item.dateAdded}</td>
+                <td>${formattedDate}</td>
                 <td>${item.status}</td>
-                <td><button class="Match-btn" title="Match?">Match</button></td>
+                <td>${imageCell}</td>
+                <td><button class="Match-btn" title="Claim?">Claim</button>
             `;
             tbody.appendChild(row);
             rows.push(row);
@@ -53,8 +59,22 @@ function appendNewItemsFromStorage() {
     });
     
     visibleRows = [...rows];
-
     attachMatchButtonListeners();
+    attachViewButtonListeners(); 
+}
+
+function attachViewButtonListeners() {
+    document.querySelectorAll(".view-btn").forEach(btn => {
+        btn.addEventListener("click", function() {
+            const imageSrc = this.getAttribute("data-image");
+            document.getElementById("popupImage").src = imageSrc;
+            document.getElementById("imagePopup").style.display = "flex";
+        });
+    });
+}
+
+function closeImagePopup() {
+    document.getElementById("imagePopup").style.display = "none";
 }
 
 function attachMatchButtonListeners() {
@@ -75,12 +95,9 @@ function attachMatchButtonListeners() {
 }
 
 function resetLocalStorage() {
-
     localStorage.removeItem('foundItems');
     localStorage.removeItem('matchRequests');
     localStorage.removeItem('claimRequests');
-    
-
     location.reload();
 }
 

@@ -42,12 +42,15 @@ function appendNewItemsFromStorageLost() {
 
             const date = new Date(item.dateAdded);
             const formattedDate = `${(date.getMonth() + 1).toString().padStart(2, '0')}/${date.getDate().toString().padStart(2, '0')}/${date.getFullYear()}`;
+
+            const imageCell = item.image ? `<button class="view-btn" data-image="${item.image}">View</button>` : '';
             row.innerHTML = `
                 <td>${item.itemName}</td>
                 <td>${item.description}</td>
                 <td>${item.location}</td>
                 <td>${formattedDate}</td>
                 <td>${item.status}</td>
+                <td>${imageCell}</td>
                 <td><button class="Match-btn" title="Match?">Match</button></td>
             `;
             tbody.appendChild(row);
@@ -58,6 +61,21 @@ function appendNewItemsFromStorageLost() {
     visibleRowsLost = [...rowsLost];
 
     attachMatchButtonListenersLost();
+    attachViewButtonListeners();
+}
+
+function attachViewButtonListeners() {
+    document.querySelectorAll(".view-btn").forEach(btn => {
+        btn.addEventListener("click", function() {
+            const imageSrc = this.getAttribute("data-image");
+            document.getElementById("popupImage").src = imageSrc;
+            document.getElementById("imagePopup").style.display = "flex";
+        });
+    });
+}
+
+function closeImagePopup() {
+    document.getElementById("imagePopup").style.display = "none";
 }
 
 function attachMatchButtonListenersLost() {

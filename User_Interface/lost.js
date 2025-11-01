@@ -39,26 +39,58 @@ form.addEventListener('submit', function (e) {
         notes: form.notes.value.trim()
     };
 
-    const lostItems = JSON.parse(localStorage.getItem('lostItems')) || [];
-    lostItems.push({
-        itemName: formData.itemName,
-        description: formData.notes,
-        location: formData.location,
-        dateAdded: formData.date,
-        status: 'Not Matched' 
-    });
-    localStorage.setItem('lostItems', JSON.stringify(lostItems));
+    const fileInput = document.getElementById('file');
+    let imageData = null;
 
-    popupText.textContent = `Lost Item successfully reported.`;
-    popup.classList.remove('hidden');
-    popupOverlay.classList.remove('hidden');
+    if (fileInput.files.length > 0) {
+        const file = fileInput.files[0];
 
-    form.querySelector('button[type="submit"]').disabled = true;
+        if (!file.type.startsWith('image/')) {
+            alert('Please select a valid image file.');
+            return;
+        }
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            imageData = e.target.result;
+            saveItem(formData, imageData);
+        };
+        reader.onerror = function() {
+            alert('Error reading the image file. Please try again.');
+        };
+        reader.readAsDataURL(file);
+    } else {
+        saveItem(formData, imageData);
+    }
+
+    function saveItem(data, image) {
+        const lostItems = JSON.parse(localStorage.getItem('lostItems')) || [];
+        lostItems.push({
+            itemName: data.itemName,
+            description: data.notes,
+            location: data.location,
+            dateAdded: data.date,
+            status: 'Not Matched',
+            image: image 
+        });
+        localStorage.setItem('lostItems', JSON.stringify(lostItems));
+
+        form.reset();
+
+        inputs.forEach(input => input.classList.remove('filled'));
+
+        popupText.textContent = `Lost Item successfully reported.`;
+        popup.classList.remove('hidden');
+        popupOverlay.classList.remove('hidden');
+
+        form.querySelector('button[type="submit"]').disabled = true;
+    }
 });
 
 closePopupBtn.addEventListener('click', (e) => {
     e.preventDefault();
     popup.classList.add('hidden');
     popupOverlay.classList.add('hidden');
+
+    form.querySelector('button[type="submit"]').disabled = false;
     window.location.href = 'user.html';
 });

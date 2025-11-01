@@ -285,3 +285,18 @@ body {
     transform: translateY(-3px);
     box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
 }
+
+@media (max-width: 767px) {
+    .Found {
+        max-width: 400px;
+    }
+    .Date label {
+        top: 50%;
+        left: 120px;
+    }
+    .back-btn {
+        width: 20%;
+        margin-top: -740px;
+        margin-left: -300px;
+    }
+}
