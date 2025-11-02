@@ -164,3 +164,164 @@ body {
     font-size: 14px;
     margin-top: 10px;
 }
+
+@media (min-width: 481px) and (max-width: 769px) {
+    .logo {
+        max-width: 90px;
+        margin-top: -450px;
+    }
+    .login {
+        width: 400px;
+        height: 450px;
+        padding: 30px;
+    }
+    .login h1 {
+        font-size: 26px;
+        margin-bottom: 50px;
+    }
+    .Input input {
+        padding: 18px 22px;
+        font-size: 15px;
+    }
+    .Input label {
+        font-size: 15px;
+    }
+    .Input input:focus + label,
+    .Input input:valid + label {
+        font-size: 11px;
+    }
+    .Login-btn {
+        padding: 14px;
+        font-size: 15px;
+    }
+    .error {
+        font-size: 13px;
+    }
+}
+
+@media (max-width: 480px) {
+    .logo {
+        max-width: 70px;
+        margin-top: -390px;
+    }
+    .login {
+        width: 90%;
+        max-width: 350px;
+        height: 400px;
+        padding: 25px;
+    }
+    .login h1 {
+        font-size: 24px;
+        margin-bottom: 40px;
+    }
+    .Input {
+        margin-bottom: 30px;
+    }
+    .Input input {
+        padding: 16px 20px;
+        font-size: 14px;
+    }
+    .Input label {
+        font-size: 14px;
+        left: 18px;
+    }
+    .Input input:focus + label,
+    .Input input:valid + label {
+        font-size: 10px;
+        left: 12px;
+    }
+    .toggle-password {
+        right: 12px;
+        height: 40px;
+    }
+    .Login-btn {
+        padding: 12px;
+        font-size: 14px;
+        margin-top: 15px;
+    }
+    .error {
+        font-size: 12px;
+        margin-top: 8px;
+    }
+}
+
+@media (max-width: 376px) {
+    .logo {
+        max-width: 90px;
+        margin-top: -380px;
+    }
+    .login {
+        width: 95%;
+        height: 380px;
+        padding: 20px;
+    }
+    .login h1 {
+        font-size: 22px;
+        margin-bottom: 35px;
+    }
+    .Input input {
+        padding: 14px 18px;
+        font-size: 13px;
+    }
+    .Input label {
+        font-size: 13px;
+        left: 16px;
+    }
+    .Input input:focus + label,
+    .Input input:valid + label {
+        font-size: 9px;
+        left: 10px;
+    }
+    .toggle-password {
+        right: 10px;
+        height: 35px;
+    }
+    .Login-btn {
+        padding: 10px;
+        font-size: 13px;
+    }
+    .error {
+        font-size: 11px;
+    }
+}
+
+@media (max-width: 320px) {
+    .logo {
+        max-width: 70px;
+        margin-top: -350px;
+    }
+    .login {
+        width: 98%;
+        height: 350px;
+        padding: 15px;
+    }
+    .login h1 {
+        font-size: 20px;
+        margin-bottom: 30px;
+    }
+    .Input input {
+        padding: 12px 16px;
+        font-size: 12px;
+    }
+    .Input label {
+        font-size: 12px;
+        left: 14px;
+    }
+    .Input input:focus + label,
+    .Input input:valid + label {
+        font-size: 8px;
+        left: 8px;
+    }
+    .toggle-password {
+        right: 8px;
+        height: 30px;
+    }
+    .Login-btn {
+        padding: 8px;
+        font-size: 12px;
+    }
+    .error {
+        font-size: 10px;
+    }
+}
+
