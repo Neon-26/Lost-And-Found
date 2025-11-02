@@ -287,7 +287,7 @@ body {
     }
 }
 
-@media (min-width: 370px) and (max-width: 768px) {
+@media (min-width: 481px) and (max-width: 768px) {
     .Top {
         max-width: 768px;
         height: 12%;
@@ -439,6 +439,47 @@ body {
     .Lost {
         width: 120px;
         margin-left: 15px;
+    }
+    .Found {
+        width: 120px;
+        margin-left: 5px;
+    }
+    .Bottom {
+        height: 300px;
+        padding: 10px;
+    }
+    .Bottom p {
+        font-size: 12px;
+        margin: 5px;
+    }
+    .pic img {
+        max-width: 60px;
+        margin-left: 5px;
+    }
+}
+
+@media (max-width: 360px) {
+    .Top h1 {
+        font-size: 16px;
+        margin-left: 60px;
+        margin-top: 13px;
+    }
+    .Top img {
+        max-width: 50px;
+        margin: 5px;
+    }
+    .Center h1 {
+        margin-bottom: 10px;
+        font-size: 49px;
+    }
+    .Center p {
+        font-size: 14px;
+        max-width: 300px;
+        margin-left: 30px;
+    }
+    .Lost {
+        width: 120px;
+        margin-left: 55px;
     }
     .Found {
         width: 120px;
