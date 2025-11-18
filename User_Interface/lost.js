@@ -94,3 +94,7 @@ closePopupBtn.addEventListener('click', (e) => {
     form.querySelector('button[type="submit"]').disabled = false;
     window.location.href = 'user.html';
 });
+
+document.getElementById('cancelBtn').addEventListener('click', function() {
+    window.location.href = 'user.html';
+});

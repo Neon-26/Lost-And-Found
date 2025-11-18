@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="register.css">
+    <link rel="icon" href="logo.png" type="image/x-icon">
+    <title>Register</title>
+</head>
+<body>
+    <img src="logo.png" alt="logo" class="logo">
+    <div class="register">
+        <h1>Register</h1>
+        <form id="registerForm">
+            <div class="name-row">
+                <div class="Input">
+                    <input type="text" id="firstName" required>
+                    <label>First Name</label>
+                </div>
+                <div class="Input">
+                    <input type="text" id="lastName" required>
+                    <label>Last Name</label>
+                </div>
+            </div>
+
+            <div class="Input">
+                <input type="text" id="username" required>
+                <label>Username</label>
+            </div>
+
+            <div class="Input">
+                <input type="email" id="email" required>
+                <label>Email</label>
+            </div>
+
+            <div class="Input password-container">
+                <input type="password" id="password" required />
+                <label>Password</label>
+                <svg class="toggle-password" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" onclick="togglePassword('password')" aria-hidden="true">
+                    <path d="M12 5c-7 0-11 7-11 7s4 7 11 7 11-7 11-7-4-7-11-7zm0 12a5 5 0 1 1 0-10 5 5 0 0 1 0 10z"/>
+                    <circle cx="12" cy="12" r="2.5" />
+                </svg>
+            </div>
+
+            <div class="Input password-container">
+                <input type="password" id="confirmPassword" required />
+                <label>Confirm Password</label>
+                <svg class="toggle-password" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" onclick="togglePassword('confirmPassword')" aria-hidden="true">
+                    <path d="M12 5c-7 0-11 7-11 7s4 7 11 7 11-7 11-7-4-7-11-7zm0 12a5 5 0 1 1 0-10 5 5 0 0 1 0 10z"/>
+                    <circle cx="12" cy="12" r="2.5" />
+                </svg>
+            </div>
+            <button type="submit" class="register-btn">Register</button>
+            <a href="index.html" class="login-link">Already have an account? Login here.</a>
+            <p class="error" id="error"></p>
+        </form>
+    </div>
+<script src="register.js"></script>
+</body>
+</html>

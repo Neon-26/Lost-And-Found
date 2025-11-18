@@ -11,22 +11,29 @@
     <img src="logo.png" alt="logo" class="logo">
     <div class="login">
         <h1>Login</h1>
-            <div class="Input">
-                <input type="text" id="username" required>
-                <label>Username</label>
-            </div>
+        <div class="Input">
+            <input type="text" id="username" required>
+            <label>Username</label>
+        </div>
 
-            <div class="Input password-container">
-                <input type="password" id="password" required />
-                <label>Password</label>
+        <div class="Input password-container">
+            <input type="password" id="password" required />
+            <label>Password</label>
             <svg class="toggle-password" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" onclick="togglePassword()" aria-hidden="true">
-                    <path d="M12 5c-7 0-11 7-11 7s4 7 11 7 11-7 11-7-4-7-11-7zm0 12a5 5 0 1 1 0-10 5 5 0 0 1 0 10z"/>
-                    <circle cx="12" cy="12" r="2.5" />
-                </svg>
-            </div>
+                <path d="M12 5c-7 0-11 7-11 7s4 7 11 7 11-7 11-7-4-7-11-7zm0 12a5 5 0 1 1 0-10 5 5 0 0 1 0 10z"/>
+                <circle cx="12" cy="12" r="2.5" />
+            </svg>
+        </div>
+
+        <button onclick="login()" class="Login-btn">Login</button>
+        <div>
+            <a href="Forgotpass.html" class="forgot-link">Forgot password?</a><br/>
+            <a href="register.html" class="register-link">Register Here</a>
+        </div>
         
-            <button onclick="login()" class="Login-btn">Login</button>
-            <p class="error" id="error"></p>
+        <p class="error" id="error"></p>
+        <div class="error-message" id="errorMessage" style="display: none; color: red; text-align: center;"></div>
+        <p class="success" id="successMessage" style="display: none; color: green; text-align: center;"></p>
     </div>
 <script src="login.js"></script>
 </body>

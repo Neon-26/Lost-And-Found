@@ -176,10 +176,33 @@ body {
 }
 
 .Submit-btn {
-    width: 100%;
+    width: 49%;
     margin-top: 20px;
     padding: 15px;
+    background: #003300;
+    border-color: 2px solid #272727;
+    outline: none;
+    border-radius: 35px;
+    color: #fff;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 5px 15px #0000001a;
+}
+
+.Submit-btn:hover {
     background: #cccccc;
+    color: #000000;
+    transform: translateY(-3px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+}
+
+.back-btn {
+    width: 49%;
+    margin-top: 20px;
+    padding: 15px;
+    background: #9b9b9b;
     border-color: 2px solid #272727;
     outline: none;
     border-radius: 35px;
@@ -191,11 +214,19 @@ body {
     box-shadow: 0 5px 15px #0000001a;
 }
 
-.Submit-btn:hover {
-    background: #003300;
-    color: #ffff;
+.back-btn:hover {
+    background: #00c200;
+    color: #000000;
     transform: translateY(-3px);
     box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+}
+
+.button-container {
+    display: flex;
+    justify-content: space-between; 
+    align-items: center;
+    width: 100%;
+    margin-top: 1px;
 }
 
 .popup {
@@ -262,41 +293,20 @@ body {
     font-weight: bold;
 }
 
-.back-btn {
-    width: 5%;
-    padding: 10px;
-    background: #44be01d6;
-    border-color: 2px solid #272727;
-    outline: none;
-    margin-top: -630px;
-    margin-left: -1435px;
-    border-radius: 15px;
-    color: #000000;
-    font-size: 16px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    box-shadow: 0 5px 15px #0000001a;
-}
-
-.back-btn:hover {
-    background: #003300;
-    color: #dfdfdf;
-    transform: translateY(-3px);
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
-}
-
 @media (max-width: 767px) {
-    .Found {
+    .Lost {
         max-width: 400px;
     }
     .Date label {
         top: 50%;
         left: 120px;
     }
+    .button-container {
+        flex-direction: column;
+    }
+    .Submit-btn,
     .back-btn {
-        width: 20%;
-        margin-top: -740px;
-        margin-left: -300px;
+        width: 100%;
+        margin-bottom: 10px;
     }
 }

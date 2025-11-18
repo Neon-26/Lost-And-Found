@@ -105,21 +105,6 @@ body {
     color: #272727;
 }
 
-.Input input,
-.Input textarea {
-    width: 100%;
-    padding: 15px 20px;
-    background: rgba(255, 255, 255, 0.2);
-    border: none;
-    outline: none;
-    border-radius: 35px;
-    font-size: 16px;
-    color: #272727;
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
-    transition: all 0.3s ease;
-    resize: none;
-}
-
 .Date {
     position: relative;
     margin-bottom: 30px;
@@ -176,10 +161,33 @@ body {
 }
 
 .Submit-btn {
-    width: 100%;
+    width: 49%;
     margin-top: 20px;
     padding: 15px;
+    background: #003300;
+    border-color: 2px solid #272727;
+    outline: none;
+    border-radius: 35px;
+    color: #fff;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 5px 15px #0000001a;
+}
+
+.Submit-btn:hover {
     background: #cccccc;
+    color: #000000;
+    transform: translateY(-3px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+}
+
+.back-btn {
+    width: 49%;
+    margin-top: 20px;
+    padding: 15px;
+    background: #9b9b9b;
     border-color: 2px solid #272727;
     outline: none;
     border-radius: 35px;
@@ -191,11 +199,19 @@ body {
     box-shadow: 0 5px 15px #0000001a;
 }
 
-.Submit-btn:hover {
-    background: #003300;
-    color: #ffff;
+.back-btn:hover {
+    background: #00c200;
+    color: #000000;
     transform: translateY(-3px);
     box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+}
+
+.button-container {
+    display: flex;
+    justify-content: space-between; 
+    align-items: center;
+    width: 100%;
+    margin-top: 1px;
 }
 
 .popup {
@@ -262,30 +278,6 @@ body {
     font-weight: bold;
 }
 
-.back-btn {
-    width: 5%;
-    padding: 10px;
-    background: #44be01d6;
-    border-color: 2px solid #272727;
-    outline: none;
-    margin-top: -630px;
-    margin-left: -1435px;
-    border-radius: 15px;
-    color: #000000;
-    font-size: 16px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    box-shadow: 0 5px 15px #0000001a;
-}
-
-.back-btn:hover {
-    background: #003300;
-    color: #dfdfdf;
-    transform: translateY(-3px);
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
-}
-
 @media (max-width: 767px) {
     .Lost {
         max-width: 400px;
@@ -294,9 +286,12 @@ body {
         top: 50%;
         left: 120px;
     }
+    .button-container {
+        flex-direction: column;
+    }
+    .Submit-btn,
     .back-btn {
-        width: 20%;
-        margin-top: -740px;
-        margin-left: -300px;
+        width: 100%;
+        margin-bottom: 10px;
     }
 }

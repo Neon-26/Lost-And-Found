@@ -8,7 +8,6 @@
     <title>Found Item</title>
 </head>
 <body>
-    <button class="back-btn" onclick="location.href='user.html'">BACK</button>
     <div class="Found">
         <h1>Found Item</h1>
         <form id="FoundItemform" novalidate>
@@ -39,7 +38,11 @@
                 <input type="file" id="file" name="file" />
             </div>
 
-            <button type="submit" class="Submit-btn">Submit</button>
+            <div class="button-container">
+                <button type="submit" class="Submit-btn">Submit</button>
+                <button type="button" class="back-btn" id="cancelBtn">Cancel</button>
+            </div>
+
         </form>
 
         <div class="success-message" id="successMessage"></div>

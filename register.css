@@ -17,16 +17,16 @@ body {
 }
 
 .logo {
-    max-width: 100px;
+    max-width: 80px;
     align-items: center;
-    margin-top: -500px;
+    margin-top: -620px;
     z-index: 100;
 }
 
-.login {
+.register {
     position: fixed;
-    width: 450px;
-    height: 500px;
+    width: 600px;
+    height: 630px; 
     padding: 40px;
     border-radius: 20px;
     backdrop-filter: blur(15px);
@@ -37,7 +37,7 @@ body {
     overflow: hidden;
 }
 
-.login::before {
+.register::before {
     content: '';
     position: absolute;
     top: 0;
@@ -50,24 +50,24 @@ body {
     pointer-events: none;
 }
 
-.login:hover::before {
+.register:hover::before {
     left: 120%;
 }
 
-.login h1 {
+.register h1 {
     color: #1b1b1b;
     font-size: 28px;
     font-weight: 600;
     text-align: center;
     letter-spacing: 1px;
-    margin-top: 30px;
-    margin-bottom: 40px;
+    margin-top: 10px;
+    margin-bottom: 25px;
     text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
 
 .Input {
     position: relative;
-    margin-bottom: 40px;
+    margin-bottom: 25px;
 }
 
 .Input input {
@@ -135,14 +135,41 @@ body {
     fill: #000;
 }
 
-.Login-btn {
+.login-link {
+    margin-top: 10px;
+    display: block;
+    text-align: center;
+    font-weight: bold;
+    color: #272727;
+    text-decoration: none;
+    font-size: 14px;
+    transition: all 0.3s ease;
+}
+
+.login-link:hover {
+    color: #44be01;
+    text-decoration: underline;
+}
+
+.name-row {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px; 
+    margin-bottom: 20px;
+}
+
+.name-row .Input {
+    flex: 1; 
+    margin-bottom: 0; 
+}
+
+.register-btn {
     width: 100%;
     padding: 15px;
     background: #44be01d6;
     border-color: 2px solid #272727;
     outline: none;
-    margin-top: 5px;
-    margin-bottom: 10px;
+    margin-top: 1px;
     border-radius: 35px;
     color: #000000;
     font-size: 16px;
@@ -152,7 +179,7 @@ body {
     box-shadow: 0 5px 15px #0000001a;
 }
 
-.Login-btn:hover {
+.register-btn:hover {
     background: rgba(255, 255, 255, 0.4);
     color: #272727;
     transform: translateY(-3px);
@@ -166,34 +193,17 @@ body {
     margin-top: 10px;
 }
 
-.forgot-link,
-.register-link {
-    display: block;
-    text-align: center;
-    font-weight: bold;
-    color: #272727;
-    text-decoration: none;
-    font-size: 14px;
-    transition: all 0.3s ease;
-}
-
-.forgot-link:hover,
-.register-link:hover {
-    color: #44be01;
-    text-decoration: underline;
-}
-
 @media (min-width: 481px) and (max-width: 769px) {
     .logo {
         max-width: 90px;
         margin-top: -450px;
     }
-    .login {
-        width: 400px;
-        height: 450px;
+    .register {
+        width: 550px; 
+        height: 700px;
         padding: 30px;
     }
-    .login h1 {
+    .register h1 {
         font-size: 26px;
         margin-bottom: 50px;
     }
@@ -208,15 +218,14 @@ body {
     .Input input:valid + label {
         font-size: 11px;
     }
-    .Login-btn {
+    .name-row {
+        gap: 8px;
+    }
+    .register-btn {
         padding: 14px;
         font-size: 15px;
     }
     .error {
-        font-size: 13px;
-    }
-    .forgot-link,
-    .register-link {
         font-size: 13px;
     }
 }
@@ -224,20 +233,20 @@ body {
 @media (max-width: 480px) {
     .logo {
         max-width: 70px;
-        margin-top: -390px;
+        margin-top: -650px;
     }
-    .login {
+    .register {
         width: 90%;
-        max-width: 350px;
-        height: 400px;
+        max-width: 450px; 
+        height: 650px;
         padding: 25px;
     }
-    .login h1 {
+    .register h1 {
         font-size: 24px;
-        margin-bottom: 40px;
+        margin-bottom: 10px;
     }
     .Input {
-        margin-bottom: 30px;
+        margin-bottom: 25px;
     }
     .Input input {
         padding: 16px 20px;
@@ -256,7 +265,14 @@ body {
         right: 12px;
         height: 40px;
     }
-    .Login-btn {
+    .name-row {
+        flex-direction: column; 
+        gap: 0;
+    }
+    .name-row .Input {
+        margin-bottom: 30px; 
+    }
+    .register-btn {
         padding: 12px;
         font-size: 14px;
         margin-top: 15px;
@@ -265,10 +281,6 @@ body {
         font-size: 12px;
         margin-top: 8px;
     }
-    .forgot-link,
-    .register-link {
-        font-size: 12px;
-    }
 }
 
 @media (max-width: 376px) {
@@ -276,12 +288,12 @@ body {
         max-width: 90px;
         margin-top: -380px;
     }
-    .login {
+    .register {
         width: 95%;
-        height: 380px;
+        height: 600px; 
         padding: 20px;
     }
-    .login h1 {
+    .register h1 {
         font-size: 22px;
         margin-bottom: 35px;
     }
@@ -302,15 +314,14 @@ body {
         right: 10px;
         height: 35px;
     }
-    .Login-btn {
+    .name-row {
+        flex-direction: column; 
+    }
+    .register-btn {
         padding: 10px;
         font-size: 13px;
     }
     .error {
-        font-size: 11px;
-    }
-    .forgot-link,
-    .register-link {
         font-size: 11px;
     }
 }
@@ -320,12 +331,12 @@ body {
         max-width: 70px;
         margin-top: -350px;
     }
-    .login {
+    .register {
         width: 98%;
-        height: 350px;
+        height: 550px; 
         padding: 15px;
     }
-    .login h1 {
+    .register h1 {
         font-size: 20px;
         margin-bottom: 30px;
     }
@@ -346,15 +357,14 @@ body {
         right: 8px;
         height: 30px;
     }
-    .Login-btn {
+    .name-row {
+        flex-direction: column;
+    }
+    .register-btn {
         padding: 8px;
         font-size: 12px;
     }
     .error {
-        font-size: 10px;
-    }
-    .forgot-link,
-    .register-link {
         font-size: 10px;
     }
 }
