@@ -264,7 +264,7 @@ function appendNewItemsToLostAdmin() {
     lostItems.forEach(item => {
         if (!existingItemNames.includes(item.itemName.toLowerCase())) {
             const row = document.createElement("tr");
-            const date = new Date(item.dateAdded);
+            const date = new Date(item.date);
             const formattedDate = `${(date.getMonth() + 1).toString().padStart(2, '0')}/${date.getDate().toString().padStart(2, '0')}/${date.getFullYear()}`;
             
             const imageCell = item.image ? `<button class="view-btn" data-image="${item.image}">View</button>` : '';
@@ -290,7 +290,7 @@ function appendNewItemsToFoundAdmin() {
     foundItems.forEach(item => {
         if (!existingItemNames.includes(item.itemName.toLowerCase())) {
             const row = document.createElement("tr");
-            const date = new Date(item.dateAdded);
+            const date = new Date(item.date);
             const formattedDate = `${(date.getMonth() + 1).toString().padStart(2, '0')}/${date.getDate().toString().padStart(2, '0')}/${date.getFullYear()}`;
             
             const imageCell = item.image ? `<button class="view-btn" data-image="${item.image}">View</button>` : '';
@@ -357,6 +357,7 @@ function displayTableClaims() {
     visibleRowsClaims.slice(start, end).forEach((request, index) => {
         const row = document.createElement('tr');
         const removeCell = isEditModeClaims ? `<td><button class="Valid-btn" onclick="removeClaimRequest(${start + index})" style="background: red; color: white;">X</button></td>` : '';
+        const imageCell = request.image ? `<button class="view-btn" data-image="${request.image}">View</button>` : '';
         row.innerHTML = `
             <td>${request.itemName}</td>
             <td>${request.description}</td>
@@ -365,6 +366,7 @@ function displayTableClaims() {
             <td>${request.type}</td>
             <td>${request.user}</td>
             <td>${request.status || 'Pending'}</td>
+            <td>${imageCell}</td>
             <td>
                 <button class="Valid-btn" onclick="updateClaimStatus(${start + index}, 'Approved')">Approve</button>
                 <button class="Valid-btn" onclick="updateClaimStatus(${start + index}, 'Rejected')">Reject</button>
@@ -374,6 +376,7 @@ function displayTableClaims() {
         tbody.appendChild(row);
     });
     renderPaginationClaims();
+    attachViewButtonListeners();
 }
 
 function renderPaginationClaims() {
@@ -461,6 +464,7 @@ function displayTableMatches() {
     visibleRowsMatches.slice(start, end).forEach((request, index) => {
         const row = document.createElement('tr');
         const removeCell = isEditModeMatches ? `<td><button class="Valid-btn" onclick="removeMatchRequest(${start + index})" style="background: red; color: white;">X</button></td>` : '';
+        const imageCell = request.image ? `<button class="view-btn" data-image="${request.image}">View</button>` : ''; 
         row.innerHTML = `
             <td>${request.itemName}</td>
             <td>${request.description}</td>
@@ -469,6 +473,7 @@ function displayTableMatches() {
             <td>${request.type}</td>
             <td>${request.user}</td>
             <td>${request.status || 'Pending'}</td>
+            <td>${imageCell}</td>
             <td>
                 <button class="Valid-btn" onclick="updateMatchStatus(${start + index}, 'Approved')">Approve</button>
                 <button class="Valid-btn" onclick="updateMatchStatus(${start + index}, 'Rejected')">Reject</button>
@@ -478,6 +483,7 @@ function displayTableMatches() {
         tbody.appendChild(row);
     });
     renderPaginationMatches();
+    attachViewButtonListeners();  
 }
 
 function renderPaginationMatches() {
@@ -522,7 +528,17 @@ function updateMatchStatus(index, status) {
 function addEventListener() {
     const td = currentButton.parentElement;
     if (!td.querySelector(".remove-btn")) {
-        const removeBtn = document.getElementById("Remove")
+        const removeBtn = document.createElement("button");
+        removeBtn.textContent = "Remove";
+        removeBtn.className = "remove-btn";
+        removeBtn.onclick = function() {
+            const row = this.closest("tr");
+            row.remove();
+            updateRowsAndPagination(currentTable);
+            const tableType = currentTable === 'lost' ? 'lost items' : 'found items';
+            alertBox(`Item removed from ${tableType} table.`, currentTable);
+        };
+        td.appendChild(removeBtn);
     }
 }
 

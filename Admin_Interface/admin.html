@@ -72,8 +72,8 @@
             <section id="student" class="page">
                 <h1>Student Profile</h1>
                 <p>Here you can manage student profiles.</p>
-                <input type="text" id="searchBarStudent" placeholder="Search Student Name..." onkeyup="searchItem('student')" />
-                <table>
+                <input type="text" id="searchBarStudent" placeholder="Search Student Name..." onkeyup="searchStudent()" />
+                <table id="student">
                     <thead>
                         <tr>
                             <th>ID</th>
@@ -385,6 +385,7 @@
                         <th>Type</th>
                         <th>User</th>
                         <th>Status</th>
+                        <th>Image</th>
                         <th>Action</th>
                         <th id="removeColumnHeader" style="display: none;">Remove</th>
                     </tr>
@@ -408,7 +409,7 @@
                     <button id="editMatchesBtn" class="edit-btn" style="margin-left: auto;">Edit</button>
                 </div>
                 <p>Manage incoming match requests from users.</p>
-                <table id="matchRequestsTable">
+                <table id="reportTableMatches">
                 <thead>
                     <tr>
                         <th>Item Name</th>
@@ -418,6 +419,7 @@
                         <th>Type</th>
                         <th>User</th>
                         <th>Status</th>
+                        <th>Image</th>
                         <th>Action</th>
                         <th id="removeMatchColumnHeader" style="display: none;">Remove</th>
                     </tr>

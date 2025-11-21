@@ -1,3 +1,5 @@
+console.log('found.js loaded successfully.');
+
 const dateInput = document.getElementById('date');
 const form = document.getElementById('FoundItemform');
 const successMessage = document.getElementById('successMessage');
@@ -6,7 +8,15 @@ const popupText = document.getElementById('popupText');
 const popupOverlay = document.getElementById('popupOverlay');
 const closePopupBtn = document.getElementById('closePopup');
 
-const inputs = form.querySelectorAll('input, textarea');
+console.log('Form element found:', form);
+console.log('Popup elements found:', popup, popupOverlay, popupText, closePopupBtn);
+
+if (!form) {
+    console.error('Error: Form with ID "FoundItemform" not found. Check HTML.');
+    alert('Form not found! Check console.');
+}
+
+const inputs = form ? form.querySelectorAll('input, textarea') : [];
 inputs.forEach(input => {
     if (input.value) {
         input.classList.add('filled');
@@ -21,11 +31,9 @@ inputs.forEach(input => {
     });
 });
 
-form.addEventListener('submit', function (e) {
+form.addEventListener('submit', function(e) {
     e.preventDefault();
-
-    successMessage.textContent = '';
-    successMessage.style.color = '';
+    console.log('Submit triggered.');
 
     if (!form.checkValidity()) {
         form.reportValidity();
@@ -40,61 +48,45 @@ form.addEventListener('submit', function (e) {
     };
 
     const fileInput = document.getElementById('file');
-    let imageData = null;
-
     if (fileInput.files.length > 0) {
         const file = fileInput.files[0];
-
         if (!file.type.startsWith('image/')) {
-            alert('Please select a valid image file.');
+            alert('Select a valid image.');
             return;
         }
         const reader = new FileReader();
-        reader.onload = function(e) {
-            imageData = e.target.result;
-            saveItem(formData, imageData);
-        };
-        reader.onerror = function() {
-            alert('Error reading the image file. Please try again.');
-        };
+        reader.onload = () => saveItem(formData, reader.result);
         reader.readAsDataURL(file);
     } else {
-        saveItem(formData, imageData);
-    }
-
-    function saveItem(data, image) {
-        const foundItems = JSON.parse(localStorage.getItem('foundItems')) || [];
-        foundItems.push({
-            itemName: data.itemName,
-            description: data.notes,
-            location: data.location,
-            dateAdded: data.date,
-            status: 'Not Matched',
-            image: image 
-        });
-        localStorage.setItem('foundItems', JSON.stringify(foundItems));
-
-        form.reset();
-
-        inputs.forEach(input => input.classList.remove('filled'));
-
-        popupText.textContent = `Found Item successfully reported.`;
-        popup.classList.remove('hidden');
-        popupOverlay.classList.remove('hidden');
-
-        form.querySelector('button[type="submit"]').disabled = true;
+        saveItem(formData, null);
     }
 });
 
-closePopupBtn.addEventListener('click', (e) => {
-    e.preventDefault();
+function saveItem(data, image) {
+    const foundItems = JSON.parse(localStorage.getItem('foundItems')) || [];
+    foundItems.push({
+        itemName: data.itemName,
+        description: data.notes,
+        location: data.location,
+        date: data.date, 
+        status: 'pending', 
+        image: image
+    });
+    localStorage.setItem('foundItems', JSON.stringify(foundItems));
+    console.log('Saved:', foundItems.length, 'items');
+
+    form.reset();
+    popupText.textContent = 'Found Item successfully reported.';
+    popup.classList.remove('hidden');
+    popupOverlay.classList.remove('hidden');
+}
+
+closePopupBtn.addEventListener('click', () => {
     popup.classList.add('hidden');
     popupOverlay.classList.add('hidden');
-
-    form.querySelector('button[type="submit"]').disabled = false;
     window.location.href = 'user.html';
 });
 
-document.getElementById('cancelBtn').addEventListener('click', function() {
+document.getElementById('cancelBtn').addEventListener('click', () => {
     window.location.href = 'user.html';
 });

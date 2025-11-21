@@ -3,60 +3,487 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lost And Found Item - Pateros Technological College</title>
     <link rel="stylesheet" href="site.css">
     <link rel="icon" href="logo.png" type="image/x-icon">
-    <title>Lost And Found Item</title>
 </head>
 <body>
-    <div class="user-menu-container">
-        <button class="user-menu-button" id="userMenuButton">
-            <svg class="user-icon" viewBox="0 0 24 24">
-                <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
-            </svg>
-            <span id="username">Login</span> ▼
-        </button>
-        <ul class="user-menu-dropdown" id="userMenuDropdown">
-            <li class="user-menu-item-1"><a href="Listoffound.html">LIST OF THE FOUND ITEMS</a></li>
-            <li class="user-menu-item-1"><a href="Listoflost.html">LIST OF THE LOST ITEMS</a></li>
-            <li class="user-menu-item"><a href="/logout" id="logoutLink">Log Out</a></li>
-        </ul>
-    </div>
-
-    <div class="Top">
-        <img src="logo.png" alt="Logo" />
-        <h1>Pateros Technological College</h1>
-        <nav class="top-nav">
-            <ul>
-                <li><a href="Listoffound.html">LIST OF THE FOUND ITEMS</a></li>
-                <li><a href="Listoflost.html">LIST OF THE LOST ITEMS</a></li>
-            </ul>
-        </nav>
-    </div>
-    
-    <div class="Center">
-        <h1>LOST AND FOUND ITEM</h1>
-        <p>You can report any lost or found item here! Just fill out the
-            details so we can help return it to its owner
-        </p>
-        <button type="submit" class="Lost" onclick="location.href='Lost.html'">LOST</button>
-        <button type="submit" class="Found" onclick="location.href='Found.html'">FOUND</button>
-    </div>
-<footer>
-    <div class="Bottom">
-        <div class="pic">
-            <img src="logo.png" alt="PTC LOGO" />
-            <img src="IICT.png" alt="IICT LOGO" />
-            <img src="SSC.png" alt="SSC LOGO" />            
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <div class="logo-section">
+                    <img src="logo.png" alt="Logo" class="logo">
+                    <div>
+                        <h1 class="site-title">Pateros Technological College</h1>
+                    </div>
+                </div>
+                <nav class="nav">
+                    <ul class="nav-list">
+                        <li><a href="#home" class="nav-link active">Home</a></li>
+                        <li><a href="#dashboard" class="nav-link">Dashboard</a></li>
+                        <li><a href="#found-items" class="nav-link">Found Items</a></li>
+                        <li><a href="#lost-items" class="nav-link">Lost Items</a></li>
+                        <li><a href="#about" class="nav-link">About</a></li>
+                        <li><a href="#contact" class="nav-link">Contact</a></li>
+                    </ul>
+                </nav>
+                <div class="user-menu-container">
+                    <button class="user-menu-button" id="userMenuButton">
+                        <svg class="user-icon" viewBox="0 0 24 24">
+                            <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
+                        </svg>
+                        <span id="username">Login</span> ▼
+                    </button>
+                    <ul class="user-menu-dropdown" id="userMenuDropdown">
+                        <li class="user-menu-item"><a href="/logout" id="logoutLink">Log Out</a></li>
+                    </ul>
+                </div>
+            </div>
         </div>
+    </header>
 
-        <p>Hi there! Welcome to our Lost and Found System — your helpful tool for finding and reporting lost items within Pateros 
-            Technological College. We understand how stressful it can be to misplace something important, so this system makes 
-            it easier for you to report and track your belongings. Once an item is reported, the Student Council will be notified 
-            to verify and ensure everything is handled securely. With this, you can easily stay updated and recover your lost 
-            items faster, all within a safe and organized campus system made just for students like you.
-        </p>
+    <section id="home" class="hero">
+        <div class="container">
+            <div class="hero-content">
+                <h1 class="hero-title">LOST AND FOUND ITEM</h1>
+                <p class="hero-subtitle">You can report any lost or found item here! Just fill out the details so we can help return it to its owner</p>
+                <div class="hero-buttons">
+                    <a href="Lost.html" class="btn btn-primary">LOST</a>
+                    <a href="Found.html" class="btn btn-secondary">FOUND</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="dashboard" class="dashboard">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">Dashboard</h2>
+                <div class="underline"></div>
+                <p class="section-desc">Key metrics and information about our Lost and Found system.</p>
+            </div>
+            <div class="dashboard-grid">
+                <div class="card">
+                    <h3 class="card-title">Total Items Reported</h3>
+                    <p class="card-value" id="total-reported">150</p> 
+                </div>
+                <div class="card">
+                    <h3 class="card-title">Items Found</h3>
+                    <p class="card-value" id="items-found">75</p>
+                </div>
+                <div class="card">
+                    <h3 class="card-title">Items Lost</h3>
+                    <p class="card-value" id="items-lost">75</p>
+                </div>
+                <div class="card">
+                    <h3 class="card-title">Items Returned</h3>
+                    <p class="card-value" id="items-returned">45</p>
+                </div>
+                <div class="card">
+                    <h3 class="card-title">Pending Claims</h3>
+                    <p class="card-value" id="pending-claims">30</p>
+                </div>
+                <div class="card">
+                    <h3 class="card-title">Student Council Inquiries</h3>
+                    <p class="card-value" id="council-inquiries">12</p> 
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="found-items" class="items-section">
+        <div class="found-items-container">
+            <div class="section-header">
+                <h2 class="section-title">List of Found Items</h2>
+                <div class="underline"></div>
+                <p class="section-desc">Items reported as found. Contact the Student Council for claims.</p>
+                <input type="text" placeholder="Search found items..." class="search-bar" id="found-search">
+            </div>
+
+            <div class="found-carousel-wrapper">
+                <button class="found-arrow-btn left-arrow" aria-label="Scroll Left">&#9664;</button>
+                <div class="scroll-container found-scroll-container">
+                    <div class="found-item-card" data-item-name="Java programming Book" data-description="Book with blue cover, slightly worn" data-location="School" data-date="09/26/2025" data-status="Available for claim">
+                        <img src="Java Book.jpeg" alt="Java programming Book" class="found-item-image" />
+                        <h2 class="found-item-title">Java programming Book</h2>
+                        <p class="found-item-description">Book with blue cover, slightly worn</p>
+                        <div class="found-item-buttons">
+                            <button class="view-btn">View</button>
+                            <button class="match-btn">Match</button>
+                        </div>
+                    </div>
+
+                    <div class="found-item-card" data-item-name="Black Wallet" data-description="Contains ID, ATM card, and receipts" data-location="School" data-date="10/09/2025" data-status="Available for claim">
+                        <img src="Wallet.jpeg" alt="Black Wallet" class="found-item-image" />
+                        <h2 class="found-item-title">Black Wallet</h2>
+                        <p class="found-item-description">Contains ID, ATM card, and receipts</p>
+                        <div class="found-item-buttons">
+                            <button class="view-btn">View</button>
+                            <button class="match-btn">Match</button>
+                        </div>
+                    </div>
+
+                    <div class="found-item-card" data-item-name="Umbrella" data-description="Black folding umbrella, plain design" data-location="School" data-date="10/02/2025" data-status="Available for claim">
+                        <img src="Umbrella.jpeg" alt="Umbrella" class="found-item-image" />
+                        <h2 class="found-item-title">Umbrella</h2>
+                        <p class="found-item-description">Black folding umbrella, plain design</p>
+                        <div class="found-item-buttons">
+                            <button class="view-btn">View</button>
+                            <button class="match-btn">Match</button>
+                        </div>
+                    </div>
+
+                    <div class="found-item-card" data-item-name="USB Flash Drive" data-description="32GB Kingston" data-location="School" data-date="10/17/2025" data-status="Available for claim">
+                        <img src="Flash Drive.jpeg" alt="USB Flash Drive" class="found-item-image" />
+                        <h2 class="found-item-title">USB Flash Drive</h2>
+                        <p class="found-item-description">32GB Kingston</p>
+                        <div class="found-item-buttons">
+                            <button class="view-btn">View</button>
+                            <button class="match-btn">Match</button>
+                        </div>
+                    </div>
+
+                    <div class="found-item-card" data-item-name="Samsung earbuds" data-description="White wireless earbuds in case" data-location="School" data-date="10/10/2025" data-status="Available for claim">
+                        <img src="Samsung earpods.jpeg" alt="Samsung earbuds" class="found-item-image" />
+                        <h2 class="found-item-title">Samsung earbuds</h2>
+                        <p class="found-item-description">White wireless earbuds in case</p>
+                        <div class="found-item-buttons">
+                            <button class="view-btn">View</button>
+                            <button class="match-btn">Match</button>
+                        </div>
+                    </div>
+
+                    <div class="found-item-card" data-item-name="Key" data-description="House key with a cat logo keychain" data-location="School" data-date="10/15/2025" data-status="Available for claim">
+                        <img src="Key.jpeg" alt="Key" class="found-item-image" />
+                        <h2 class="found-item-title">Key</h2>
+                        <p class="found-item-description">House key with a cat logo keychain</p>
+                        <div class="found-item-buttons">
+                            <button class="view-btn">View</button>
+                            <button class="match-btn">Match</button>
+                        </div>
+                    </div>
+
+                    <div class="found-item-card" data-item-name="Powerbank" data-description="Small black powerbank (20,000mAh) with a red charging cable" data-location="School" data-date="10/05/2025" data-status="Available for claim">
+                        <img src="Powerbank.jpeg" alt="Powerbank" class="found-item-image" />
+                        <h2 class="found-item-title">Powerbank</h2>
+                        <p class="found-item-description">Small black powerbank (20,000mAh) with a red charging cable</p>
+                        <div class="found-item-buttons">
+                            <button class="view-btn">View</button>
+                            <button class="match-btn">Match</button>
+                        </div>
+                    </div>
+
+                    <div class="found-item-card" data-item-name="Watch" data-description="Gold analog wristwatch with a brown leather strap" data-location="School" data-date="10/23/2025" data-status="Available for claim">
+                        <img src="Watch.jpeg" alt="Watch" class="found-item-image" />
+                        <h2 class="found-item-title">Watch</h2>
+                        <p class="found-item-description">Gold analog wristwatch with a brown leather strap</p>
+                        <div class="found-item-buttons">
+                            <button class="view-btn">View</button>
+                            <button class="match-btn">Match</button>
+                        </div>
+                    </div>
+
+                    <div class="found-item-card" data-item-name="Earphones" data-description="White wired earphones wrapped around a small case" data-location="School" data-date="10/18/2025" data-status="Available for claim">
+                        <img src="Headset.jpeg" alt="Earphones" class="found-item-image" />
+                        <h2 class="found-item-title">Earphones</h2>
+                        <p class="found-item-description">White wired earphones wrapped around a small case</p>
+                        <div class="found-item-buttons">
+                            <button class="view-btn">View</button>
+                            <button class="match-btn">Match</button>
+                        </div>
+                    </div>
+
+                    <div class="found-item-card" data-item-name="School ID" data-description="Student ID card with a blue lanyard" data-location="School" data-date="10/10/2025" data-status="Available for claim">
+                        <img src="ID.jpeg" alt="School ID" class="found-item-image" />
+                        <h2 class="found-item-title">School ID</h2>
+                        <p class="found-item-description">Student ID card with a blue lanyard</p>
+                        <div class="found-item-buttons">
+                            <button class="view-btn">View</button>
+                            <button class="match-btn">Match</button>
+                        </div>
+                    </div>
+                </div>
+                <button class="found-arrow-btn right-arrow" aria-label="Scroll Right">&#9654;</button>
+            </div>
+        </div>
+    </section>
+
+    <section id="lost-items" class="items-section alt">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">List of Lost Items</h2>
+                <div class="underline"></div>
+                <p class="section-desc">Items reported as lost. Check if yours matches and contact the owner or council.</p>
+                <input type="text" placeholder="Search lost items..." class="search-bar" id="lost-search">
+            </div>
+            <div class="lost-carousel-wrapper">
+                <button class="lost-arrow-btn left-arrow" aria-label="Scroll Left">&#9664;</button>
+                <div class="scroll-container lost-scroll-container">
+                    <div class="lost-item-card" data-item-name="Java programming Book" data-description="Book with blue cover, slightly worn" data-location="School" data-date="09/26/2025" data-status="Reported">
+                        <img src="Java Book.jpeg" alt="Java programming Book" class="lost-item-image" />
+                        <h2 class="lost-item-title">Java programming Book</h2>
+                        <p class="lost-item-description">Book with blue cover, slightly worn</p>
+                        <div class="lost-item-buttons">
+                            <button class="view-btn">View</button>
+                            <button class="claim-btn">Claim</button>
+                        </div>
+                    </div>
+
+                    <div class="lost-item-card" data-item-name="Black Wallet" data-description="Contains ID, ATM card, and receipts" data-location="School" data-date="10/09/2025" data-status="Reported">
+                        <img src="Wallet.jpeg" alt="Black Wallet" class="lost-item-image" />
+                        <h2 class="lost-item-title">Black Wallet</h2>
+                        <p class="lost-item-description">Contains ID, ATM card, and receipts</p>
+                        <div class="lost-item-buttons">
+                            <button class="view-btn">View</button>
+                            <button class="claim-btn">Claim</button>
+                        </div>
+                    </div>
+
+                    <div class="lost-item-card" data-item-name="Umbrella" data-description="Black folding umbrella, plain design" data-location="School" data-date="10/02/2025" data-status="Reported">
+                        <img src="Umbrella.jpeg" alt="Umbrella" class="lost-item-image" />
+                        <h2 class="lost-item-title">Umbrella</h2>
+                        <p class="lost-item-description">Black folding umbrella, plain design</p>
+                        <div class="lost-item-buttons">
+                            <button class="view-btn">View</button>
+                            <button class="claim-btn">Claim</button>
+                        </div>
+                    </div>
+
+                    <div class="lost-item-card" data-item-name="USB Flash Drive" data-description="32GB Kingston" data-location="School" data-date="10/17/2025" data-status="Reported">
+                        <img src="Flash Drive.jpeg" alt="USB Flash Drive" class="lost-item-image" />
+                        <h2 class="lost-item-title">USB Flash Drive</h2>
+                        <p class="lost-item-description">32GB Kingston</p>
+                        <div class="lost-item-buttons">
+                            <button class="view-btn">View</button>
+                            <button class="claim-btn">Claim</button>
+                        </div>
+                    </div>
+
+                    <div class="lost-item-card" data-item-name="Samsung earbuds" data-description="White wireless earbuds in case" data-location="School" data-date="10/10/2025" data-status="Reported">
+                        <img src="Samsung earpods.jpeg" alt="Samsung earbuds" class="lost-item-image" />
+                        <h2 class="lost-item-title">Samsung earbuds</h2>
+                        <p class="lost-item-description">White wireless earbuds in case</p>
+                        <div class="lost-item-buttons">
+                            <button class="view-btn">View</button>
+                            <button class="claim-btn">Claim</button>
+                        </div>
+                    </div>
+
+                    <div class="lost-item-card" data-item-name="Key" data-description="House key with a cat logo keychain" data-location="School" data-date="10/15/2025" data-status="Reported">
+                        <img src="Key.jpeg" alt="Key" class="lost-item-image" />
+                        <h2 class="lost-item-title">Key</h2>
+                        <p class="lost-item-description">House key with a cat logo keychain</p>
+                        <div class="lost-item-buttons">
+                            <button class="view-btn">View</button>
+                            <button class="claim-btn">Claim</button>
+                        </div>
+                    </div>
+
+                    <div class="lost-item-card" data-item-name="Powerbank" data-description="Small black powerbank (20,000mAh) with a red charging cable" data-location="School" data-date="10/05/2025" data-status="Reported">
+                        <img src="Powerbank.jpeg" alt="Powerbank" class="lost-item-image" />
+                        <h2 class="lost-item-title">Powerbank</h2>
+                        <p class="lost-item-description">Small black powerbank (20,000mAh) with a red charging cable</p>
+                        <div class="lost-item-buttons">
+                            <button class="view-btn">View</button>
+                            <button class="claim-btn">Claim</button>
+                        </div>
+                    </div>
+
+                    <div class="lost-item-card" data-item-name="Watch" data-description="Gold analog wristwatch with a brown leather strap" data-location="School" data-date="10/23/2025" data-status="Reported">
+                        <img src="Watch.jpeg" alt="Watch" class="lost-item-image" />
+                        <h2 class="lost-item-title">Watch</h2>
+                        <p class="lost-item-description">Gold analog wristwatch with a brown leather strap</p>
+                        <div class="lost-item-buttons">
+                            <button class="view-btn">View</button>
+                            <button class="claim-btn">Claim</button>
+                        </div>
+                    </div>
+
+                    <div class="lost-item-card" data-item-name="Earphones" data-description="White wired earphones wrapped around a small case" data-location="School" data-date="10/18/2025" data-status="Reported">
+                        <img src="Headset.jpeg" alt="Earphones" class="lost-item-image" />
+                        <h2 class="lost-item-title">Earphones</h2>
+                        <p class="lost-item-description">White wired earphones wrapped around a small case</p>
+                        <div class="lost-item-buttons">
+                            <button class="view-btn">View</button>
+                            <button class="claim-btn">Claim</button>
+                        </div>
+                    </div>
+
+                    <div class="lost-item-card" data-item-name="School ID" data-description="Student ID card with a blue lanyard" data-location="School" data-date="10/10/2025" data-status="Reported">
+                        <img src="ID.jpeg" alt="School ID" class="lost-item-image" />
+                        <h2 class="lost-item-title">School ID</h2>
+                        <p class="lost-item-description">Student ID card with a blue lanyard</p>
+                        <div class="lost-item-buttons">
+                            <button class="view-btn">View</button>
+                            <button class="claim-btn">Claim</button>
+                        </div>
+                    </div>
+                </div>
+                <button class="lost-arrow-btn right-arrow" aria-label="Scroll Right">&#9654;</button>
+            </div>
+        </div>
+    </section>
+
+    <section id="about" class="about">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">About Our System</h2>
+                <div class="underline"></div>
+            </div>
+            <div class="about-content">
+                <div class="about-image">
+                    <img src="logo.png" alt="PTC Logo">
+                    <img src="IICT.png" alt="IICT Logo">
+                    <img src="SSC.png" alt="SSC Logo">
+                </div>
+                <div class="about-text">
+                    <p>Hi there! Welcome to our Lost and Found System — your helpful tool for finding and reporting lost items within Pateros 
+                        Technological College. We understand how stressful it can be to misplace something important, so this system makes 
+                        it easier for you to report and track your belongings. Once an item is reported, the Student Council will be notified 
+                        to verify and ensure everything is handled securely. With this, you can easily stay updated and recover your lost 
+                        items faster, all within a safe and organized campus system made just for students like you.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="contact" class="contact">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">Contact Us</h2>
+                <div class="underline"></div>
+                <p class="section-desc">Reach out for inquiries about lost or found items.</p>
+            </div>
+            <div class="contact-content">
+                <div class="contact-info">
+                    <h3>Student Council Information</h3>
+                    <div class="info-item">
+                        <i class="fas fa-map-marker-alt"></i>
+                        <div>
+                            <h4>Address</h4>
+                            <p>205 College Street, Sto. Rosario-Kanluran, Pateros, Metro Manila</p>
+                        </div>
+                    </div>
+                    <div class="info-item">
+                        <i class="fas fa-envelope"></i>
+                        <div>
+                            <h4>Email</h4>
+                            <p>ssc@paterostechnologicalcollege.edu.ph</p>
+                        </div>
+                    </div>
+                    <div class="info-item">
+                        <i class="fas fa-phone-alt"></i>
+                        <div>
+                            <h4>Phone</h4>
+                            <p>(02) 123-4567</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="contact-form">
+                    <h3>Send Us a Message</h3>
+                    <form>
+                        <input type="text" placeholder="Full Name" required>
+                        <input type="email" placeholder="Email Address" required>
+                        <input type="text" placeholder="Subject" required>
+                        <textarea placeholder="Message" rows="5" required></textarea>
+                        <button type="submit" class="btn btn-primary">Send Message <i class="fas fa-paper-plane"></i></button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>Pateros Technological College</h3>
+                    <p>Lost and Found System - Helping students recover their belongings.</p>
+                </div>
+                <div class="footer-section">
+                    <h3>Quick Links</h3>
+                    <ul>
+                        <li><a href="#home">Home</a></li>
+                        <li><a href="#dashboard">Dashboard</a></li>
+                        <li><a href="#found-items">Found Items</a></li>
+                        <li><a href="#lost-items">Lost Items</a></li>
+                        <li><a href="#about">About</a></li>
+                        <li><a href="#contact">Contact</a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="footer-bottom">
+                <p>&copy; 2025 Pateros Technological College. All rights reserved.</p>
+            <div class="image">
+                <img src="logo.png" alt="PTC LOGO">
+                <img src="IICT.png" alt="IICT LOGO">
+                <img src="SSC.png" alt="SSC LOGO">
+            </div>
+                <div class="footer-links">
+                    <a href="#">Privacy Policy</a>
+                    <a href="#">Terms of Service</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <button id="backToTop" class="back-to-top">
+        <i class="fas fa-arrow-up"></i>
+    </button>
+
+    <div id="itemModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <img id="modalImage" src="" alt="Item Image" style="width: 100%; max-width: 300px; height: auto; max-height: 300px; margin-bottom: 10px;">
+            <h2 id="modalTitle"></h2>
+            <p id="modalDescription"></p>
+            <p id="modalLocation"></p>
+            <p id="modalDate"></p>
+            <p id="modalStatus"></p>
+            <button onclick="closePopup()">Back</button>
+        </div>
     </div>
-</footer>
-<script src="user.js"></script>
+
+    <div id="itemModalMatch" class="modal" style="display: none;">
+        <div class="modal-content">
+            <form id="itemModalMatch">
+            <div class="Input">
+                <textarea name="notes" id="notes" required></textarea>
+                <label for="notes">Description</label>
+            </div>
+            <div class="Upload">
+                <label for="file">Upload Photo</label>
+                <input type="file" id="file" name="file" required/>
+            </div>
+            <div class="button-container">
+                <button type="button" class="back-btn" id="cancelBtn">Cancel</button>
+                <button type="submit" class="Submit-btn">Submit</button>
+            </div>
+            </form>
+        </div>
+    </div>
+
+    <div id="itemModalClaim" class="modal" style="display: none;">
+        <div class="modal-content">
+            <form id="itemModalClaimForm">
+            <div class="Input">
+                <textarea name="notes" id="notes" required></textarea>
+                <label for="notes">Description</label>
+            </div>
+            <div class="Upload">
+                <label for="file">Upload Photo</label>
+                <input type="file" id="file" name="file" required/>
+            </div>
+            <div class="button-container">
+                <button type="button" class="back-btn" id="cancelBtn">Cancel</button>
+                <button type="submit" class="Submit-btn">Submit</button>
+            </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="user.js"></script>
 </body>
 </html>

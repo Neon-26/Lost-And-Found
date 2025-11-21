@@ -16,25 +16,32 @@ body {
     overflow: hidden;
 }
 
+.container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 60px;
+}
+
 .logo {
     max-width: 80px;
-    align-items: center;
-    margin-top: -620px;
     z-index: 100;
 }
 
 .register {
-    position: fixed;
     width: 600px;
-    height: 630px; 
-    padding: 40px;
+    min-height: 450px;
+    padding: 35px;
     border-radius: 20px;
+    margin-top: -100px;
     backdrop-filter: blur(15px);
     background: #ffffffe4;
     border: 1px solid #ffffff66;
     box-shadow: 0 25px 45px #00000066;
     z-index: 10;
     overflow: hidden;
+    transition: min-height 0.3s ease;
 }
 
 .register::before {
@@ -60,7 +67,7 @@ body {
     font-weight: 600;
     text-align: center;
     letter-spacing: 1px;
-    margin-top: 10px;
+    margin-top: 15px;
     margin-bottom: 25px;
     text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
@@ -163,6 +170,18 @@ body {
     margin-bottom: 0; 
 }
 
+.pass-row {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px; 
+    margin-bottom: 20px;
+}
+
+.pass-row .Input {
+    flex: 1; 
+    margin-bottom: 0; 
+}
+
 .register-btn {
     width: 100%;
     padding: 15px;
@@ -196,12 +215,12 @@ body {
 @media (min-width: 481px) and (max-width: 769px) {
     .logo {
         max-width: 90px;
-        margin-top: -450px;
     }
     .register {
-        width: 550px; 
-        height: 700px;
+        width: 500px;
+        min-height: 650px;
         padding: 30px;
+        transition: min-height 0.3s ease;
     }
     .register h1 {
         font-size: 26px;
@@ -233,13 +252,13 @@ body {
 @media (max-width: 480px) {
     .logo {
         max-width: 70px;
-        margin-top: -650px;
     }
     .register {
         width: 90%;
-        max-width: 450px; 
-        height: 650px;
+        max-width: 400px;
+        min-height: 600px;
         padding: 25px;
+        transition: min-height 0.3s ease;
     }
     .register h1 {
         font-size: 24px;
@@ -286,12 +305,12 @@ body {
 @media (max-width: 376px) {
     .logo {
         max-width: 90px;
-        margin-top: -380px;
     }
     .register {
         width: 95%;
-        height: 600px; 
+        min-height: 550px;
         padding: 20px;
+        transition: min-height 0.3s ease;
     }
     .register h1 {
         font-size: 22px;
@@ -329,12 +348,12 @@ body {
 @media (max-width: 320px) {
     .logo {
         max-width: 70px;
-        margin-top: -350px;
     }
     .register {
         width: 98%;
-        height: 550px; 
+        min-height: 500px;
         padding: 15px;
+        transition: min-height 0.3s ease;
     }
     .register h1 {
         font-size: 20px;

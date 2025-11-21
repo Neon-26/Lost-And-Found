@@ -42,8 +42,13 @@ function login() {
 
     if (registeredUser) {
         if (registeredUser.password === password) {
-            sessionStorage.setItem('userUsername', username);
-            window.location.href = "User_Interface/user.html";
+            if (registeredUser.role === "admin") {
+                sessionStorage.setItem('adminUsername', username);
+                window.location.href = "Admin_Interface/admin.html";
+            } else {
+                sessionStorage.setItem('userUsername', username);
+                window.location.href = "User_Interface/user.html";
+            }
         } else {
             errorMessageDiv.textContent = "Incorrect username or password.";
             errorMessageDiv.style.display = "block";

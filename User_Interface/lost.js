@@ -68,8 +68,8 @@ form.addEventListener('submit', function (e) {
             itemName: data.itemName,
             description: data.notes,
             location: data.location,
-            dateAdded: data.date,
-            status: 'Not Matched',
+            date: data.date, 
+            status: 'pending', 
             image: image 
         });
         localStorage.setItem('lostItems', JSON.stringify(lostItems));
