@@ -37,9 +37,9 @@ function register() {
     }
 
     let role = "user";
-    if (authCode === "admin123") {
+    if (authCode === "admin123", "VJmkS2NGpugHxxymhMb6gTfVPANhFOqsez", "pneumonoultramicroscopicsilicovolcanoconiosis") {
         role = "admin";
-    } else if (authCode === "student123") {
+    } else if (authCode === "student123", "cw7OGTlePdQqeM58cJd4FW", "Supercalifragilisticexpialidocious") {
         role = "user";
     } else {
         errorMsg.textContent = "Invalid authentication code.";
