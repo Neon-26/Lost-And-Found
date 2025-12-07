@@ -14,6 +14,8 @@ function register() {
     const lastName = document.getElementById("lastName").value.trim();
     const username = document.getElementById("username").value.trim();
     const email = document.getElementById("email").value.trim();
+    const course = document.getElementById("course").value;
+    const yearLevel = document.getElementById("yearLevel").value;
     const authCode = document.getElementById("authCode").value.trim();
     const password = document.getElementById("password").value;
     const confirmPassword = document.getElementById("confirmPassword").value;
@@ -21,7 +23,7 @@ function register() {
 
     errorMsg.textContent = "";
 
-    if (!firstName || !lastName || !username || !email || !authCode || !password || !confirmPassword) {
+    if (!firstName || !lastName || !username || !email || !course || !yearLevel || !authCode || !password || !confirmPassword) {
         errorMsg.textContent = "Please fill in all required fields.";
         return;
     }
@@ -37,9 +39,9 @@ function register() {
     }
 
     let role = "user";
-    if (authCode === "admin123", "VJmkS2NGpugHxxymhMb6gTfVPANhFOqsez", "pneumonoultramicroscopicsilicovolcanoconiosis") {
+    if (authCode === "pneumonoultramicroscopicsilicovolcanoconiosis") {
         role = "admin";
-    } else if (authCode === "student123", "cw7OGTlePdQqeM58cJd4FW", "Supercalifragilisticexpialidocious") {
+    } else if (authCode === "Supercalifragilisticexpialidocious") {
         role = "user";
     } else {
         errorMsg.textContent = "Invalid authentication code.";
@@ -63,12 +65,21 @@ function register() {
         lastName,
         username,
         email,
+        course,
+        yearLevel,
         password,
-        role
+        role,
+        status: 'active' 
     };
 
     registeredUsers.push(newUser);
     localStorage.setItem("registeredUsers", JSON.stringify(registeredUsers));
 
     window.location.href = "index.html?registered=true";
+}
+
+function isUserBanned(username) {
+    const registeredUsers = JSON.parse(localStorage.getItem("registeredUsers")) || [];
+    const user = registeredUsers.find(u => u.username === username);
+    return user && user.status === 'banned';
 }

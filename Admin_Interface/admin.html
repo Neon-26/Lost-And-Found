@@ -9,6 +9,23 @@
 </head>
 <body>
     <div class="user-menu-container">
+<div class="notification-container">
+<button class="notification-btn" id="adminNotificationBtn">
+    <svg viewBox="0 0 24 24" class="notification-icon">
+        <path d="M20 4H4C2.9 4 2.01 4.9 2.01 6L2 18C2 19.1 2.9 20 4 20H20C21.1 20 22 19.1 22 18V6C22 4.9 21.1 4 20 4ZM20 8L12 13L4 8V6L12 11L20 6V8Z"/>
+    </svg>
+    <span class="notification-badge" id="adminNotificationBadge" style="display: none;">0</span>
+</button>
+    <div class="notification-dropdown" id="adminNotificationDropdown">
+        <div class="notification-header">
+            <h4>Admin Notifications</h4>
+            <button id="adminClearAllBtn">Clear All</button>
+        </div>
+        <div class="notification-list" id="adminNotificationList">
+            <p class="no-notifications">No notifications yet.</p>
+        </div>
+    </div>
+</div>
         <button class="user-menu-button" id="userMenuButton">
             <svg class="user-icon" viewBox="0 0 24 24">
                 <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
@@ -31,10 +48,13 @@
             <nav>
                 <ul>
                     <li><a href="#" class="active" class="Valid-btn" onclick="showPage('dashboard')">Dashboard</a></li>
+                    <li><a href="#" class="active" class="Valid-btn" onclick="showPage('lostitemrequest')">Lost Item Request</a></li>
+                    <li><a href="#" class="active" class="Valid-btn" onclick="showPage('founditemrequest')">Found Item Request</a></li>
                     <li><a href="#" class="active" class="Valid-btn" onclick="showPage('listofl')">List of Lost Items</a></li>
                     <li><a href="#" class="active" class="Valid-btn" onclick="showPage('listoff')">List of Found Items</a></li>
-                    <li><a href="#" class="active" class="Valid-btn" onclick="showPage('claimrequests')">List of Claim Requests</a></li>
-                    <li><a href="#" class="active" class="Valid-btn" onclick="showPage('matchrequests')">List of Match Requests</a></li>
+                    <li><a href="#" class="active" class="Valid-btn" onclick="showPage('matcheditems')">Matched Items</a></li>
+                    <li><a href="#" class="active" class="Valid-btn" onclick="showPage('claimeditems')">Claimed Items</a></li>
+                    <li><a href="#" class="active" class="Valid-btn" onclick="showPage('itemrecords')">Item Records</a></li>
                     <li><a href="#" class="active" class="Valid-btn" onclick="showPage('student')">Student Profile</a></li>
                     <li><a href="#" class="active" class="Valid-btn" onclick="showPage('about')">About</a></li>
                 </ul>
@@ -42,425 +62,430 @@
         </aside>
 
         <main class="main-content">
-            <section id="dashboard" class="page active">
-                <h1>Dashboard</h1>
-                <p>Here is an overview of the system.</p>
-                <div class="stats">
-                    <div class="stat-card">
-                        <h3>Total Lost Items</h3>
-                        <p id="totalLost">0</p>
-                    </div>
-                    <div class="stat-card">
-                        <h3>Total Found Items</h3>
-                        <p id="totalFound">0</p>
-                    </div>
-                    <div class="stat-card">
-                        <h3>Claim Requests</h3>
-                        <p id="totalClaims">0</p>
-                    </div>
-                    <div class="stat-card">
-                        <h3>Match Requests</h3>
-                        <p id="totalMatches">0</p>
-                    </div>
-                    <div class="stat-card">
-                        <h3>Students</h3>
-                        <p id="totalStudents">0</p>
-                    </div>
-                </div>
-            </section>
+<section id="dashboard" class="page active">
+    <h1>Dashboard</h1>
+    <p>Here is an overview of the system.</p>
+    <div class="stats">
+        <div class="stat-card">
+            <h3>Lost Item Request</h3>
+            <p id="lostRequests">0</p>
+        </div>
+        <div class="stat-card">
+            <h3>Found Item Request</h3>
+            <p id="foundRequests">0</p>
+        </div>
+        <div class="stat-card">
+            <h3>Total Lost Items</h3>
+            <p id="totalLost">0</p>
+        </div>
+        <div class="stat-card">
+            <h3>Total Found Items</h3>
+            <p id="totalFound">0</p>
+        </div>
+        <div class="stat-card">
+            <h3>Claimed Items</h3>
+            <p id="totalClaims">0</p>
+        </div>
+        <div class="stat-card">
+            <h3>Matched Items</h3>
+            <p id="totalMatches">0</p>
+        </div>
+        <div class="stat-card">
+            <h3>Item Records</h3>
+            <p id="totalRecords">0</p>
+        </div>
+        <div class="stat-card">
+            <h3>Students</h3>
+            <p id="totalStudents">0</p>
+        </div>
+    </div>
+</section>
 
             <section id="student" class="page">
                 <h1>Student Profile</h1>
-                <p>Here you can manage student profiles.</p>
-                <input type="text" id="searchBarStudent" placeholder="Search Student Name..." onkeyup="searchStudent()" />
-                <table id="student">
-                    <thead>
-                        <tr>
-                            <th>ID</th>
-                            <th>Name</th>
-                            <th>Course</th>
-                            <th>Year Level</th>
-                        </tr>
-                    </thead>
-                    <tbody id="studentTableBody">
-                        <tr>
-                            <td>001</td>
-                            <td>Charles Adrian Gaviola</td>
-                            <td>BSIT</td>
-                            <td>3rd Year</td>
-                        </tr>
-                        <tr>
-                            <td>002</td>
-                            <td>Jericho Lejano</td>
-                            <td>BSIT</td>
-                            <td>3rd Year</td>
-                        </tr>
-                        <tr>
-                            <td>003</td>
-                            <td>Elyza Dizon</td>
-                            <td>BSIT</td>
-                            <td>3rd Year</td>
-                        </tr>
-                        <tr>
-                            <td>004</td>
-                            <td>Jheno Vien Calagos</td>
-                            <td>BSIT</td>
-                            <td>3rd Year</td>
-                        </tr>
-                        <tr>
-                            <td>005</td>
-                            <td>Denosta Norwellyn Grace</td>
-                            <td>BSIT</td>
-                            <td>3rd Year</td>
-                        </tr>
-                        <tr>
-                            <td>006</td>
-                            <td>Kaela Imbao</td>
-                            <td>BSIT</td>
-                            <td>3rd Year</td>
-                        </tr>
-                        <tr>
-                            <td>007</td>
-                            <td>Elaiza Joy Castor</td>
-                            <td>BSIT</td>
-                            <td>3rd Year</td>
-                        </tr>
-                        <tr>
-                            <td>008</td>
-                            <td>Rai Sanchez</td>
-                            <td>BSIT</td>
-                            <td>3rd Year</td>
-                        </tr>
-                        <tr>
-                            <td>009</td>
-                            <td>James Corporal</td>
-                            <td>BSIT</td>
-                            <td>3rd Year</td>
-                        </tr>
-                        <tr>
-                            <td>010</td>
-                            <td>Marisol Plaquia Pagauitan</td>
-                            <td>BSIT</td>
-                            <td>3rd Year</td>
-                        </tr>
-                    </tbody>
-                </table>
+                <p>Here you can manage registered student accounts.</p>
+                <input type="text" id="searchBarStudent" placeholder="Search by Full Name or Username..." onkeyup="searchStudent()" />
+<table id="studentTable">
+    <thead>
+        <tr>
+            <th>Username</th>
+            <th>Full Name</th>
+            <th>Course</th>
+            <th>Year Level</th>
+            <th>Status</th>
+            <th>Action</th>
+        </tr>
+    </thead>
+    <tbody id="studentTableBody">
+       
+    </tbody>
+</table>
                 <div class="pagination" id="paginationStudent"></div>
+                <p id="noStudentsMessage" style="display: none; text-align: center;">No registered students found.</p>
             </section>
 
+        <section id="lostitemrequest" class="page">
+<div class="buttons">
+</div>
+        </section>
+
+        <section id="founditemrequest" class="page">
+<div class="buttons">
+</div>
+        </section>
+
             <section id="listofl" class="page">
-                <h1>List of Lost Items</h1>
-                <input type="text" id="searchBarLost" placeholder="Search Item Name..." onkeyup="searchItem('lost')" />
-                <table id="reportTableLost">
-                    <thead>
-                        <tr>
-                            <th>Item Name</th>
-                            <th>Description</th>
-                            <th>Location</th>
-                            <th>Date Lost</th>
-                            <th>Image</th>
-                            <th>Action</th>
-                        </tr>
-                    </thead>
-                    <tbody id="lostTableBody">
-                        <tr>
-                            <td>Java programming Book</td>
-                            <td>Book with blue cover, slightly worn</td>
-                            <td>School</td>
-                            <td>09/26/2025</td>
-                            <td><button class="view-btn" data-image="Java Book.jpeg">View</button></td>
-                            <td><button class="Valid-btn" onclick="startValidation(this, 'lost')">Valid</button></td>
-                        </tr>
-                        <tr>
-                            <td>Black Wallet</td>
-                            <td>Contains ID, ATM card, and receipts</td>
-                            <td>School</td>
-                            <td>10/09/2025</td>
-                            <td><button class="view-btn" data-image="Wallet.jpeg">View</button></td>
-                            <td><button class="Valid-btn" onclick="startValidation(this, 'lost')">Valid</button></td>
-                        </tr>
-                        <tr>
-                            <td>Umbrella</td>
-                            <td>Black folding umbrella, plain design</td>
-                            <td>School</td>
-                            <td>10/02/2025</td>
-                            <td><button class="view-btn" data-image="Umbrella.jpeg">View</button></td>
-                            <td><button class="Valid-btn" onclick="startValidation(this, 'lost')">Valid</button></td>
-                        </tr>
-                        <tr>
-                            <td>USB Flash Drive</td>
-                            <td>32GB Kingston</td>
-                            <td>School</td>
-                            <td>10/17/2025</td>
-                            <td><button class="view-btn" data-image="Flash Drive.jpeg">View</button></td>
-                            <td><button class="Valid-btn" onclick="startValidation(this, 'lost')">Valid</button></td>
-                        </tr>
-                        <tr>
-                            <td>Samsung earbuds</td>
-                            <td>White wireless earbuds in case</td>
-                            <td>School</td>
-                            <td>10/10/2025</td>
-                            <td><button class="view-btn" data-image="Samsung earpods.jpeg">View</button></td>
-                            <td><button class="Valid-btn" onclick="startValidation(this, 'lost')">Valid</button></td>
-                        </tr>
-                        <tr>
-                            <td>Key</td>
-                            <td>House key with a cat logo keychain</td>
-                            <td>School</td>
-                            <td>10/15/2025</td>
-                            <td><button class="view-btn" data-image="Key.jpeg">View</button></td>
-                            <td><button class="Valid-btn" onclick="startValidation(this, 'lost')">Valid</button></td>
-                        </tr>
-                        <tr>
-                            <td>Powerbank</td>
-                            <td>Small black powerbank (20,000mAh) with a red charging cable</td>
-                            <td>School</td>
-                            <td>10/05/2025</td>
-                            <td><button class="view-btn" data-image="Powerbank.jpeg">View</button></td>
-                            <td><button class="Valid-btn" onclick="startValidation(this, 'lost')">Valid</button></td>
-                        </tr>
-                        <tr>
-                            <td>Watch</td>
-                            <td>Gold analog wristwatch with a brown leather strap</td>
-                            <td>School</td>
-                            <td>10/23/2025</td>
-                            <td><button class="view-btn" data-image="Watch.jpeg">View</button></td>
-                            <td><button class="Valid-btn" onclick="startValidation(this, 'lost')">Valid</button></td>
-                        </tr>
-                        <tr>
-                            <td>Earphones</td>
-                            <td>White wired earphones wrapped around a small case</td>
-                            <td>School</td>
-                            <td>10/18/2025</td>
-                            <td><button class="view-btn" data-image="Headset.jpeg">View</button></td>
-                            <td><button class="Valid-btn" onclick="startValidation(this, 'lost')">Valid</button></td>
-                        </tr>
-                        <tr>
-                            <td>School ID</td>
-                            <td>Student ID card with a blue lanyard</td>
-                            <td>School</td>
-                            <td>10/10/2025</td>
-                            <td><button class="view-btn" data-image="ID.jpeg">View</button></td>
-                            <td><button class="Valid-btn" onclick="startValidation(this, 'lost')">Valid</button></td>
-                        </tr>
-                    </tbody>
-                </table>
-                <div class="pagination" id="paginationLost"></div>
-                <div class="overlay" id="overlayLost"></div>
-                <div id="popupOverlayLost" class="popup-overlay">
-                    <div class="popup" id="popupBoxLost">
-                        <h3 id="popupMessageLost">Message here</h3>
-                        <div id="popupButtonsLost"></div>
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                    <h1>List of Lost Items</h1>
+                </div>
+        <div class="container">
+            <div class="section-header">
+                <div class="underline"></div>
+                <p class="section-desc">Items reported as lost.</p>
+                <input type="text" placeholder="Search lost items..." class="search-bar" id="lost-search">
+            </div>
+            <div class="lost-carousel-wrapper">
+                <button class="lost-arrow-btn left-arrow" onclick="scrollCarousel('lost', 'left')" aria-label="Scroll Left">&#9664;</button>
+                <div class="scroll-container lost-scroll-container">
+                    <div class="lost-item-card" data-item-name="Java programming Book" data-description="Book with blue cover, slightly worn" data-location="School" data-date="09/26/2025" data-status="Reported">
+                        <img src="Java Book.jpeg" alt="Java programming Book" class="lost-item-image" />
+                        <h2 class="lost-item-title">Java programming Book</h2>
+                        <p class="lost-item-description">Book with blue cover, slightly worn</p>
+                        <div class="lost-item-buttons">
+                            <button class="view-btn">View</button>
+                        </div>
+                    </div>
+
+                    <div class="lost-item-card" data-item-name="Black Wallet" data-description="Contains ID, ATM card, and receipts" data-location="School" data-date="10/09/2025" data-status="Reported">
+                        <img src="Wallet.jpeg" alt="Black Wallet" class="lost-item-image" />
+                        <h2 class="lost-item-title">Black Wallet</h2>
+                        <p class="lost-item-description">Contains ID, ATM card, and receipts</p>
+                        <div class="lost-item-buttons">
+                            <button class="view-btn">View</button>
+                        </div>
+                    </div>
+
+                    <div class="lost-item-card" data-item-name="Umbrella" data-description="Black folding umbrella, plain design" data-location="School" data-date="10/02/2025" data-status="Reported">
+                        <img src="Umbrella.jpeg" alt="Umbrella" class="lost-item-image" />
+                        <h2 class="lost-item-title">Umbrella</h2>
+                        <p class="lost-item-description">Black folding umbrella, plain design</p>
+                        <div class="lost-item-buttons">
+                            <button class="view-btn">View</button>
+                        </div>
+                    </div>
+
+                    <div class="lost-item-card" data-item-name="USB Flash Drive" data-description="32GB Kingston" data-location="School" data-date="10/17/2025" data-status="Reported">
+                        <img src="Flash Drive.jpeg" alt="USB Flash Drive" class="lost-item-image" />
+                        <h2 class="lost-item-title">USB Flash Drive</h2>
+                        <p class="lost-item-description">32GB Kingston</p>
+                        <div class="lost-item-buttons">
+                            <button class="view-btn">View</button>
+                        </div>
+                    </div>
+
+                    <div class="lost-item-card" data-item-name="Samsung earbuds" data-description="White wireless earbuds in case" data-location="School" data-date="10/10/2025" data-status="Reported">
+                        <img src="Samsung earpods.jpeg" alt="Samsung earbuds" class="lost-item-image" />
+                        <h2 class="lost-item-title">Samsung earbuds</h2>
+                        <p class="lost-item-description">White wireless earbuds in case</p>
+                        <div class="lost-item-buttons">
+                            <button class="view-btn">View</button>
+                        </div>
+                    </div>
+
+                    <div class="lost-item-card" data-item-name="Key" data-description="House key with a cat logo keychain" data-location="School" data-date="10/15/2025" data-status="Reported">
+                        <img src="Key.jpeg" alt="Key" class="lost-item-image" />
+                        <h2 class="lost-item-title">Key</h2>
+                        <p class="lost-item-description">House key with a cat logo keychain</p>
+                        <div class="lost-item-buttons">
+                            <button class="view-btn">View</button>
+                        </div>
+                    </div>
+
+                    <div class="lost-item-card" data-item-name="Powerbank" data-description="Small black powerbank (20,000mAh) with a red charging cable" data-location="School" data-date="10/05/2025" data-status="Reported">
+                        <img src="Powerbank.jpeg" alt="Powerbank" class="lost-item-image" />
+                        <h2 class="lost-item-title">Powerbank</h2>
+                        <p class="lost-item-description">Small black powerbank (20,000mAh) with a red charging cable</p>
+                        <div class="lost-item-buttons">
+                            <button class="view-btn">View</button>
+                        </div>
+                    </div>
+
+                    <div class="lost-item-card" data-item-name="Watch" data-description="Gold analog wristwatch with a brown leather strap" data-location="School" data-date="10/23/2025" data-status="Reported">
+                        <img src="Watch.jpeg" alt="Watch" class="lost-item-image" />
+                        <h2 class="lost-item-title">Watch</h2>
+                        <p class="lost-item-description">Gold analog wristwatch with a brown leather strap</p>
+                        <div class="lost-item-buttons">
+                            <button class="view-btn">View</button>
+                        </div>
+                    </div>
+
+                    <div class="lost-item-card" data-item-name="Earphones" data-description="White wired earphones wrapped around a small case" data-location="School" data-date="10/18/2025" data-status="Reported">
+                        <img src="Headset.jpeg" alt="Earphones" class="lost-item-image" />
+                        <h2 class="lost-item-title">Earphones</h2>
+                        <p class="lost-item-description">White wired earphones wrapped around a small case</p>
+                        <div class="lost-item-buttons">
+                            <button class="view-btn">View</button>
+                        </div>
+                    </div>
+
+                    <div class="lost-item-card" data-item-name="School ID" data-description="Student ID card with a blue lanyard" data-location="School" data-date="10/10/2025" data-status="Reported">
+                        <img src="ID.jpeg" alt="School ID" class="lost-item-image" />
+                        <h2 class="lost-item-title">School ID</h2>
+                        <p class="lost-item-description">Student ID card with a blue lanyard</p>
+                        <div class="lost-item-buttons">
+                            <button class="view-btn">View</button>
+                        </div>
                     </div>
                 </div>
+                <button class="lost-arrow-btn right-arrow" onclick="scrollCarousel('lost', 'right')" aria-label="Scroll Right">&#9654;</button>
+            </div>
+        </div>
             </section>
 
             <section id="listoff" class="page">
-                <h1>List of Found Items</h1>
-                <input type="text" id="searchBarFound" placeholder="Search Item Name..." onkeyup="searchItem('found')" />
-                <table id="reportTableFound">
-                    <thead>
-                        <tr>
-                            <th>Item Name</th>
-                            <th>Description</th>
-                            <th>Location</th>
-                            <th>Date Found</th>
-                            <th>Image</th>
-                            <th>Action</th>
-                        </tr>
-                    </thead>
-                    <tbody id="foundTableBody">
-                        <tr>
-                            <td>Java programming Book</td>
-                            <td>Book with blue cover, slightly worn</td>
-                            <td>School</td>
-                            <td>09/26/2025</td>
-                            <td><button class="view-btn" data-image="Java Book.jpeg">View</button></td>
-                            <td><button class="Valid-btn" onclick="startValidation(this, 'found')">Valid</button></td>
-                        </tr>
-                        <tr>
-                            <td>Black Wallet</td>
-                            <td>Contains ID, ATM card, and receipts</td>
-                            <td>School</td>
-                            <td>10/09/2025</td>
-                            <td><button class="view-btn" data-image="Wallet.jpeg">View</button></td>
-                            <td><button class="Valid-btn" onclick="startValidation(this, 'found')">Valid</button></td>
-                        </tr>
-                        <tr>
-                            <td>Umbrella</td>
-                            <td>Black folding umbrella, plain design</td>
-                            <td>School</td>
-                            <td>10/02/2025</td>
-                            <td><button class="view-btn" data-image="Umbrella.jpeg">View</button></td>
-                            <td><button class="Valid-btn" onclick="startValidation(this, 'found')">Valid</button></td>
-                        </tr>
-                        <tr>
-                            <td>USB Flash Drive</td>
-                            <td>32GB Kingston</td>
-                            <td>School</td>
-                            <td>10/17/2025</td>
-                            <td><button class="view-btn" data-image="Flash Drive.jpeg">View</button></td>
-                            <td><button class="Valid-btn" onclick="startValidation(this, 'found')">Valid</button></td>
-                        </tr>
-                        <tr>
-                            <td>Samsung earbuds</td>
-                            <td>White wireless earbuds in case</td>
-                            <td>School</td>
-                            <td>10/10/2025</td>
-                            <td><button class="view-btn" data-image="Samsung earpods.jpeg">View</button></td>
-                            <td><button class="Valid-btn" onclick="startValidation(this, 'found')">Valid</button></td>
-                        </tr>
-                        <tr>
-                            <td>Key</td>
-                            <td>House key with a cat logo keychain</td>
-                            <td>School</td>
-                            <td>10/15/2025</td>
-                            <td><button class="view-btn" data-image="Key.jpeg">View</button></td>
-                            <td><button class="Valid-btn" onclick="startValidation(this, 'found')">Valid</button></td>
-                        </tr>
-                        <tr>
-                            <td>Powerbank</td>
-                            <td>Small black powerbank (20,000mAh) with a red charging cable</td>
-                            <td>School</td>
-                            <td>10/05/2025</td>
-                            <td><button class="view-btn" data-image="Powerbank.jpeg">View</button></td>
-                            <td><button class="Valid-btn" onclick="startValidation(this, 'found')">Valid</button></td>
-                        </tr>
-                        <tr>
-                            <td>Watch</td>
-                            <td>Gold analog wristwatch with a brown leather strap</td>
-                            <td>School</td>
-                            <td>10/23/2025</td>
-                            <td><button class="view-btn" data-image="Watch.jpeg">View</button></td>
-                            <td><button class="Valid-btn" onclick="startValidation(this, 'found')">Valid</button></td>
-                        </tr>
-                        <tr>
-                            <td>Earphones</td>
-                            <td>White wired earphones wrapped around a small case</td>
-                            <td>School</td>
-                            <td>10/18/2025</td>
-                            <td><button class="view-btn" data-image="Headset.jpeg">View</button></td>
-                            <td><button class="Valid-btn" onclick="startValidation(this, 'found')">Valid</button></td>
-                        </tr>
-                        <tr>
-                            <td>School ID</td>
-                            <td>Student ID card with a blue lanyard</td>
-                            <td>School</td>
-                            <td>10/10/2025</td>
-                            <td><button class="view-btn" data-image="ID.jpeg">View</button></td>
-                            <td><button class="Valid-btn" onclick="startValidation(this, 'found')">Valid</button></td>
-                        </tr>
-                    </tbody>
-                </table>
-                <div class="pagination" id="paginationFound"></div>
-                <div class="overlay" id="overlayFound"></div>
-                <div id="popupOverlayFound" class="popup-overlay">
-                    <div class="popup" id="popupBoxFound">
-                        <h3 id="popupMessageFound">Message here</h3>
-                        <div id="popupButtonsFound"></div>
-                    </div>
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                    <h1>List of Found Items</h1>
                 </div>
-            </section>
+                <div class="found-items-container">
+                    <div class="section-header">
+                        <div class="underline"></div>
+                        <p class="section-desc">Items reported as found.</p>
+                        <input type="text" placeholder="Search found items..." class="search-bar" id="found-search">
+                    </div>
 
-            <div class="popup" id="imagePopup">
-            <div class="popup-Content">
-                    <img id="popupImage" src="" alt="Item Image" class="img-popup">
-                    <button onclick="closeImagePopup()">Close</button>
+                    <div class="found-carousel-wrapper">
+                        <button class="found-arrow-btn left-arrow" onclick="scrollCarousel('found', 'left')" aria-label="Scroll Left">&#9664;</button>
+                        <div class="scroll-container found-scroll-container">
+                            <div class="found-item-card" data-item-name="Java programming Book" data-description="Book with blue cover, slightly worn" data-location="School" data-date="09/26/2025" data-status="Available for claim">
+                                <img src="Java Book.jpeg" alt="Java programming Book" class="found-item-image" />
+                                <h2 class="found-item-title">Java programming Book</h2>
+                                <p class="found-item-description">Book with blue cover, slightly worn</p>
+                                <div class="found-item-buttons">
+                                    <button class="view-btn">View</button>
+                                    <button class="match-btn">Match</button>
+                                </div>
+                            </div>
+
+                            <div class="found-item-card" data-item-name="Black Wallet" data-description="Contains ID, ATM card, and receipts" data-location="School" data-date="10/09/2025" data-status="Available for claim">
+                                <img src="Wallet.jpeg" alt="Black Wallet" class="found-item-image" />
+                                <h2 class="found-item-title">Black Wallet</h2>
+                                <p class="found-item-description">Contains ID, ATM card, and receipts</p>
+                                <div class="found-item-buttons">
+                                    <button class="view-btn">View</button>
+                                    <button class="match-btn">Match</button>
+                                </div>
+                            </div>
+
+                            <div class="found-item-card" data-item-name="Umbrella" data-description="Black folding umbrella, plain design" data-location="School" data-date="10/02/2025" data-status="Available for claim">
+                                <img src="Umbrella.jpeg" alt="Umbrella" class="found-item-image" />
+                                <h2 class="found-item-title">Umbrella</h2>
+                                <p class="found-item-description">Black folding umbrella, plain design</p>
+                                <div class="found-item-buttons">
+                                    <button class="view-btn">View</button>
+                                    <button class="match-btn">Match</button>
+                                </div>
+                            </div>
+
+                            <div class="found-item-card" data-item-name="USB Flash Drive" data-description="32GB Kingston" data-location="School" data-date="10/17/2025" data-status="Available for claim">
+                                <img src="Flash Drive.jpeg" alt="USB Flash Drive" class="found-item-image" />
+                                <h2 class="found-item-title">USB Flash Drive</h2>
+                                <p class="found-item-description">32GB Kingston</p>
+                                <div class="found-item-buttons">
+                                    <button class="view-btn">View</button>
+                                    <button class="match-btn">Match</button>
+                                </div>
+                            </div>
+
+                            <div class="found-item-card" data-item-name="Samsung earbuds" data-description="White wireless earbuds in case" data-location="School" data-date="10/10/2025" data-status="Available for claim">
+                                <img src="Samsung earpods.jpeg" alt="Samsung earbuds" class="found-item-image" />
+                                <h2 class="found-item-title">Samsung earbuds</h2>
+                                <p class="found-item-description">White wireless earbuds in case</p>
+                                <div class="found-item-buttons">
+                                    <button class="view-btn">View</button>
+                                    <button class="match-btn">Match</button>
+                                </div>
+                            </div>
+
+                            <div class="found-item-card" data-item-name="Powerbank" data-description="Small black powerbank (20,000mAh) with a red charging cable" data-location="School" data-date="10/05/2025" data-status="Available for claim"> 
+                                <img src="Powerbank.jpeg" alt="Powerbank" class="found-item-image" /> 
+                                <h2 class="found-item-title">Powerbank</h2> 
+                                <p class="found-item-description">Small black powerbank (20,000mAh) with a red charging cable</p> 
+                                <div class="found-item-buttons"> 
+                                    <button class="view-btn">View</button> 
+                                    <button class="match-btn">Match</button> 
+                                </div> 
+                            </div>
+
+                        <div class="found-item-card" data-item-name="Watch" data-description="Gold analog wristwatch with a brown leather strap" data-location="School" data-date="10/23/2025" data-status="Available for claim">
+                            <img src="Watch.jpeg" alt="Watch" class="found-item-image" />
+                            <h2 class="found-item-title">Watch</h2>
+                            <p class="found-item-description">Gold analog wristwatch with a brown leather strap</p>
+                            <div class="found-item-buttons">
+                                <button class="view-btn">View</button>
+                                <button class="match-btn">Match</button>
+                            </div>
+                        </div>
+
+                        <div class="found-item-card" data-item-name="Earphones" data-description="White wired earphones wrapped around a small case" data-location="School" data-date="10/18/2025" data-status="Available for claim">
+                            <img src="Headset.jpeg" alt="Earphones" class="found-item-image" />
+                            <h2 class="found-item-title">Earphones</h2>
+                            <p class="found-item-description">White wired earphones wrapped around a small case</p>
+                            <div class="found-item-buttons">
+                                <button class="view-btn">View</button>
+                                <button class="match-btn">Match</button>
+                            </div>
+                        </div>
+
+                        <div class="found-item-card" data-item-name="School ID" data-description="Student ID card with a blue lanyard" data-location="School" data-date="10/10/2025" data-status="Available for claim">
+                            <img src="ID.jpeg" alt="School ID" class="found-item-image" />
+                            <h2 class="found-item-title">School ID</h2>
+                            <p class="found-item-description">Student ID card with a blue lanyard</p>
+                            <div class="found-item-buttons">
+                                <button class="view-btn">View</button>
+                                <button class="match-btn">Match</button>
+                            </div>
+                        </div>
+                    </div>
+                    <button class="found-arrow-btn right-arrow" onclick="scrollCarousel('found', 'right')" aria-label="Scroll Right">&#9654;</button>
                 </div>
             </div>
+        </section>
 
-            <section id="claimrequests" class="page">
-                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
-                    <h1>List of Claim Requests</h1>
-                    <button id="editClaimsBtn" class="edit-btn" style="margin-left: auto;">Edit</button>
+        <section id="matcheditems" class="page">
+    <div class="matched-section">
+        <div class="item found">
+            <h2>Found Item</h2>
+            <div class="item-content">
+                <img src="Powerbank.jpeg" alt="Found Item Image">
+                <div class="details">
+                    <p><strong>Description:</strong> A Powerbank found near the School Gate.</p>
+                    <p><strong>Location:</strong> Infront of school.</p>
+                    <p><strong>Date Found:</strong> 11/26/2025 </p>
+                    <p><strong>User:</strong>Raze</p>
                 </div>
-                <p>Manage incoming claim requests from users.</p>
-                <table id="claimRequestsTable">
-                <thead>
-                    <tr>
-                        <th>Item Name</th>
-                        <th>Description</th>
-                        <th>Location</th>
-                        <th>Date</th>
-                        <th>Type</th>
-                        <th>User</th>
-                        <th>Status</th>
-                        <th>Image</th>
-                        <th>Action</th>
-                        <th id="removeColumnHeader" style="display: none;">Remove</th>
-                    </tr>
-                </thead>
-                <tbody id="claimRequestsBody">
-                </tbody>
-                </table>
-                    <div class="pagination" id="paginationClaims"></div>
-                    <p id="noClaimsMessage" style="display: none; text-align: center;">No claim requests available.</p>
-                    <div id="popupOverlayClaims" class="popup-overlay" style="display: none;">
-                        <div class="popup-content">
-                            <p id="popupMessageClaims"></p>
-                            <div id="popupButtonsClaims"></div>
-                        </div>
-                    </div>
-            </section>
-
-            <section id="matchrequests" class="page">
-                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
-                    <h1>List of Match Requests</h1>
-                    <button id="editMatchesBtn" class="edit-btn" style="margin-left: auto;">Edit</button>
+            </div>
+        </div>
+        <div class="middle">
+            <div class="divider-left"></div>
+            <div class="divider-right"></div>
+            <h3>Matched</h3>
+            <div class="status">Status: Processing</div>
+            <button class="claim-btn">Claim</button>
+        </div>
+        <div class="item lost">
+            <h2>Lost Item</h2>
+            <div class="item-content">
+                <img src="Powerbank.jpeg" alt="Lost Item Image">
+                <div class="details">
+                    <p><strong>Description:</strong> Black powerbank with a red charging cable.</p>
+                    <p><strong>Location Lost:</strong> School.</p>
+                    <p><strong>Date Lost:</strong> 11/23/2025</p>
+                    <p><strong>User:</strong>Neon</p>
                 </div>
-                <p>Manage incoming match requests from users.</p>
-                <table id="reportTableMatches">
-                <thead>
-                    <tr>
-                        <th>Item Name</th>
-                        <th>Description</th>
-                        <th>Location</th>
-                        <th>Date</th>
-                        <th>Type</th>
-                        <th>User</th>
-                        <th>Status</th>
-                        <th>Image</th>
-                        <th>Action</th>
-                        <th id="removeMatchColumnHeader" style="display: none;">Remove</th>
-                    </tr>
-                </thead>
-                <tbody id="matchRequestsBody">
-                </tbody>
-                </table>
-                    <div class="pagination" id="paginationMatches"></div>
-                    <p id="noMatchesMessage" style="display: none; text-align: center;">No match requests available.</p>
-                    <div id="popupOverlayMatches" class="popup-overlay" style="display: none;">
-                        <div class="popup-content">
-                            <p id="popupMessageMatches"></p>
-                            <div id="popupButtonsMatches"></div>
-                        </div>
-                    </div>
-            </section>
-
-            <section id="about" class="page">
-                <h1>About</h1>
-                <div class="pic">
-                    <img src="logo.png" alt="PTC LOGO" />
-                    <img src="IICT.png" alt="IICT LOGO" />
-                    <img src="SSC.png" alt="SSC LOGO" />            
-                </div>
-                <div class="Text">
-                    <h1>PATEROS TECHNOLOGICAL COLLEGE</h1>
-                <p>Lost and Found Systems designed to help our school community to locate and to 
-                    return the misplaced belongings. As students, we understand how stressful it is to lose an important items 
-                    like ID's, notebooks, gadgets and other items that might lose when you are in school. So we built a simple 
-                    platform that anyone/students can reports lost items or post if you found items, and connect with the rightful 
-                    owner quickly.</p>
-
-                <p>This project was developed by BSIT students who wanted to apply their skills on System Analysis and Design and 
-                    solve campus problems from losing important items. Our goal is to make the lost-and-found process more 
-                    effiecient and organized, reducing the need for announcements, group chats, and manual searching. Through 
-                    the webiste, we hope to encourage responsibility and honesty, also the cooperation of students, while making 
-                    our school more connected.</p>
-                </div>
-            </section>
-        </main>
+            </div>
+        </div>
     </div>
-<script src="admin.js"></script>
-</body>
+        </section>
+
+        <section id="claimeditems" class="page">
+        </section>
+
+            <section id="itemrecords" class="page">
+        </section>
+
+        <section id="about" class="page">
+            <h1>About</h1>
+            <div class="pic">
+                <img src="logo.png" alt="PTC LOGO" />
+                <img src="IICT.png" alt="IICT LOGO" />
+                <img src="SSC.png" alt="SSC LOGO" />            
+            </div>
+            <div class="Text">
+                <h1>PATEROS TECHNOLOGICAL COLLEGE</h1>
+            <p>Lost and Found Systems designed to help our school community to locate and to 
+                return the misplaced belongings. As students, we understand how stressful it is to lose an important items 
+                like ID's, notebooks, gadgets and other items that might lose when you are in school. So we built a simple 
+                platform that anyone/students can reports lost items or post if you found items, and connect with the rightful 
+                owner quickly.</p>
+
+            <p>This project was developed by BSIT students who wanted to apply their skills on System Analysis and Design and 
+                solve campus problems from losing important items. Our goal is to make the lost-and-found process more 
+                effiecient and organized, reducing the need for announcements, group chats, and manual searching. Through 
+                the webiste, we hope to encourage responsibility and honesty, also the cooperation of students, while making 
+                our school more connected.</p>
+            </div>
+        </section>
+    </main>
+</div>
+
+<div id="itemModal" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="closePopup()">&times;</span>
+        <img id="modalImage" src="" alt="Item Image" style="width: 100%; max-width: 300px; height: auto; max-height: 300px; margin-bottom: 10px;">
+        <h2 id="modalTitle"></h2>
+        <p id="modalDescription"></p>
+        <p id="modalLocation"></p>
+        <p id="modalDate"></p>
+        <p id="modalStatus"></p>
+        <div class="buttons">
+        <button onclick="closePopup()" class="back-btn">Back</button>
+        <button onclick="removeItemFromModal()" class="remove-btn">Remove Item</button>
+        </div>
+    </div>
+</div>
+
+<div id="popupOverlaySuccess" class="popup-overlay" style="display: none;">
+    <div class="popup">
+        <h3 id="popupMessageSuccess">Item removed successfully.</h3>
+        <div id="popupButtonsSuccess">
+            <button class="yes" onclick="closeSuccessPopup()">OK</button>
+        </div>
+    </div>
+</div>
+
+<div id="matchModal" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="closeMatchModal()">&times;</span>
+        <h2>Match Found?</h2>
+        <p>Do you want to match this found item with a lost item?</p>
+        <button onclick="showLostItemsTable()">Yes</button>
+        <button onclick="closeMatchModal()">No</button>
+    </div>
+</div>
+
+<div id="lostItemsModal" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="closeLostItemsModal()">&times;</span>
+        <h2>Select Lost Item to Match</h2>
+        <table id="lostItemsTable" style="width: 100%; font-size: 12px; border-collapse: collapse;">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Description</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody id="lostItemsTableBody">
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<div id="requestModal" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="closeRequestModal()">&times;</span>        
+        <img id="requestModalImage" alt="Item Image">
+        <h2 id="requestModalTitle"></h2>
+        <div id="requestModalDescription"></div>
+        <div class="buttons">
+            <button onclick="approveRequest(currentRequestType, currentRequestId)" class="approve-btn">Approve</button>
+            <button onclick="rejectRequest(currentRequestType, currentRequestId)" class="reject-btn">Reject</button>
+            <button onclick="closeRequestModal()" class="back-btn">Back</button>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="admin.js"></script> 
+</body> 
 </html>

@@ -40,33 +40,54 @@ function login() {
     const registeredUser = registeredUsers.find(u => u.username === username);
     const hardcodedUser = hardcodedAccounts.find(u => u.user === username);
 
+    let currentUser = null;
+    let isHardcoded = false;
+
     if (registeredUser) {
-        if (registeredUser.password === password) {
-            if (registeredUser.role === "admin") {
-                sessionStorage.setItem('adminUsername', username);
-                window.location.href = "Admin_Interface/admin.html";
-            } else {
-                sessionStorage.setItem('userUsername', username);
-                window.location.href = "User_Interface/user.html";
-            }
-        } else {
-            errorMessageDiv.textContent = "Incorrect username or password.";
-            errorMessageDiv.style.display = "block";
-        }
+        currentUser = registeredUser;
     } else if (hardcodedUser) {
-        if (hardcodedUser.pass === password) {
-            if (hardcodedUser === admin || hardcodedUser === admin1) {
-                sessionStorage.setItem('adminUsername', username);
-                window.location.href = "Admin_Interface/admin.html";
-            } else {
-                sessionStorage.setItem('userUsername', username);
-                window.location.href = "User_Interface/user.html";
-            }
-        } else {
-            errorMessageDiv.textContent = "Incorrect username or password.";
-            errorMessageDiv.style.display = "block";
-        }
+        currentUser = hardcodedUser;
+        isHardcoded = true;
     } else {
         errorMsg.textContent = "No account found. Please register.";
+        return;
+    }
+
+    const passwordMatch = isHardcoded ? currentUser.pass === password : currentUser.password === password;
+    if (!passwordMatch) {
+        errorMessageDiv.textContent = "Incorrect username or password.";
+        errorMessageDiv.style.display = "block";
+        return;
+    }
+
+    if (!isHardcoded && currentUser.status === 'banned') {
+        errorMessageDiv.textContent = "Your account has been banned. Contact admin for details.";
+        errorMessageDiv.style.display = "block";
+        return;
+    }
+
+    if (!isHardcoded && currentUser.status === 'restricted') {
+        alert('Your account is restricted. Some features may be limited.');
+        sessionStorage.setItem('userStatus', 'restricted');
+    } else {
+        sessionStorage.setItem('userStatus', 'active');
+    }
+
+    if (isHardcoded) {
+        if (currentUser === admin || currentUser === admin1) {
+            sessionStorage.setItem('adminUsername', username);
+            window.location.href = "Admin_Interface/admin.html";
+        } else {
+            sessionStorage.setItem('userUsername', username);
+            window.location.href = "User_Interface/user.html";
+        }
+    } else {
+        if (currentUser.role === "admin") {
+            sessionStorage.setItem('adminUsername', username);
+            window.location.href = "Admin_Interface/admin.html";
+        } else {
+            sessionStorage.setItem('userUsername', username);
+            window.location.href = "User_Interface/user.html";
+        }
     }
 }

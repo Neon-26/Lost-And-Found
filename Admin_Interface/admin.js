@@ -1,587 +1,21 @@
-let currentButton = null;
-let currentTable = "";
-let currentFilterLost = "";
-let currentFilterFound = "";
-let visibleRowsLost = [];
-let visibleRowsFound = [];
-
-let currentFilterClaims = "";
-let visibleRowsClaims = [];
-let currentPageClaims = 1;
-let rowsPerPageClaims = 4;
-
-let isEditModeClaims = false;
-
-let currentFilterMatches = "";
-let visibleRowsMatches = [];
-let currentPageMatches = 1;
-let rowsPerPageMatches = 4;
-let isEditModeMatches = false;
-
-function searchStudent() {
-    const input = document.getElementById("searchBarStudent");
-    currentFilterStudent = input.value.toLowerCase().trim(); 
-    currentPageStudent = 1; 
-    updateRowsAndPaginationStudent();
-}
-
-function updateVisibleRowsStudent() {
-    const allRows = Array.from(studentTableBody.rows);
-    visibleRowsStudent.length = 0; 
-    allRows.forEach(row => {
-        const nameCell = row.getElementsByTagName("td")[1];
-        if (nameCell) {
-            const nameValue = nameCell.textContent || nameCell.innerText;
-            if (nameValue.toLowerCase().indexOf(currentFilterStudent) > -1) {
-                visibleRowsStudent.push(row);
-            }
-        }
-    });
-}
-
-document.addEventListener("DOMContentLoaded", function() {
-    document.getElementById("searchBarStudent").value = "";
-    updateRowsAndPaginationStudent();
-});
-
-function searchItem(table) {
-    const input = table === 'lost' ? document.getElementById("searchBarLost") : document.getElementById("searchBarFound");
-    if (table === 'lost') {
-        currentFilterLost = input.value.toLowerCase();
-        updateVisibleRows('lost');
-        updateRowsAndPagination('lost');
-    } else {
-        currentFilterFound = input.value.toLowerCase();
-        updateVisibleRows('found');
-        updateRowsAndPagination('found');
+function isLocalStorageSupported() {
+    try {
+        const test = '__localStorage_test__';
+        localStorage.setItem(test, test);
+        localStorage.removeItem(test);
+        return true;
+    } catch (e) {
+        return false;
     }
 }
 
-function updateVisibleRows(table) {
-    const rows = table === 'lost' ? Array.from(lostTableBody.getElementsByTagName("tr")) : Array.from(foundTableBody.getElementsByTagName("tr"));
-    const filter = table === 'lost' ? currentFilterLost : currentFilterFound;
-    const visibleRows = table === 'lost' ? visibleRowsLost : visibleRowsFound;
-    visibleRows.length = 0;
-    rows.forEach(row => {
-        const itemCell = row.getElementsByTagName("td")[0];
-        if (itemCell) {
-            const textValue = itemCell.textContent || itemCell.innerText;
-            if (textValue.toLowerCase().indexOf(filter) > -1) {
-                visibleRows.push(row);
-            }
-        }
-    });
-}
-
-let lostTableBody = document.getElementById("lostTableBody");
-let foundTableBody = document.getElementById("foundTableBody");
-
-let currentPageLost = 1;
-let currentPageFound = 1;
-let rowsPerPage = 5;
-
-function displayTable(table) {
-    const visibleRows = table === 'lost' ? visibleRowsLost : visibleRowsFound;
-    const currentPage = table === 'lost' ? currentPageLost : currentPageFound;
-    const tableBody = table === 'lost' ? lostTableBody : foundTableBody;
-
-    Array.from(tableBody.getElementsByTagName("tr")).forEach(row => row.style.display = "none");
-
-    let start = (currentPage - 1) * rowsPerPage;
-    let end = start + rowsPerPage;
-    visibleRows.slice(start, end).forEach(row => row.style.display = "");
-    renderPagination(table);
-}
-
-function renderPagination(table) {
-    const visibleRows = table === 'lost' ? visibleRowsLost : visibleRowsFound;
-    const currentPage = table === 'lost' ? currentPageLost : currentPageFound;
-    const pagination = table === 'lost' ? document.getElementById("paginationLost") : document.getElementById("paginationFound");
-    let pageCount = Math.ceil(visibleRows.length / rowsPerPage);
-    pagination.innerHTML = "";
-    for (let i = 1; i <= pageCount; i++) {
-        let btn = document.createElement("button");
-        btn.textContent = i;
-        btn.onclick = function() {
-            if (table === 'lost') {
-                currentPageLost = i;
-            } else {
-                currentPageFound = i;
-            }
-            displayTable(table);
-        };
-        if (i === currentPage) btn.style.background = "#4CAF50";
-        pagination.appendChild(btn);
-    }
-}
-
-function updateRowsAndPagination(table) {
-    updateVisibleRows(table);
-    const visibleRows = table === 'lost' ? visibleRowsLost : visibleRowsFound;
-    const currentPage = table === 'lost' ? currentPageLost : currentPageFound;
-    let pageCount = Math.ceil(visibleRows.length / rowsPerPage);
-    if (currentPage > pageCount && pageCount > 0) {
-        if (table === 'lost') {
-            currentPageLost = pageCount;
-        } else {
-            currentPageFound = pageCount;
-        }
-    } else if (pageCount === 0) {
-        if (table === 'lost') {
-            currentPageLost = 1;
-        } else {
-            currentPageFound = 1;
-        }
-    }
-    displayTable(table);
-    updateDashboard(); 
-}
-
-function showPopup(message, yesAction, noAction, table) {
-    const overlay = table === 'lost' ? document.getElementById("popupOverlayLost") : table === 'found' ? document.getElementById("popupOverlayFound") : table === 'claims' ? document.getElementById("popupOverlayClaims") : document.getElementById("popupOverlayMatches");
-    const msg = table === 'lost' ? document.getElementById("popupMessageLost") : table === 'found' ? document.getElementById("popupMessageFound") : table === 'claims' ? document.getElementById("popupMessageClaims") : document.getElementById("popupMessageMatches");
-    const btns = table === 'lost' ? document.getElementById("popupButtonsLost") : table === 'found' ? document.getElementById("popupButtonsFound") : table === 'claims' ? document.getElementById("popupButtonsClaims") : document.getElementById("popupButtonsMatches");
-
-    msg.textContent = message;
-    btns.innerHTML = "";
-
-    const yesBtn = document.createElement("button");
-    yesBtn.textContent = "Yes";
-    yesBtn.className = "yes";
-    yesBtn.onclick = () => { overlay.style.display = "none"; yesAction(); };
-
-    const noBtn = document.createElement("button");
-    noBtn.textContent = "No";
-    noBtn.className = "no";
-    noBtn.onclick = () => { overlay.style.display = "none"; noAction(); };
-
-    btns.appendChild(yesBtn);
-    btns.appendChild(noBtn);
-
-    overlay.style.display = "flex";
-}
-
-function startValidation(button, table) {
-    currentButton = button;
-    currentTable = table;
-    const reportType = table === 'lost' ? 'Lost' : 'Found';
-    showPopup(`Is the ${reportType} Report Valid?`, () => approveReport(), () => askRemove(), table);
-}
-
-function approveReport() {
-    const row = currentButton.closest("tr");
-    const actionCell = row.querySelector("td:last-child");
-    actionCell.innerHTML = "<button class='Valid-btn'>Approved</button>";
-    
-    const reportType = currentTable === 'lost' ? 'Lost' : 'Found';
-    updateRowsAndPagination(currentTable);
-    alertBox(`${reportType} Report Approved.`, currentTable);
-}
-
-function askRemove() {
-    const tableType = currentTable === 'lost' ? 'lost items' : 'found items';
-    showPopup(`Do you want to remove this from the ${tableType} table?`, 
-        () => removeItem(), 
-        () => addRemoveButton(), currentTable);
-}
-
-function removeItem() {
-    const row = currentButton.closest("tr");
-    row.remove();
-    updateRowsAndPagination(currentTable);
-    const tableType = currentTable === 'lost' ? 'lost items' : 'found items';
-    alertBox(`Item removed from ${tableType} table.`, currentTable);
-}
-
-function addRemoveButton() {
-    const td = currentButton.parentElement;
-    if (!td.querySelector(".remove-btn")) {
-        const removeBtn = document.createElement("button");
-        removeBtn.textContent = "Remove";
-        removeBtn.className = "remove-btn";
-        removeBtn.onclick = function() {
-            const row = this.closest("tr");
-            row.remove();
-            updateRowsAndPagination(currentTable);
-            const tableType = currentTable === 'lost' ? 'lost items' : 'found items';
-            alertBox(`Item removed from ${tableType} table.`, currentTable);
-        };
-        td.appendChild(removeBtn);
-    }
-    const tableType = currentTable === 'lost' ? 'lost items' : 'found items';
-    alertBox(`Remove button added beside Valid in ${tableType} table.`, currentTable);
-}
-
-function alertBox(message, table) {
-    const overlay = table === 'lost' ? document.getElementById("popupOverlayLost") : table === 'found' ? document.getElementById("popupOverlayFound") : table === 'claims' ? document.getElementById("popupOverlayClaims") : document.getElementById("popupOverlayMatches");
-    const msg = table === 'lost' ? document.getElementById("popupMessageLost") : table === 'found' ? document.getElementById("popupMessageFound") : table === 'claims' ? document.getElementById("popupMessageClaims") : document.getElementById("popupMessageMatches");
-    const btns = table === 'lost' ? document.getElementById("popupButtonsLost") : table === 'found' ? document.getElementById("popupButtonsFound") : table === 'claims' ? document.getElementById("popupButtonsClaims") : document.getElementById("popupButtonsMatches");
-
-    msg.textContent = message;
-    btns.innerHTML = "";
-
-    const okBtn = document.createElement("button");
-    okBtn.textContent = "OK";
-    okBtn.className = "yes";
-    okBtn.onclick = () => overlay.style.display = "none";
-
-    btns.appendChild(okBtn);
-    overlay.style.display = "flex";
-}
-
-function showPage(pageId) {
-    document.querySelectorAll('.page').forEach(page => {
-        page.classList.remove('active');
-    });
-
-    document.querySelectorAll('.sidebar a').forEach(link => {
-        link.classList.remove('active');
-    });
-
-    document.getElementById(pageId).classList.add('active');
-    event.target.classList.add('active');
-
-    if (pageId === 'listofl') {
-        appendNewItemsToLostAdmin();
-        attachViewButtonListeners();
-        updateRowsAndPagination('lost');
-    } else if (pageId === 'listoff') {
-        appendNewItemsToFoundAdmin();
-        attachViewButtonListeners();
-        updateRowsAndPagination('found');
-    } else if (pageId === 'claimrequests') {
-        updateRowsAndPaginationClaims();
-    } else if (pageId === 'matchrequests') {
-        updateRowsAndPaginationMatches();
-    }
-}
-
-function appendNewItemsToLostAdmin() {
-    const lostItems = JSON.parse(localStorage.getItem('lostItems')) || [];
-    const tbody = document.getElementById("lostTableBody");
-    const existingItemNames = Array.from(tbody.getElementsByTagName("tr")).map(row => row.cells[0].innerText.toLowerCase());
-    
-    lostItems.forEach(item => {
-        if (!existingItemNames.includes(item.itemName.toLowerCase())) {
-            const row = document.createElement("tr");
-            const date = new Date(item.date);
-            const formattedDate = `${(date.getMonth() + 1).toString().padStart(2, '0')}/${date.getDate().toString().padStart(2, '0')}/${date.getFullYear()}`;
-            
-            const imageCell = item.image ? `<button class="view-btn" data-image="${item.image}">View</button>` : '';
-            
-            row.innerHTML = `
-                <td>${item.itemName}</td>
-                <td>${item.description}</td>
-                <td>${item.location}</td>
-                <td>${formattedDate}</td>
-                <td>${imageCell}</td>
-                <td><button class="Valid-btn" onclick="startValidation(this, 'lost')">Valid</button></td>
-            `;
-            tbody.appendChild(row);
-        }
-    });
-}
-
-function appendNewItemsToFoundAdmin() {
-    const foundItems = JSON.parse(localStorage.getItem('foundItems')) || [];
-    const tbody = document.getElementById("foundTableBody");
-    const existingItemNames = Array.from(tbody.getElementsByTagName("tr")).map(row => row.cells[0].innerText.toLowerCase());
-    
-    foundItems.forEach(item => {
-        if (!existingItemNames.includes(item.itemName.toLowerCase())) {
-            const row = document.createElement("tr");
-            const date = new Date(item.date);
-            const formattedDate = `${(date.getMonth() + 1).toString().padStart(2, '0')}/${date.getDate().toString().padStart(2, '0')}/${date.getFullYear()}`;
-            
-            const imageCell = item.image ? `<button class="view-btn" data-image="${item.image}">View</button>` : '';
-            
-            row.innerHTML = `
-                <td>${item.itemName}</td>
-                <td>${item.description}</td>
-                <td>${item.location}</td>
-                <td>${formattedDate}</td>
-                <td>${imageCell}</td>
-                <td><button class="Valid-btn" onclick="startValidation(this, 'found')">Valid</button></td>
-            `;
-            tbody.appendChild(row);
-        }
-    });
-}
-
-function attachViewButtonListeners() {
-    document.querySelectorAll(".view-btn").forEach(btn => {
-        btn.addEventListener("click", function() {
-            const imageSrc = this.getAttribute("data-image");
-            document.getElementById("popupImage").src = imageSrc;
-            document.getElementById("imagePopup").style.display = "flex";
-        });
-    });
-}
-
-function closeImagePopup() {
-    document.getElementById("imagePopup").style.display = "none";
-}
-
-document.addEventListener("DOMContentLoaded", function() {
-    const imagePopup = document.getElementById("imagePopup");
-    if (imagePopup) {
-        imagePopup.style.display = "none";
-    }
-});
-
-
-function updateVisibleRowsClaims() {
-    const claimRequests = JSON.parse(localStorage.getItem('claimRequests')) || [];
-    visibleRowsClaims.length = 0;
-    claimRequests.forEach(request => {
-        visibleRowsClaims.push(request);
-    });
-}
-
-function displayTableClaims() {
-    const tbody = document.getElementById('claimRequestsBody');
-    const noClaimsMsg = document.getElementById('noClaimsMessage');
-    const removeColumnHeader = document.getElementById('removeColumnHeader');
-    tbody.innerHTML = '';
-
-    if (visibleRowsClaims.length === 0) {
-        noClaimsMsg.style.display = 'block';
-        removeColumnHeader.style.display = 'none';
-        return;
-    }
-    noClaimsMsg.style.display = 'none';
-    removeColumnHeader.style.display = isEditModeClaims ? '' : 'none';
-
-    let start = (currentPageClaims - 1) * rowsPerPageClaims;
-    let end = start + rowsPerPageClaims;
-    visibleRowsClaims.slice(start, end).forEach((request, index) => {
-        const row = document.createElement('tr');
-        const removeCell = isEditModeClaims ? `<td><button class="Valid-btn" onclick="removeClaimRequest(${start + index})" style="background: red; color: white;">X</button></td>` : '';
-        const imageCell = request.image ? `<button class="view-btn" data-image="${request.image}">View</button>` : '';
-        row.innerHTML = `
-            <td>${request.itemName}</td>
-            <td>${request.description}</td>
-            <td>${request.location}</td>
-            <td>${request.date}</td>
-            <td>${request.type}</td>
-            <td>${request.user}</td>
-            <td>${request.status || 'Pending'}</td>
-            <td>${imageCell}</td>
-            <td>
-                <button class="Valid-btn" onclick="updateClaimStatus(${start + index}, 'Approved')">Approve</button>
-                <button class="Valid-btn" onclick="updateClaimStatus(${start + index}, 'Rejected')">Reject</button>
-            </td>
-            ${removeCell}
-        `;
-        tbody.appendChild(row);
-    });
-    renderPaginationClaims();
-    attachViewButtonListeners();
-}
-
-function renderPaginationClaims() {
-    const pagination = document.getElementById("paginationClaims");
-    if (!pagination) return;
-    let pageCount = Math.ceil(visibleRowsClaims.length / rowsPerPageClaims);
-    pagination.innerHTML = "";
-    for (let i = 1; i <= pageCount; i++) {
-        let btn = document.createElement("button");
-        btn.textContent = i;
-        btn.onclick = function() {
-            currentPageClaims = i;
-            displayTableClaims();
-        };
-        if (i === currentPageClaims) btn.style.background = "#4CAF50";
-        pagination.appendChild(btn);
-    }
-}
-
-function updateRowsAndPaginationClaims() {
-    updateVisibleRowsClaims();
-    let pageCount = Math.ceil(visibleRowsClaims.length / rowsPerPageClaims);
-    if (currentPageClaims > pageCount && pageCount > 0) {
-        currentPageClaims = pageCount;
-    } else if (pageCount === 0) {
-        currentPageClaims = 1;
-    }
-    displayTableClaims();
-    updateDashboard(); 
-}
-
-function updateClaimStatus(index, status) {
-    const claimRequests = JSON.parse(localStorage.getItem('claimRequests')) || [];
-    if (claimRequests[index]) {
-        claimRequests[index].status = status;
-        localStorage.setItem('claimRequests', JSON.stringify(claimRequests));
-        updateRowsAndPaginationClaims();
-        alertBox(`Claim request ${status.toLowerCase()}.`, 'claims');
-    }
-}
-
-function toggleEditModeClaims() {
-    isEditModeClaims = !isEditModeClaims;
-    const editBtn = document.getElementById('editClaimsBtn');
-    editBtn.textContent = isEditModeClaims ? 'Done' : 'Edit';
-    updateRowsAndPaginationClaims();
-}
-
-function removeClaimRequest(index) {
-    const claimRequests = JSON.parse(localStorage.getItem('claimRequests')) || [];
-    if (claimRequests[index]) {
-        claimRequests.splice(index, 1);
-        localStorage.setItem('claimRequests', JSON.stringify(claimRequests));
-        updateRowsAndPaginationClaims();
-        alertBox('Claim request removed.', 'claims');
-    }
-}
-
-document.getElementById('editClaimsBtn').addEventListener('click', toggleEditModeClaims);
-
-function updateVisibleRowsMatches() {
-    const matchRequests = JSON.parse(localStorage.getItem('matchRequests')) || [];
-    visibleRowsMatches.length = 0;
-    matchRequests.forEach(request => {
-        visibleRowsMatches.push(request);
-    });
-}
-
-function displayTableMatches() {
-    const tbody = document.getElementById('matchRequestsBody');
-    const noMatchesMsg = document.getElementById('noMatchesMessage');
-    const removeColumnHeader = document.getElementById('removeMatchColumnHeader');
-    tbody.innerHTML = '';
-
-    if (visibleRowsMatches.length === 0) {
-        noMatchesMsg.style.display = 'block';
-        removeColumnHeader.style.display = 'none';
-        return;
-    }
-    noMatchesMsg.style.display = 'none';
-    removeColumnHeader.style.display = isEditModeMatches ? '' : 'none';
-
-    let start = (currentPageMatches - 1) * rowsPerPageMatches;
-    let end = start + rowsPerPageMatches;
-    visibleRowsMatches.slice(start, end).forEach((request, index) => {
-        const row = document.createElement('tr');
-        const removeCell = isEditModeMatches ? `<td><button class="Valid-btn" onclick="removeMatchRequest(${start + index})" style="background: red; color: white;">X</button></td>` : '';
-        const imageCell = request.image ? `<button class="view-btn" data-image="${request.image}">View</button>` : ''; 
-        row.innerHTML = `
-            <td>${request.itemName}</td>
-            <td>${request.description}</td>
-            <td>${request.location}</td>
-            <td>${request.date}</td>
-            <td>${request.type}</td>
-            <td>${request.user}</td>
-            <td>${request.status || 'Pending'}</td>
-            <td>${imageCell}</td>
-            <td>
-                <button class="Valid-btn" onclick="updateMatchStatus(${start + index}, 'Approved')">Approve</button>
-                <button class="Valid-btn" onclick="updateMatchStatus(${start + index}, 'Rejected')">Reject</button>
-            </td>
-            ${removeCell}
-        `;
-        tbody.appendChild(row);
-    });
-    renderPaginationMatches();
-    attachViewButtonListeners();  
-}
-
-function renderPaginationMatches() {
-    const pagination = document.getElementById("paginationMatches");
-    if (!pagination) return;
-    let pageCount = Math.ceil(visibleRowsMatches.length / rowsPerPageMatches);
-    pagination.innerHTML = "";
-    for (let i = 1; i <= pageCount; i++) {
-        let btn = document.createElement("button");
-        btn.textContent = i;
-        btn.onclick = function() {
-            currentPageMatches = i;
-            displayTableMatches();
-        };
-        if (i === currentPageMatches) btn.style.background = "#4CAF50";
-        pagination.appendChild(btn);
-    }
-}
-
-function updateRowsAndPaginationMatches() {
-    updateVisibleRowsMatches();
-    let pageCount = Math.ceil(visibleRowsMatches.length / rowsPerPageMatches);
-    if (currentPageMatches > pageCount && pageCount > 0) {
-        currentPageMatches = pageCount;
-    } else if (pageCount === 0) {
-        currentPageMatches = 1;
-    }
-    displayTableMatches();
-    updateDashboard(); 
-}
-
-function updateMatchStatus(index, status) {
-    const matchRequests = JSON.parse(localStorage.getItem('matchRequests')) || [];
-    if (matchRequests[index]) {
-        matchRequests[index].status = status;
-        localStorage.setItem('matchRequests', JSON.stringify(matchRequests));
-        updateRowsAndPaginationMatches();
-        alertBox(`Match request ${status.toLowerCase()}.`, 'matches');
-    }
-}
-
-function addEventListener() {
-    const td = currentButton.parentElement;
-    if (!td.querySelector(".remove-btn")) {
-        const removeBtn = document.createElement("button");
-        removeBtn.textContent = "Remove";
-        removeBtn.className = "remove-btn";
-        removeBtn.onclick = function() {
-            const row = this.closest("tr");
-            row.remove();
-            updateRowsAndPagination(currentTable);
-            const tableType = currentTable === 'lost' ? 'lost items' : 'found items';
-            alertBox(`Item removed from ${tableType} table.`, currentTable);
-        };
-        td.appendChild(removeBtn);
-    }
-}
-
-function toggleEditModeMatches() {
-    isEditModeMatches = !isEditModeMatches;
-    const editBtn = document.getElementById('editMatchesBtn');
-    editBtn.textContent = isEditModeMatches ? 'Done' : 'Edit';
-    updateRowsAndPaginationMatches();
-}
-
-function removeMatchRequest(index) {
-    const matchRequests = JSON.parse(localStorage.getItem('matchRequests')) || [];
-    if (matchRequests[index]) {
-        matchRequests.splice(index, 1);
-        localStorage.setItem('matchRequests', JSON.stringify(matchRequests));
-        updateRowsAndPaginationMatches();
-        alertBox('Match request removed.', 'matches');
-    }
-}
-
-document.getElementById('editMatchesBtn').addEventListener('click', toggleEditModeMatches);
-
-function updateDashboard() {
-
-    const totalLost = document.getElementById("lostTableBody").getElementsByTagName("tr").length;
-    document.getElementById("totalLost").textContent = totalLost;
-
-    const totalFound = document.getElementById("foundTableBody").getElementsByTagName("tr").length;
-    document.getElementById("totalFound").textContent = totalFound;
-
-    const claimRequests = JSON.parse(localStorage.getItem('claimRequests')) || [];
-    document.getElementById("totalClaims").textContent = claimRequests.length;
-
-    const matchRequests = JSON.parse(localStorage.getItem('matchRequests')) || [];
-    document.getElementById("totalMatches").textContent = matchRequests.length;
-
-    const totalStudents = document.getElementById("studentTableBody").getElementsByTagName("tr").length;
-    document.getElementById("totalStudents").textContent = totalStudents;
+function clearLocalStorage() {
+    localStorage.clear();
+    alert('localStorage cleared. Try confirming a match again.');
 }
 
 function updateUserMenu() {
-    const username = sessionStorage.getItem('adminUsername');  
-
+    const username = sessionStorage.getItem('adminUsername');
     const usernameSpan = document.getElementById('username');
     const dropdown = document.getElementById('userMenuDropdown');
 
@@ -603,7 +37,6 @@ document.getElementById('userMenuButton').addEventListener('click', () => {
     const username = sessionStorage.getItem('adminUsername');
     if (username) {
         document.getElementById('userMenuDropdown').classList.toggle('show');
-    } else {
     }
 });
 
@@ -617,66 +50,1191 @@ document.addEventListener('click', (event) => {
 
 updateUserMenu();
 
-let studentTableBody = document.getElementById("studentTableBody");
-let currentFilterStudent = "";
-let visibleRowsStudent = [];
-let currentPageStudent = 1;
-let rowsPerPageStudent = 10;
+function loadNotifications() {
+    const username = sessionStorage.getItem('adminUsername');
+    if (!username) return [];
+    const key = `notifications_${username}`;
+    return JSON.parse(localStorage.getItem(key)) || [];
+}
 
-function renderPaginationStudent() {
-    const pagination = document.getElementById("paginationStudent");
-    if (!pagination) return;
-    let pageCount = Math.ceil(visibleRowsStudent.length / rowsPerPageStudent);
-    pagination.innerHTML = "";
-    for (let i = 1; i <= pageCount; i++) {
-        let btn = document.createElement("button");
-        btn.textContent = i;
-        btn.onclick = function() {
-            currentPageStudent = i;
-            displayTableStudent();
-        };
-        if (i === currentPageStudent) btn.style.background = "#4CAF50";
-        pagination.appendChild(btn);
+function saveNotifications(notifications) {
+    const username = sessionStorage.getItem('adminUsername');
+    if (!username) return;
+    localStorage.setItem(`notifications_${username}`, JSON.stringify(notifications));
+}
+
+function addNotification(message, type = 'info', targetUsername = null) {
+    const username = targetUsername || sessionStorage.getItem('adminUsername');
+    if (!username) return;
+    const key = `notifications_${username}`;
+    const notifications = JSON.parse(localStorage.getItem(key)) || [];
+    notifications.unshift({
+        id: Date.now(),
+        message,
+        type,
+        timestamp: new Date().toISOString(),
+        read: false
+    });
+    localStorage.setItem(key, JSON.stringify(notifications));
+    if (!targetUsername) updateNotificationUI();
+}
+
+function markAsRead(notificationId) {
+    const notifications = loadNotifications();
+    const notification = notifications.find(n => n.id === notificationId);
+    if (notification) {
+        notification.read = true;
+        saveNotifications(notifications);
+        updateNotificationUI();
     }
 }
 
-function updateVisibleRowsStudent() {
-    visibleRowsStudent = Array.from(studentTableBody.rows);
-
+function clearAllNotifications() {
+    saveNotifications([]);
+    updateNotificationUI();
 }
 
-function displayTableStudent() {
+function updateNotificationUI() {
+    const notifications = loadNotifications();
+    const unreadCount = notifications.filter(n => !n.read).length;
+    const badge = document.getElementById('adminNotificationBadge');
+    const list = document.getElementById('adminNotificationList');
 
-    visibleRowsStudent.forEach(row => row.style.display = "none");
+    if (badge) badge.textContent = unreadCount;
+    if (badge) badge.style.display = unreadCount > 0 ? 'inline' : 'none';
 
-    let start = (currentPageStudent - 1) * rowsPerPageStudent;
-    let end = start + rowsPerPageStudent;
-
-    for (let i = start; i < end && i < visibleRowsStudent.length; i++) {
-        visibleRowsStudent[i].style.display = "";
+    if (list) {
+        list.innerHTML = '';
+        if (notifications.length === 0) {
+            list.innerHTML = '<p class="no-notifications">No notifications yet.</p>';
+        } else {
+            notifications.forEach(notification => {
+                const item = document.createElement('div');
+                item.className = `notification-item ${notification.read ? 'read' : 'unread'}`;
+                item.innerHTML = `
+                    <p>${notification.message}</p>
+                    <small>${new Date(notification.timestamp).toLocaleString()}</small>
+                `;
+                item.addEventListener('click', () => markAsRead(notification.id));
+                list.appendChild(item);
+            });
+        }
     }
-
-    renderPaginationStudent();
 }
 
-function updateRowsAndPaginationStudent() {
-    updateVisibleRowsStudent();
-    let pageCount = Math.ceil(visibleRowsStudent.length / rowsPerPageStudent);
-    if (currentPageStudent > pageCount && pageCount > 0) {
-        currentPageStudent = pageCount;
-    } else if (pageCount === 0) {
-        currentPageStudent = 1;
+document.addEventListener('DOMContentLoaded', () => {
+    updateNotificationUI();
+    const notificationBtn = document.getElementById('adminNotificationBtn');
+    const dropdown = document.getElementById('adminNotificationDropdown');
+    const clearAllBtn = document.getElementById('adminClearAllBtn');
+
+    if (notificationBtn && dropdown) {
+        notificationBtn.addEventListener('click', () => {
+            dropdown.style.display = dropdown.style.display === 'block' ? 'none' : 'block';
+        });
     }
-    displayTableStudent();
-    updateDashboard();
+
+    if (clearAllBtn) {
+        clearAllBtn.addEventListener('click', clearAllNotifications);
+    }
+
+    document.addEventListener('click', (event) => {
+        if (notificationBtn && dropdown && !notificationBtn.contains(event.target) && !dropdown.contains(event.target)) {
+            dropdown.style.display = 'none';
+        }
+    });
+});
+
+let currentItemElement = null;
+
+function attachViewButtonListeners() {
+    document.querySelectorAll(".view-btn").forEach(btn => {
+        btn.addEventListener("click", function() {
+            let itemName = '', description = '', location = '', date = '', status = '', imageSrc = '';
+
+            const row = btn.closest('tr');
+            if (row) {
+                const cells = row.querySelectorAll('td');
+                itemName = cells[0] ? cells[0].textContent.trim() : 'Unknown';
+                description = cells[1] ? cells[1].textContent.trim() : 'No description';
+                location = cells[2] ? cells[2].textContent.trim() : 'Unknown';
+                date = cells[3] ? cells[3].textContent.trim() : 'Unknown';
+                status = cells[6] ? cells[6].textContent.trim() : 'Unknown';
+                imageSrc = btn.getAttribute('data-image') || '';
+                currentItemElement = row;
+            } else {
+                const card = btn.closest('.lost-item-card') || btn.closest('.found-item-card');
+                if (card) {
+                    itemName = card.getAttribute('data-item-name') || 'Unknown';
+                    description = card.getAttribute('data-description') || 'No description';
+                    location = card.getAttribute('data-location') || 'Unknown';
+                    date = card.getAttribute('data-date') || 'Unknown';
+                    status = card.getAttribute('data-status') || 'Unknown';
+                    const img = card.querySelector('img');
+                    imageSrc = img ? img.src : '';
+                    currentItemElement = card;
+                }
+            }
+
+            document.getElementById('modalTitle').textContent = itemName;
+            document.getElementById('modalDescription').innerHTML = `
+                <ul class="modal-details">
+                    <li><strong>Description:</strong> ${description}</li>
+                    <li><strong>Location:</strong> ${location}</li>
+                    <li><strong>Date:</strong> ${date}</li>
+                    <li><strong>Status:</strong> ${status}</li>
+                </ul>
+            `;
+            document.getElementById('modalLocation').style.display = 'none';
+            document.getElementById('modalDate').style.display = 'none';
+            document.getElementById('modalStatus').style.display = 'none';
+            const modalImg = document.getElementById('modalImage');
+            if (modalImg) {
+                modalImg.src = imageSrc;
+                modalImg.style.display = imageSrc ? 'block' : 'none';
+            }
+            document.getElementById('itemModal').style.display = 'flex';
+        });
+    });
+}
+
+function closePopup() {
+    document.getElementById('itemModal').style.display = 'none';
 }
 
 document.addEventListener("DOMContentLoaded", function() {
-    updateRowsAndPaginationStudent();
+    const itemModal = document.getElementById('itemModal');
+    if (itemModal) {
+        itemModal.style.display = 'none';
+        itemModal.addEventListener("click", closePopup);
+        const modalContent = itemModal.querySelector('.modal-content');
+        if (modalContent) {
+            modalContent.addEventListener("click", (e) => e.stopPropagation());
+        }
+    }
+    attachViewButtonListeners();
 });
 
-updateRowsAndPagination('lost');
-updateRowsAndPagination('found');
-updateRowsAndPaginationClaims();
-updateRowsAndPaginationMatches();
-updateDashboard();
+function removeItemFromModal() {
+    if (currentItemElement) {
+        currentItemElement.remove();
+        closePopup();
+        showSuccessPopup();
+        const activePage = document.querySelector('.page.active');
+        if (activePage) {
+            if (activePage.id === 'listofl') loadLostItems();
+            else if (activePage.id === 'listoff') loadFoundItems();
+            else if (activePage.id === 'matcheditems') loadMatchedItems();
+            else if (activePage.id === 'claimeditems') loadClaimedItems();
+            else if (activePage.id === 'lostitemrequest') loadLostRequests();
+            else if (activePage.id === 'founditemrequest') loadFoundRequests();
+        }
+    }
+}
+
+function showSuccessPopup() {
+    const popup = document.getElementById('popupOverlaySuccess');
+    if (popup) popup.style.display = 'flex';
+}
+
+function closeSuccessPopup() {
+    const popup = document.getElementById('popupOverlaySuccess');
+    if (popup) popup.style.display = 'none';
+}
+
+function showPage(pageId) {
+    document.querySelectorAll('.page').forEach(page => page.classList.remove('active'));
+    document.querySelectorAll('.sidebar a').forEach(link => link.classList.remove('active'));
+
+    const page = document.getElementById(pageId);
+    if (page) page.classList.add('active');
+    if (event && event.target) event.target.classList.add('active');
+
+    if (pageId === 'dashboard') updateDashboard();
+    else if (pageId === 'listofl') {
+        loadLostItems();
+        attachViewButtonListeners();
+    } else if (pageId === 'listoff') {
+        loadFoundItems();
+        attachViewButtonListeners();
+        attachMatchButtonListeners();
+    } else if (pageId === 'matcheditems') {
+        loadMatchedItems();
+        attachViewButtonListeners();
+    } else if (pageId === 'claimeditems') {
+        loadClaimedItems();
+        attachViewButtonListeners();
+    } else if (pageId === 'itemrecords') {
+        loadItemRecords();
+        attachViewButtonListeners();
+    } else if (pageId === 'lostitemrequest') {
+        loadLostRequests();
+        attachViewButtonListeners();
+    } else if (pageId === 'founditemrequest') {
+        loadFoundRequests();
+        attachViewButtonListeners();
+    } else if (pageId === 'student') {
+        loadStudentProfiles();
+    }
+}
+
+function loadLostItems() {
+    try {
+        const items = JSON.parse(localStorage.getItem('lostItems')) || [];
+        const container = document.querySelector('.lost-scroll-container');
+        if (!container) return;
+
+        const existingNames = Array.from(container.querySelectorAll('.lost-item-card')).map(card => card.getAttribute('data-item-name'));
+
+        items.forEach(item => {
+            if (!existingNames.includes(item.itemName)) {
+                const card = document.createElement('div');
+                card.className = 'lost-item-card';
+                card.setAttribute('data-item-name', item.itemName);
+                card.setAttribute('data-description', item.description);
+                card.setAttribute('data-location', item.location);
+                card.setAttribute('data-date', item.date);
+                card.setAttribute('data-status', item.status);
+                card.innerHTML = `
+                    <img src="${item.image || 'placeholder.png'}" alt="${item.itemName}" class="lost-item-image" />
+                    <h2 class="lost-item-title">${item.itemName}</h2>
+                    <p class="lost-item-description">${item.description}</p>
+                    <div class="lost-item-buttons">
+                        <button class="view-btn">View</button>
+                    </div>
+                `;
+                container.appendChild(card);
+            }
+        });
+        attachViewButtonListeners();
+    } catch (error) {
+        console.error('Error loading lost items:', error);
+    }
+}
+
+function loadFoundItems() {
+    try {
+        const items = JSON.parse(localStorage.getItem('foundItems')) || [];
+        const container = document.querySelector('.found-scroll-container');
+        if (!container) return;
+
+        const existingNames = Array.from(container.querySelectorAll('.found-item-card')).map(card => card.getAttribute('data-item-name'));
+
+        items.forEach(item => {
+            if (!existingNames.includes(item.itemName)) {
+                const card = document.createElement('div');
+                card.className = 'found-item-card';
+                card.setAttribute('data-item-name', item.itemName);
+                card.setAttribute('data-description', item.description);
+                card.setAttribute('data-location', item.location);
+                card.setAttribute('data-date', item.date);
+                card.setAttribute('data-status', item.status);
+                card.innerHTML = `
+                    <img src="${item.image || 'placeholder.png'}" alt="${item.itemName}" class="found-item-image" />
+                    <h2 class="found-item-title">${item.itemName}</h2>
+                    <p class="found-item-description">${item.description}</p>
+                    <div class="found-item-buttons">
+                        <button class="view-btn">View</button>
+                        <button class="match-btn">Match</button>
+                    </div>
+                `;
+                container.appendChild(card);
+            }
+        });
+        attachViewButtonListeners();
+        attachMatchButtonListeners();
+    } catch (error) {
+        console.error('Error loading found items:', error);
+    }
+}
+
+function banUser(username) {
+    try {
+        const registeredUsers = JSON.parse(localStorage.getItem('registeredUsers')) || [];
+        const userIndex = registeredUsers.findIndex(u => u.username === username);
+        if (userIndex !== -1) {
+            registeredUsers[userIndex].status = 'banned';
+            localStorage.setItem('registeredUsers', JSON.stringify(registeredUsers));
+            loadStudentProfiles();
+            alert(`${username} has been banned.`);
+        }
+    } catch (error) {
+        console.error('Error banning user:', error);
+    }
+}
+
+function restrictUser(username) {
+    try {
+        const registeredUsers = JSON.parse(localStorage.getItem('registeredUsers')) || [];
+        const userIndex = registeredUsers.findIndex(u => u.username === username);
+        if (userIndex !== -1) {
+            registeredUsers[userIndex].status = 'restricted';
+            localStorage.setItem('registeredUsers', JSON.stringify(registeredUsers));
+            loadStudentProfiles();
+            alert(`${username} has been restricted.`);
+        }
+    } catch (error) {
+        console.error('Error restricting user:', error);
+    }
+}
+
+let currentPage = 1;
+const studentsPerPage = 5;
+let allStudents = [];
+let filteredStudents = [];
+
+function loadStudentProfiles() {
+    try {
+        const storedStudents = localStorage.getItem('registeredUsers');
+        if (storedStudents) {
+            allStudents = JSON.parse(storedStudents);
+        } else {
+            allStudents = [];
+        }
+        filteredStudents = [...allStudents];
+        currentPage = 1;
+        updateRowsAndPaginationStudent();
+        updateTotalStudents();
+    } catch (error) {
+        console.error('Error loading student profiles:', error);
+        allStudents = [];
+        filteredStudents = [];
+    }
+}
+
+function updateRowsAndPaginationStudent() {
+    const tbody = document.getElementById('studentTableBody');
+    const noStudentsMessage = document.getElementById('noStudentsMessage');
+    if (!tbody || !noStudentsMessage) return;
+
+    tbody.innerHTML = '';
+
+    if (filteredStudents.length === 0) {
+        noStudentsMessage.style.display = 'block';
+        return;
+    }
+    noStudentsMessage.style.display = 'none';
+
+    const totalPages = Math.ceil(filteredStudents.length / studentsPerPage);
+    const startIndex = (currentPage - 1) * studentsPerPage;
+    const endIndex = startIndex + studentsPerPage;
+    const studentsToShow = filteredStudents.slice(startIndex, endIndex);
+
+    studentsToShow.forEach(student => {
+        const fullName = student.fullName || (student.firstName + ' ' + student.lastName) || 'N/A';
+        const status = student.status || 'active';
+        const row = document.createElement('tr');
+        let topButtons = '';
+        let bottomButtons = '';
+
+        if (status === 'active') {
+            topButtons = `<button class="view-btn" onclick="viewStudent('${student.username}')">View</button><button class="ban-btn" onclick="banUser('${student.username}')">Ban</button>`;
+            bottomButtons = `<button class="restrict-btn" onclick="restrictUser('${student.username}')">Restrict</button><button class="remove-btn" onclick="removeStudent('${student.username}')">Remove</button>`;
+        } else if (status === 'banned') {
+            topButtons = `<button class="view-btn" onclick="viewStudent('${student.username}')">View</button><button class="unban-btn" onclick="unbanUser('${student.username}')">Unban</button>`;
+            bottomButtons = `<button class="remove-btn" onclick="removeStudent('${student.username}')">Remove</button><div></div>`;
+        } else if (status === 'restricted') {
+            topButtons = `<button class="view-btn" onclick="viewStudent('${student.username}')">View</button><button class="unrestrict-btn" onclick="unrestrictUser('${student.username}')">Unrestrict</button>`;
+            bottomButtons = `<button class="ban-btn" onclick="banUser('${student.username}')">Ban</button><button class="remove-btn" onclick="removeStudent('${student.username}')">Remove</button>`;
+        }
+
+        row.innerHTML = `
+            <td>${student.username}</td>
+            <td>${fullName}</td>
+            <td>${student.course || 'N/A'}</td>
+            <td>${student.yearLevel || 'N/A'}</td>
+            <td>${status}</td>
+            <td>
+                <div class="action-buttons">
+                    <div class="top-row">${topButtons}</div>
+                    <div class="bottom-row">${bottomButtons}</div>
+                </div>
+            </td>
+        `;
+        tbody.appendChild(row);
+    });
+
+    const paginationDiv = document.getElementById('paginationStudent');
+    if (paginationDiv) {
+        paginationDiv.innerHTML = `
+            <button onclick="changeStudentPage(${currentPage - 1})" ${currentPage === 1 ? 'disabled' : ''}>Previous</button>
+            ${Array.from({ length: totalPages }, (_, i) => `<button onclick="changeStudentPage(${i + 1})" ${currentPage === i + 1 ? 'class="active"' : ''}>${i + 1}</button>`).join('')}
+            <button onclick="changeStudentPage(${currentPage + 1})" ${currentPage === totalPages ? 'disabled' : ''}>Next</button>
+        `;
+    }
+}
+
+function changeStudentPage(page) {
+    currentPage = page;
+    updateRowsAndPaginationStudent();
+}
+
+function removeStudent(username) {
+    try {
+        allStudents = allStudents.filter(s => s.username !== username);
+        localStorage.setItem('registeredUsers', JSON.stringify(allStudents));
+        filteredStudents = [...allStudents];
+        updateRowsAndPaginationStudent();
+        updateTotalStudents();
+        alert(`${username} has been removed.`);
+    } catch (error) {
+        console.error('Error removing student:', error);
+    }
+}
+
+function unbanUser(username) {
+    try {
+        const registeredUsers = JSON.parse(localStorage.getItem('registeredUsers')) || [];
+        const userIndex = registeredUsers.findIndex(u => u.username === username);
+        if (userIndex !== -1) {
+            registeredUsers[userIndex].status = 'active';
+            localStorage.setItem('registeredUsers', JSON.stringify(registeredUsers));
+            loadStudentProfiles();
+            alert(`${username} has been unbanned.`);
+        }
+    } catch (error) {
+        console.error('Error unbanning user:', error);
+    }
+}
+
+function unrestrictUser(username) {
+    try {
+        const registeredUsers = JSON.parse(localStorage.getItem('registeredUsers')) || [];
+        const userIndex = registeredUsers.findIndex(u => u.username === username);
+        if (userIndex !== -1) {
+            registeredUsers[userIndex].status = 'active';
+            localStorage.setItem('registeredUsers', JSON.stringify(registeredUsers));
+            loadStudentProfiles();
+            alert(`${username} has been unrestricted.`);
+        }
+    } catch (error) {
+        console.error('Error unrestricting user:', error);
+    }
+}
+
+function viewStudent(username) {
+    try {
+        const student = allStudents.find(s => s.username === username);
+        if (student) {
+            const fullName = student.fullName || (student.firstName + ' ' + student.lastName) || 'N/A';
+            const status = student.status || 'active';
+            document.getElementById('modalTitle').textContent = fullName;
+            document.getElementById('modalDescription').innerHTML = `
+                <ul class="modal-details">
+                    <li><strong>Username:</strong> ${student.username}</li>
+                    <li><strong>Email:</strong> ${student.email}</li>
+                    <li><strong>Course:</strong> ${student.course || 'N/A'}</li>
+                    <li><strong>Year Level:</strong> ${student.yearLevel || 'N/A'}</li>
+                    <li><strong>Role:</strong> ${student.role}</li>
+                    <li><strong>Status:</strong> ${status}</li>
+                </ul>
+            `;
+            document.getElementById('modalLocation').style.display = 'none';
+            document.getElementById('modalDate').style.display = 'none';
+            document.getElementById('modalStatus').style.display = 'none';
+            document.getElementById('modalImage').style.display = 'none';
+            currentItemElement = { username: username };
+
+            const buttonsDiv = document.querySelector('.modal-content .buttons');
+            if (buttonsDiv) {
+                buttonsDiv.innerHTML = `<button onclick="closePopup()" class="back-btn">Back</button>`;
+            }
+
+            document.getElementById('itemModal').style.display = 'flex';
+        }
+    } catch (error) {
+        console.error('Error viewing student:', error);
+    }
+}
+
+function updateTotalStudents() {
+    const totalStudentsEl = document.getElementById('totalStudents');
+    if (totalStudentsEl) totalStudentsEl.textContent = allStudents.length;
+}
+
+function searchStudent() {
+    const searchTerm = document.getElementById('searchBarStudent').value.toLowerCase();
+    filteredStudents = allStudents.filter(student => {
+        const fullName = student.fullName || (student.firstName + ' ' + student.lastName) || '';
+        return student.username.toLowerCase().includes(searchTerm) || fullName.toLowerCase().includes(searchTerm);
+    });
+    currentPage = 1;
+    updateRowsAndPaginationStudent();
+}
+
+function loadLostRequests() {
+    try {
+        console.log('Loading lost requests');
+        const requests = JSON.parse(localStorage.getItem('lostRequests')) || [];
+        console.log('Lost requests from localStorage:', requests);
+        const section = document.getElementById('lostitemrequest');
+        if (!section) return;
+        section.innerHTML = '<h1>Lost Item Requests</h1><div class="request-container"></div>';
+        const container = section.querySelector('.request-container');
+        if (requests.length === 0) {
+            console.log('No lost requests found');
+            container.innerHTML = '<p>No lost item requests yet.</p>';
+            return;
+        }
+        requests.forEach(item => {
+            console.log('Rendering lost request:', item);
+            const card = document.createElement('div');
+            card.className = 'item-card';
+            card.innerHTML = `
+                <img src="${item.image || 'placeholder.png'}" alt="${item.itemName}" style="width: 100px; height: 100px;">
+                <h3>${item.itemName}</h3>
+                <ul class="request-details">
+                    <li><strong>Description:</strong> ${item.description}</li>
+                    <li><strong>Date Lost:</strong> ${item.date}</li>
+                </ul>
+                <button class="valid-btn" onclick="openRequestModal(${item.id}, 'lost')">Valid</button>
+            `;
+            container.appendChild(card);
+        });
+    } catch (error) {
+        console.error('Error loading lost requests:', error);
+    }
+}
+
+function loadFoundRequests() {
+    try {
+        console.log('Loading found requests');
+        const requests = JSON.parse(localStorage.getItem('foundRequests')) || [];
+        console.log('Found requests from localStorage:', requests);
+        const section = document.getElementById('founditemrequest');
+        if (!section) return;
+        section.innerHTML = '<h1>Found Item Requests</h1><div class="request-container"></div>';
+        const container = section.querySelector('.request-container');
+        if (requests.length === 0) {
+            console.log('No found requests found');
+            container.innerHTML = '<p>No found item requests yet.</p>';
+            return;
+        }
+        requests.forEach(item => {
+            console.log('Rendering found request:', item);
+            const card = document.createElement('div');
+            card.className = 'item-card';
+            card.innerHTML = `
+                <img src="${item.image || 'placeholder.png'}" alt="${item.itemName}" style="width: 100px; height: 100px;">
+                <h3>${item.itemName}</h3>
+                <ul class="request-details">
+                    <li><strong>Description:</strong> ${item.description}</li>
+                    <li><strong>Date Found:</strong> ${item.date}</li>
+                </ul>
+                <button class="valid-btn" onclick="openRequestModal(${item.id}, 'found')">Valid</button>
+            `;
+            container.appendChild(card);
+        });
+    } catch (error) {
+        console.error('Error loading found requests:', error);
+    }
+}
+
+let currentRequestType = null;
+let currentRequestId = null;
+
+function openRequestModal(id, type) {
+    try {
+        currentRequestId = id;
+        currentRequestType = type;
+        const requests = JSON.parse(localStorage.getItem(`${type}Requests`)) || [];
+        const item = requests.find(r => r.id === id);
+        if (!item) {
+            alert('Request not found.');
+            return;
+        }
+
+        document.getElementById('requestModalTitle').textContent = item.itemName;
+        document.getElementById('requestModalDescription').innerHTML = `
+            <ul class="modal-details">
+                <li><strong>Description:</strong> ${item.description}</li>
+                <li><strong>Location:</strong> ${item.location}</li>
+                <li><strong>Date ${type === 'lost' ? 'Lost' : 'Found'}:</strong> ${item.date}</li>
+                <li><strong>Submitted by:</strong> ${item.user}</li>
+            </ul>
+        `;
+        const modalImg = document.getElementById('requestModalImage');
+        if (modalImg) {
+            modalImg.src = item.image || 'placeholder.png';
+            modalImg.style.display = 'block';
+        }
+        document.getElementById('requestModal').style.display = 'flex';
+    } catch (error) {
+        console.error('Error opening request modal:', error);
+    }
+}
+
+function closeRequestModal() {
+    const modal = document.getElementById('requestModal');
+    if (modal) modal.style.display = 'none';
+}
+
+function approveRequest(type, id) {
+    try {
+        console.log('Approving request:', type, id);
+        if (!type || !id) {
+            alert('Invalid request data.');
+            return;
+        }
+
+        const requests = JSON.parse(localStorage.getItem(`${type}Requests`)) || [];
+        const itemIndex = requests.findIndex(r => r.id === id);
+        if (itemIndex === -1) {
+            alert('Request not found.');
+            return;
+        }
+
+        const item = requests.splice(itemIndex, 1)[0];
+        item.status = 'approved';
+
+        const listKey = type === 'lost' ? 'lostItems' : 'foundItems';
+        const list = JSON.parse(localStorage.getItem(listKey)) || [];
+        list.push(item);
+        localStorage.setItem(listKey, JSON.stringify(list));
+        localStorage.setItem(`${type}Requests`, JSON.stringify(requests));
+
+        const notificationMessage = type === 'lost' 
+            ? 'Your lost item has been approved and added to the list.' 
+            : 'Your found item has been approved. Please submit it to the Student Council Office.';
+        addNotification(notificationMessage, 'success', item.user);
+
+        closeRequestModal();
+        updateDashboard();
+        if (type === 'lost') loadLostRequests(); else loadFoundRequests();
+        if (document.querySelector('.page.active')?.id === 'listofl' && type === 'lost') loadLostItems();
+        if (document.querySelector('.page.active')?.id === 'listoff' && type === 'found') loadFoundItems();
+
+        alert('Request approved successfully!');
+    } catch (error) {
+        console.error('Error approving request:', error);
+        alert('An error occurred while approving the request.');
+    }
+}
+
+
+function rejectRequest(type, id) {
+    try {
+        console.log('Rejecting request:', type, id);
+        if (!type || !id) {
+            alert('Invalid request data.');
+            return;
+        }
+
+        const requests = JSON.parse(localStorage.getItem(`${type}Requests`)) || [];
+        const itemIndex = requests.findIndex(r => r.id === id);
+        if (itemIndex === -1) {
+            alert('Request not found.');
+            return;
+        }
+
+        const item = requests.splice(itemIndex, 1)[0];
+        localStorage.setItem(`${type}Requests`, JSON.stringify(requests));
+
+        addNotification(`Your ${type} item "${item.itemName}" has been rejected.`, 'error', item.user);
+
+        closeRequestModal();
+        updateDashboard();
+        if (type === 'lost') loadLostRequests(); else loadFoundRequests();
+
+        alert('Request rejected successfully!');
+    } catch (error) {
+        console.error('Error rejecting request:', error);
+        alert('An error occurred while rejecting the request.');
+    }
+}
+
+function updateDashboard() {
+    try {
+        const lostRequests = JSON.parse(localStorage.getItem('lostRequests')) || [];
+        const foundRequests = JSON.parse(localStorage.getItem('foundRequests')) || [];
+        const lostItems = JSON.parse(localStorage.getItem('lostItems')) || [];
+        const foundItems = JSON.parse(localStorage.getItem('foundItems')) || [];
+        const claimedItems = JSON.parse(localStorage.getItem('claimedItems')) || [];
+        const matchedItems = JSON.parse(localStorage.getItem('matchedItems')) || [];
+        const itemRecords = JSON.parse(localStorage.getItem('itemRecords')) || [];
+        const registeredUsers = JSON.parse(localStorage.getItem('registeredUsers')) || [];
+
+        const hardcodedLost = document.querySelectorAll('#listofl .lost-item-card').length;
+        const hardcodedFound = document.querySelectorAll('#listoff .found-item-card').length;
+
+        document.getElementById('lostRequests').textContent = lostRequests.length;
+        document.getElementById('foundRequests').textContent = foundRequests.length;
+        document.getElementById('totalLost').textContent = lostItems.length + lostRequests.length + hardcodedLost;
+        document.getElementById('totalFound').textContent = foundItems.length + foundRequests.length + hardcodedFound;
+        document.getElementById('totalClaims').textContent = claimedItems.length;
+        document.getElementById('totalMatches').textContent = matchedItems.length;
+        document.getElementById('totalRecords').textContent = itemRecords.length;
+        document.getElementById('totalStudents').textContent = registeredUsers.length;
+    } catch (error) {
+        console.error('Error updating dashboard:', error);
+    }
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+    updateDashboard();
+});
+
+function scrollCarousel(type, direction) {
+    const containerClass = type === 'lost' ? '.lost-scroll-container' : '.found-scroll-container';
+    const container = document.querySelector(containerClass);
+    if (!container) {
+        console.error(`Scroll container for ${type} not found.`);
+        return;
+    }
+    const scrollAmount = 300;
+    const newScrollLeft = direction === 'left' ? container.scrollLeft - scrollAmount : container.scrollLeft + scrollAmount;
+    container.scrollTo({ left: newScrollLeft, behavior: 'smooth' });
+}
+
+let currentFoundItem = null;
+
+function attachMatchButtonListeners() {
+    document.querySelectorAll(".match-btn").forEach(btn => {
+        btn.addEventListener("click", function() {
+            const card = btn.closest('.found-item-card');
+            if (card) {
+                currentFoundItem = {
+                    itemName: card.getAttribute('data-item-name'),
+                    description: card.getAttribute('data-description'),
+                    location: card.getAttribute('data-location'),
+                    date: card.getAttribute('data-date'),
+                    status: card.getAttribute('data-status'),
+                    image: card.querySelector('img').src
+                };
+            }
+            document.getElementById('matchModal').style.display = 'flex';
+        });
+    });
+}
+
+function closeMatchModal() {
+    document.getElementById('matchModal').style.display = 'none';
+}
+
+function showLostItemsTable() {
+    closeMatchModal();
+    try {
+        const lostItems = JSON.parse(localStorage.getItem('lostItems')) || [];
+        const tableBody = document.getElementById('lostItemsTableBody');
+        if (!tableBody) return;
+        tableBody.innerHTML = '';
+
+        if (lostItems.length === 0) {
+            tableBody.innerHTML = '<tr><td colspan="3">No lost items available.</td></tr>';
+        } else {
+            lostItems.forEach(item => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${item.itemName}</td>
+                    <td>${item.description.substring(0, 100)}...</td>
+                    <td><button class="match-confirm-btn" onclick="confirmMatch('${item.itemName}')">Match</button></td>
+                `;
+                tableBody.appendChild(row);
+            });
+        }
+        document.getElementById('lostItemsModal').style.display = 'flex';
+    } catch (error) {
+        console.error('Error showing lost items table:', error);
+    }
+}
+
+function closeLostItemsModal() {
+    document.getElementById('lostItemsModal').style.display = 'none';
+}
+
+function confirmMatch(lostItemName) {
+    if (!currentFoundItem) {
+        alert('No found item selected for matching.');
+        return;
+    }
+
+    try {
+        const lostItems = JSON.parse(localStorage.getItem('lostItems')) || [];
+        const lostItem = lostItems.find(item => item.itemName === lostItemName);
+        if (!lostItem) {
+            alert('Lost item not found.');
+            return;
+        }
+
+        if (!isLocalStorageSupported()) {
+            alert('localStorage is not supported or disabled.');
+            return;
+        }
+
+        const match = {
+            id: Date.now(),
+            foundItem: currentFoundItem,
+            lostItem: lostItem,
+            status: 'matched',
+            matchedDate: new Date().toISOString()
+        };
+
+        const matchedItems = JSON.parse(localStorage.getItem('matchedItems')) || [];
+        matchedItems.push(match);
+        localStorage.setItem('matchedItems', JSON.stringify(matchedItems));
+
+        addNotification(`Your lost item "${lostItem.itemName}" has been matched with a found item. Please wait while we verify the details.`, 'info', lostItem.user);
+
+        alert(`Match confirmed!`);
+        closeLostItemsModal();
+        showPage('matcheditems');
+        updateDashboard();
+    } catch (error) {
+        console.error('Error confirming match:', error);
+        alert('An error occurred while matching.');
+    }
+}
+
+let matchedItemsCurrentPage = 1;
+const matchedItemsPerPage = 2;
+
+function loadMatchedItems() {
+    try {
+        console.log('Loading matched items...');
+        const matchedItems = JSON.parse(localStorage.getItem('matchedItems')) || [];
+        console.log('Matched items:', matchedItems);
+        const container = document.getElementById('matcheditems');
+        if (!container) return;
+
+        const totalPages = Math.ceil(matchedItems.length / matchedItemsPerPage);
+        const startIndex = (matchedItemsCurrentPage - 1) * matchedItemsPerPage;
+        const endIndex = startIndex + matchedItemsPerPage;
+        const itemsToShow = matchedItems.slice(startIndex, endIndex);
+
+        container.innerHTML = '<h1>Matched Items</h1><p class="matched">Matched Items processing.</p>';
+
+        if (matchedItems.length === 0) {
+            container.innerHTML += '<p>No matched items yet.</p>';
+            return;
+        }
+
+        itemsToShow.forEach(match => {
+            const section = document.createElement('div');
+            section.className = 'matched-section';
+            section.innerHTML = `
+                <div class="item found">
+                    <h2>Found Item</h2>
+                    <div class="item-content">
+                        <img src="${match.foundItem.image || 'placeholder.png'}" alt="${match.foundItem.itemName}">
+                        <div class="details">
+                            <ul>
+                                <li><strong>Description:</strong> ${match.foundItem.description}</li>
+                                <li><strong>Location:</strong> ${match.foundItem.location}</li>
+                                <li><strong>Date Found:</strong> ${match.foundItem.date}</li>
+                                <li><strong>User:</strong> ${match.foundItem.user || 'Unknown'}</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="middle">
+                    <div class="divider-left"></div>
+                    <div class="divider-right"></div>
+                    <h3>Matched</h3>
+                    <div class="status">Status: Processing...</div>
+                    <button class="claim-btn" onclick="claimMatch(${match.id})">Claim</button>
+                </div>
+                <div class="item lost">
+                    <h2>Lost Item</h2>
+                    <div class="item-content">
+                        <img src="${match.lostItem.image || 'placeholder.png'}" alt="${match.lostItem.itemName}">
+                        <div class="details">
+                            <ul>
+                                <li><strong>Description:</strong> ${match.lostItem.description}</li>
+                                <li><strong>Location:</strong> ${match.lostItem.location}</li>
+                                <li><strong>Date Lost:</strong> ${match.lostItem.date}</li>
+                                <li><strong>User:</strong> ${match.lostItem.user || 'Unknown'}</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            `;
+            container.appendChild(section);
+        });
+
+        const paginationDiv = document.createElement('div');
+        paginationDiv.className = 'pagination';
+        paginationDiv.innerHTML = `
+            <button onclick="changeMatchedItemsPage(${matchedItemsCurrentPage - 1})" ${matchedItemsCurrentPage === 1 ? 'disabled' : ''}>Previous</button>
+            ${Array.from({ length: totalPages }, (_, i) => `<button onclick="changeMatchedItemsPage(${i + 1})" ${matchedItemsCurrentPage === i + 1 ? 'class="active"' : ''}>${i + 1}</button>`).join('')}
+            <button onclick="changeMatchedItemsPage(${matchedItemsCurrentPage + 1})" ${matchedItemsCurrentPage === totalPages ? 'disabled' : ''}>Next</button>
+        `;
+        container.appendChild(paginationDiv);
+    } catch (error) {
+        console.error('Error loading matched items:', error);
+    }
+}
+
+function changeMatchedItemsPage(page) {
+    matchedItemsCurrentPage = page;
+    loadMatchedItems();
+}
+
+function claimMatch(matchId) {
+    try {
+        const matchedItems = JSON.parse(localStorage.getItem('matchedItems')) || [];
+        const claimedItems = JSON.parse(localStorage.getItem('claimedItems')) || [];
+        const matchIndex = matchedItems.findIndex(m => m.id === matchId);
+
+        if (matchIndex === -1) {
+            alert('Match not found.');
+            return;
+        }
+
+        const match = matchedItems.splice(matchIndex, 1)[0];
+        match.status = 'ready for claim';
+        claimedItems.push(match);
+
+        localStorage.setItem('matchedItems', JSON.stringify(matchedItems));
+        localStorage.setItem('claimedItems', JSON.stringify(claimedItems));
+
+        addNotification('Your item has been matched with the submitted details. Please proceed to the Student Council Office to claim it.', 'info', match.lostItem.user);
+
+        alert('Item claimed successfully!');
+        loadMatchedItems();
+        updateDashboard();
+    } catch (error) {
+        console.error('Error claiming match:', error);
+        alert('An error occurred while claiming the item.');
+    }
+}
+
+
+let claimedItemsCurrentPage = 1;
+const claimedItemsPerPage = 2;
+
+function loadClaimedItems() {
+    try {
+        console.log('Loading claimed items...');
+        const claimedItems = JSON.parse(localStorage.getItem('claimedItems')) || [];
+        console.log('Claimed items:', claimedItems);
+        const container = document.getElementById('claimeditems');
+        if (!container) return;
+
+        const totalPages = Math.ceil(claimedItems.length / claimedItemsPerPage);
+        const startIndex = (claimedItemsCurrentPage - 1) * claimedItemsPerPage;
+        const endIndex = startIndex + claimedItemsPerPage;
+        const itemsToShow = claimedItems.slice(startIndex, endIndex);
+
+        container.innerHTML = '<h1>Claimed Items</h1><p class="claimed">Claimed Items processing.</p>';
+
+        if (claimedItems.length === 0) {
+            container.innerHTML += '<p>No claimed items yet.</p>';
+            return;
+        }
+
+        itemsToShow.forEach(claim => {
+            const buttonText = claim.status === 'completed' ? 'Done' : 'Complete';
+            const section = document.createElement('div');
+            section.className = 'matched-section';
+            section.innerHTML = `
+                <div class="item found">
+                    <h2>Found Item</h2>
+                    <div class="item-content">
+                        <img src="${claim.foundItem.image || 'placeholder.png'}" alt="${claim.foundItem.itemName}">
+                        <div class="details">
+                            <ul>
+                                <li><strong>Description:</strong> ${claim.foundItem.description}</li>
+                                <li><strong>Location:</strong> ${claim.foundItem.location}</li>
+                                <li><strong>Date Found:</strong> ${claim.foundItem.date}</li>
+                                <li><strong>User:</strong> ${claim.foundItem.user || 'Unknown'}</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="middle">
+                    <div class="divider-left"></div>
+                    <div class="divider-right"></div>
+                    <h3>Claimed</h3>
+                    <div class="status">Status: ${claim.status}</div>
+                    <button class="complete-btn" onclick="completeClaim(${claim.id})">${buttonText}</button>
+                </div>
+                <div class="item lost">
+                    <h2>Lost Item</h2>
+                    <div class="item-content">
+                        <img src="${claim.lostItem.image || 'placeholder.png'}" alt="${claim.lostItem.itemName}">
+                        <div class="details">
+                            <ul>
+                                <li><strong>Description:</strong> ${claim.lostItem.description}</li>
+                                <li><strong>Location Lost:</strong> ${claim.lostItem.location}</li>
+                                <li><strong>Date Lost:</strong> ${claim.lostItem.date}</li>
+                                <li><strong>User:</strong> ${claim.lostItem.user || 'Unknown'}</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            `;
+            container.appendChild(section);
+        });
+
+        const paginationDiv = document.createElement('div');
+        paginationDiv.className = 'pagination';
+        paginationDiv.innerHTML = `
+            <button onclick="changeClaimedItemsPage(${claimedItemsCurrentPage - 1})" ${claimedItemsCurrentPage === 1 ? 'disabled' : ''}>Previous</button>
+            ${Array.from({ length: totalPages }, (_, i) => `<button onclick="changeClaimedItemsPage(${i + 1})" ${claimedItemsCurrentPage === i + 1 ? 'class="active"' : ''}>${i + 1}</button>`).join('')}
+            <button onclick="changeClaimedItemsPage(${claimedItemsCurrentPage + 1})" ${claimedItemsCurrentPage === totalPages ? 'disabled' : ''}>Next</button>
+        `;
+        container.appendChild(paginationDiv);
+    } catch (error) {
+        console.error('Error loading claimed items:', error);
+    }
+}
+
+function changeClaimedItemsPage(page) {
+    claimedItemsCurrentPage = page;
+    loadClaimedItems();
+}
+
+function completeClaim(claimId) {
+    try {
+        const claimedItems = JSON.parse(localStorage.getItem('claimedItems')) || [];
+        const itemRecords = JSON.parse(localStorage.getItem('itemRecords')) || [];
+        const claimIndex = claimedItems.findIndex(c => c.id === claimId);
+
+        if (claimIndex === -1) {
+            alert('Claim not found.');
+            return;
+        }
+
+        const claim = claimedItems[claimIndex];
+
+        if (claim.status === 'ready for claim') {
+            claim.status = 'completed';
+            localStorage.setItem('claimedItems', JSON.stringify(claimedItems));
+
+            addNotification('You have already received your lost item.', 'info', claim.lostItem.user);
+
+            alert('Item marked as completed!');
+        } else if (claim.status === 'completed') {
+            itemRecords.push(claim);
+            claimedItems.splice(claimIndex, 1);
+            localStorage.setItem('claimedItems', JSON.stringify(claimedItems));
+            localStorage.setItem('itemRecords', JSON.stringify(itemRecords));
+            alert('Item moved to Item Records!');
+        }
+
+        loadClaimedItems();
+        updateDashboard();
+    } catch (error) {
+        console.error('Error completing claim:', error);
+        alert('An error occurred while completing the claim.');
+    }
+}
+
+
+let itemRecordsCurrentPage = 1;
+const itemRecordsPerPage = 4;
+
+function loadItemRecords() {
+    try {
+        console.log('Loading item records...');
+        const itemRecords = JSON.parse(localStorage.getItem('itemRecords')) || [];
+        console.log('Item records:', itemRecords);
+        const container = document.getElementById('itemrecords');
+        if (!container) return;
+
+        container.innerHTML = '<h1>Item Records</h1><button id="downloadExcelBtn" class="download-btn">Download Excel</button><table id="recordsTable"><thead><tr><th>Found Item</th><th>Lost Item</th><th>Description</th><th>Location</th><th>Date</th><th>User</th><th>Status</th></tr></thead><tbody id="recordsTableBody"></tbody></table>';
+
+        const tableBody = document.getElementById('recordsTableBody');
+        if (itemRecords.length === 0) {
+            tableBody.innerHTML = '<tr><td colspan="7">No completed items yet.</td></tr>';
+            return;
+        }
+
+        itemRecords.forEach(item => {
+            const row = document.createElement('tr');
+            row.innerHTML = `
+                <td>${item.foundItem.itemName}</td>
+                <td>${item.lostItem.itemName}</td>
+                <td>
+                    <ul class="table-list">
+                        <li><strong>Found:</strong> ${item.foundItem.description}</li>
+                        <li><strong>Lost:</strong> ${item.lostItem.description}</li>
+                    </ul>
+                </td>
+                <td>
+                    <ul class="table-list">
+                        <li><strong>Found:</strong> ${item.foundItem.location}</li>
+                        <li><strong>Lost:</strong> ${item.lostItem.location}</li>
+                    </ul>
+                </td>
+                <td>
+                    <ul class="table-list">
+                        <li><strong>Found:</strong> ${item.foundItem.date}</li>
+                        <li><strong>Lost:</strong> ${item.lostItem.date}</li>
+                    </ul>
+                </td>
+                <td>
+                    <ul class="table-list">
+                        <li><strong>Found:</strong> ${item.foundItem.user || 'Unknown'}</li>
+                        <li><strong>Lost:</strong> ${item.lostItem.user || 'Unknown'}</li>
+                    </ul>
+                </td>
+                <td>${item.status}</td>
+            `;
+            tableBody.appendChild(row);
+        });
+
+        const downloadBtn = document.getElementById('downloadExcelBtn');
+        if (downloadBtn) {
+            downloadBtn.addEventListener('click', () => downloadRecordsExcel(itemRecords));
+        }
+    } catch (error) {
+        console.error('Error loading item records:', error);
+    }
+}
+
+function downloadRecordsExcel(items) {
+    try {
+        let csv = 'Found Item,Lost Item,Description (Found),Description (Lost),Location (Found),Location (Lost),Date (Found),Date (Lost),User (Found),User (Lost),Status\n';
+
+        items.forEach(item => {
+            csv += `"${item.foundItem.itemName}","${item.lostItem.itemName}","${item.foundItem.description}","${item.lostItem.description}","${item.foundItem.location}","${item.lostItem.location}","${item.foundItem.date}","${item.lostItem.date}","${item.foundItem.user || 'Unknown'}","${item.lostItem.user || 'Unknown'}","${item.status}"\n`;
+        });
+
+        const blob = new Blob([csv], { type: 'text/csv' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'item_records.csv';
+        a.click();
+        URL.revokeObjectURL(url);
+    } catch (error) {
+        console.error('Error downloading records:', error);
+    }
+}
+
+function showPage(pageId) {
+    document.querySelectorAll('.page').forEach(page => page.classList.remove('active'));
+    document.querySelectorAll('.sidebar a').forEach(link => link.classList.remove('active'));
+
+    const page = document.getElementById(pageId);
+    if (page) page.classList.add('active');
+    if (event && event.target) event.target.classList.add('active');
+
+    if (pageId === 'dashboard') updateDashboard();
+    else if (pageId === 'listofl') {
+        loadLostItems();
+        attachViewButtonListeners();
+    } else if (pageId === 'listoff') {
+        loadFoundItems();
+        attachViewButtonListeners();
+        attachMatchButtonListeners();
+    } else if (pageId === 'matcheditems') {
+        loadMatchedItems();
+        attachViewButtonListeners();
+    } else if (pageId === 'claimeditems') {
+        loadClaimedItems();
+        attachViewButtonListeners();
+    } else if (pageId === 'itemrecords') {
+        loadItemRecords();
+        attachViewButtonListeners();
+    } else if (pageId === 'lostitemrequest') {
+        loadLostRequests();
+        attachViewButtonListeners();
+    } else if (pageId === 'founditemrequest') {
+        loadFoundRequests();
+        attachViewButtonListeners();
+    } else if (pageId === 'student') {
+        loadStudentProfiles();
+    }
+}
