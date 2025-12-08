@@ -294,7 +294,7 @@ body {
 }
 
 @media (max-width: 767px) {
-    .Lost {
+    .Found {
         max-width: 400px;
     }
     .Date label {

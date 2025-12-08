@@ -1143,11 +1143,26 @@ ul {
         flex-direction: column;
         gap: 15px;
     }
+
+    .notification-dropdown {
+        max-width: 250px;
+    }
+
+    .site-title {
+        font-size: 18px;
+        max-width: 180px;
+    }
+
+    .logo {
+        margin-top: 5px;
+        margin-left: -150px;
+    }
     
     .nav-list {
         flex-wrap: wrap;
         justify-content: center;
         gap: 10px;
+        display: none;
     }
     
     .user-menu-container {
@@ -1156,18 +1171,31 @@ ul {
     }
     
     .hero-title {
-        font-size: 36px;
+        font-size: 45px;
     }
     
     .hero-subtitle {
-        font-size: 18px;
+        font-size: 20px;
+        max-width: 370px;
+        margin-left: 5px;
     }
     
     .hero-buttons {
         flex-direction: column;
         align-items: center;
+        flex-wrap: wrap;
     }
     
+    .btn-primary {
+        max-width: 300px;
+        margin-left: -5px;
+    }
+
+    .btn-secondary {
+        max-width: 300px;
+        margin-left: 0;
+    }
+
     .about-content,
     .contact-content {
         flex-direction: column;
@@ -1182,6 +1210,10 @@ ul {
     .footer-bottom {
         flex-direction: column;
         text-align: center;
+    }
+
+    .footer-bottom img {
+        left: 0;
     }
     
     .footer-links {
