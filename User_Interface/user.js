@@ -165,17 +165,12 @@ function updateDashboard() {
         const claimedItems = JSON.parse(localStorage.getItem('claimedItems')) || [];
         const itemRecords = JSON.parse(localStorage.getItem('itemRecords')) || [];
 
-        const hardcodedLost = document.querySelectorAll('#listofl .lost-item-card').length;
-        const hardcodedFound = document.querySelectorAll('#listoff .found-item-card').length;
-
         console.log('Dynamic lost items:', lostItems.length);
-        console.log('Hardcoded lost items:', hardcodedLost);
         console.log('Dynamic found items:', foundItems.length);
-        console.log('Hardcoded found items:', hardcodedFound);
 
-        const totalReported = lostItems.length + hardcodedLost;
-        const itemsFound = foundItems.length + hardcodedFound; 
-        const itemsLost = lostItems.length + hardcodedLost;  
+        const totalReported = lostItems.length;
+        const itemsFound = foundItems.length; 
+        const itemsLost = lostItems.length;  
         const itemsReturned = itemRecords.length;       
         const pendingClaims = claimedItems.filter(item => item.status !== 'completed').length;
         const councilInquiries = 12; 

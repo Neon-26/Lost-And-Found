@@ -217,9 +217,30 @@ document.addEventListener("DOMContentLoaded", function() {
 
 function removeItemFromModal() {
     if (currentItemElement) {
+        const itemName = currentItemElement.getAttribute('data-item-name');
+        if (itemName) {
+            let itemsKey = '';
+            if (currentItemElement.classList.contains('lost-item-card')) {
+                itemsKey = 'lostItems';
+            } else if (currentItemElement.classList.contains('found-item-card')) {
+                itemsKey = 'foundItems';
+            }
+
+            if (itemsKey) {
+                try {
+                    const items = JSON.parse(localStorage.getItem(itemsKey)) || [];
+                    const updatedItems = items.filter(item => item.itemName !== itemName);
+                    localStorage.setItem(itemsKey, JSON.stringify(updatedItems));
+                    console.log(`Item "${itemName}" removed from ${itemsKey}`);
+                } catch (error) {
+                    console.error('Error removing item from localStorage:', error);
+                }
+            }
+        }
+
         currentItemElement.remove();
         closePopup();
-        showSuccessPopup();
+
         const activePage = document.querySelector('.page.active');
         if (activePage) {
             if (activePage.id === 'listofl') loadLostItems();
@@ -229,6 +250,8 @@ function removeItemFromModal() {
             else if (activePage.id === 'lostitemrequest') loadLostRequests();
             else if (activePage.id === 'founditemrequest') loadFoundRequests();
         }
+
+        showSuccessPopup();
     }
 }
 
@@ -347,6 +370,35 @@ function loadFoundItems() {
         console.error('Error loading found items:', error);
     }
 }
+
+document.getElementById('lost-search').addEventListener('input', function() {
+    const searchTerm = this.value.toLowerCase();
+    const cards = document.querySelectorAll('.lost-item-card');
+    cards.forEach(card => {
+        const title = card.querySelector('.lost-item-title').textContent.toLowerCase();
+        const description = card.querySelector('.lost-item-description').textContent.toLowerCase();
+        if (title.includes(searchTerm) || description.includes(searchTerm)) {
+            card.style.display = 'block';
+        } else {
+            card.style.display = 'none';
+        }
+    });
+});
+
+document.getElementById('found-search').addEventListener('input', function() {
+    const searchTerm = this.value.toLowerCase();
+    const container = document.querySelector('.found-scroll-container');
+    const cards = container.querySelectorAll('.found-item-card');
+    cards.forEach(card => {
+        const title = card.querySelector('.found-item-title').textContent.toLowerCase();
+        const description = card.querySelector('.found-item-description').textContent.toLowerCase();
+        if (title.includes(searchTerm) || description.includes(searchTerm)) {
+            card.style.display = 'block';
+        } else {
+            card.style.display = 'none';
+        }
+    });
+});
 
 function banUser(username) {
     try {
@@ -562,6 +614,9 @@ function searchStudent() {
     updateRowsAndPaginationStudent();
 }
 
+let lostRequestsCurrentPage = 1;
+const lostRequestsPerPage = 4;
+
 function loadLostRequests() {
     try {
         console.log('Loading lost requests');
@@ -569,32 +624,55 @@ function loadLostRequests() {
         console.log('Lost requests from localStorage:', requests);
         const section = document.getElementById('lostitemrequest');
         if (!section) return;
-        section.innerHTML = '<h1>Lost Item Requests</h1><div class="request-container"></div>';
+        section.innerHTML = '<h1>Lost Item Requests</h1><p class="par">Section for reviewing and approving users lost item reports.</p><div class="request-container"></div>';
         const container = section.querySelector('.request-container');
-        if (requests.length === 0) {
+
+        const totalPages = Math.ceil(requests.length / lostRequestsPerPage);
+        const startIndex = (lostRequestsCurrentPage - 1) * lostRequestsPerPage;
+        const endIndex = startIndex + lostRequestsPerPage;
+        const requestsToShow = requests.slice(startIndex, endIndex);
+
+        if (requestsToShow.length === 0) {
             console.log('No lost requests found');
             container.innerHTML = '<p>No lost item requests yet.</p>';
-            return;
+        } else {
+            requestsToShow.forEach(item => {
+                console.log('Rendering lost request:', item);
+                const card = document.createElement('div');
+                card.className = 'item-card';
+                card.innerHTML = `
+                    <img src="${item.image || 'placeholder.png'}" alt="${item.itemName}" style="width: 100px; height: 100px;">
+                    <h3>${item.itemName}</h3>
+                    <ul class="request-details">
+                        <li><strong>Description:</strong> ${item.description}</li>
+                        <li><strong>Date Lost:</strong> ${item.date}</li>
+                    </ul>
+                    <button class="valid-btn" onclick="openRequestModal(${item.id}, 'lost')">Valid</button>
+                `;
+                container.appendChild(card);
+            });
         }
-        requests.forEach(item => {
-            console.log('Rendering lost request:', item);
-            const card = document.createElement('div');
-            card.className = 'item-card';
-            card.innerHTML = `
-                <img src="${item.image || 'placeholder.png'}" alt="${item.itemName}" style="width: 100px; height: 100px;">
-                <h3>${item.itemName}</h3>
-                <ul class="request-details">
-                    <li><strong>Description:</strong> ${item.description}</li>
-                    <li><strong>Date Lost:</strong> ${item.date}</li>
-                </ul>
-                <button class="valid-btn" onclick="openRequestModal(${item.id}, 'lost')">Valid</button>
-            `;
-            container.appendChild(card);
-        });
+
+        const paginationDiv = document.createElement('div');
+        paginationDiv.className = 'pagination';
+        paginationDiv.innerHTML = `
+            <button onclick="changeLostRequestsPage(${lostRequestsCurrentPage - 1})" ${lostRequestsCurrentPage === 1 ? 'disabled' : ''}>Previous</button>
+            ${Array.from({ length: totalPages }, (_, i) => `<button onclick="changeLostRequestsPage(${i + 1})" ${lostRequestsCurrentPage === i + 1 ? 'class="active"' : ''}>${i + 1}</button>`).join('')}
+            <button onclick="changeLostRequestsPage(${lostRequestsCurrentPage + 1})" ${lostRequestsCurrentPage === totalPages ? 'disabled' : ''}>Next</button>
+        `;
+        section.appendChild(paginationDiv);
     } catch (error) {
         console.error('Error loading lost requests:', error);
     }
 }
+
+function changeLostRequestsPage(page) {
+    lostRequestsCurrentPage = page;
+    loadLostRequests();
+}
+
+let foundRequestsCurrentPage = 1;
+const foundRequestsPerPage = 4;
 
 function loadFoundRequests() {
     try {
@@ -603,31 +681,51 @@ function loadFoundRequests() {
         console.log('Found requests from localStorage:', requests);
         const section = document.getElementById('founditemrequest');
         if (!section) return;
-        section.innerHTML = '<h1>Found Item Requests</h1><div class="request-container"></div>';
+        section.innerHTML = '<h1>Found Item Requests</h1><p class="par">Section for reviewing and approving users found item submissions.</p><div class="request-container"></div>';
         const container = section.querySelector('.request-container');
-        if (requests.length === 0) {
+
+        const totalPages = Math.ceil(requests.length / foundRequestsPerPage);
+        const startIndex = (foundRequestsCurrentPage - 1) * foundRequestsPerPage;
+        const endIndex = startIndex + foundRequestsPerPage;
+        const requestsToShow = requests.slice(startIndex, endIndex);
+
+        if (requestsToShow.length === 0) {
             console.log('No found requests found');
             container.innerHTML = '<p>No found item requests yet.</p>';
-            return;
+        } else {
+            requestsToShow.forEach(item => {
+                console.log('Rendering found request:', item);
+                const card = document.createElement('div');
+                card.className = 'item-card';
+                card.innerHTML = `
+                    <img src="${item.image || 'placeholder.png'}" alt="${item.itemName}" style="width: 100px; height: 100px;">
+                    <h3>${item.itemName}</h3>
+                    <ul class="request-details">
+                        <li><strong>Description:</strong> ${item.description}</li>
+                        <li><strong>Date Found:</strong> ${item.date}</li>
+                    </ul>
+                    <button class="valid-btn" onclick="openRequestModal(${item.id}, 'found')">Valid</button>
+                `;
+                container.appendChild(card);
+            });
         }
-        requests.forEach(item => {
-            console.log('Rendering found request:', item);
-            const card = document.createElement('div');
-            card.className = 'item-card';
-            card.innerHTML = `
-                <img src="${item.image || 'placeholder.png'}" alt="${item.itemName}" style="width: 100px; height: 100px;">
-                <h3>${item.itemName}</h3>
-                <ul class="request-details">
-                    <li><strong>Description:</strong> ${item.description}</li>
-                    <li><strong>Date Found:</strong> ${item.date}</li>
-                </ul>
-                <button class="valid-btn" onclick="openRequestModal(${item.id}, 'found')">Valid</button>
-            `;
-            container.appendChild(card);
-        });
+
+        const paginationDiv = document.createElement('div');
+        paginationDiv.className = 'pagination';
+        paginationDiv.innerHTML = `
+            <button onclick="changeFoundRequestsPage(${foundRequestsCurrentPage - 1})" ${foundRequestsCurrentPage === 1 ? 'disabled' : ''}>Previous</button>
+            ${Array.from({ length: totalPages }, (_, i) => `<button onclick="changeFoundRequestsPage(${i + 1})" ${foundRequestsCurrentPage === i + 1 ? 'class="active"' : ''}>${i + 1}</button>`).join('')}
+            <button onclick="changeFoundRequestsPage(${foundRequestsCurrentPage + 1})" ${foundRequestsCurrentPage === totalPages ? 'disabled' : ''}>Next</button>
+        `;
+        section.appendChild(paginationDiv);
     } catch (error) {
         console.error('Error loading found requests:', error);
     }
+}
+
+function changeFoundRequestsPage(page) {
+    foundRequestsCurrentPage = page;
+    loadFoundRequests();
 }
 
 let currentRequestType = null;
@@ -754,13 +852,10 @@ function updateDashboard() {
         const itemRecords = JSON.parse(localStorage.getItem('itemRecords')) || [];
         const registeredUsers = JSON.parse(localStorage.getItem('registeredUsers')) || [];
 
-        const hardcodedLost = document.querySelectorAll('#listofl .lost-item-card').length;
-        const hardcodedFound = document.querySelectorAll('#listoff .found-item-card').length;
-
         document.getElementById('lostRequests').textContent = lostRequests.length;
         document.getElementById('foundRequests').textContent = foundRequests.length;
-        document.getElementById('totalLost').textContent = lostItems.length + lostRequests.length + hardcodedLost;
-        document.getElementById('totalFound').textContent = foundItems.length + foundRequests.length + hardcodedFound;
+        document.getElementById('totalLost').textContent = lostItems.length + lostRequests.length;
+        document.getElementById('totalFound').textContent = foundItems.length + foundRequests.length;
         document.getElementById('totalClaims').textContent = claimedItems.length;
         document.getElementById('totalMatches').textContent = matchedItems.length;
         document.getElementById('totalRecords').textContent = itemRecords.length;
@@ -819,10 +914,12 @@ function showLostItemsTable() {
         if (!tableBody) return;
         tableBody.innerHTML = '';
 
-        if (lostItems.length === 0) {
+        const itemsToShow = lostItems.slice(0, 5);
+
+        if (itemsToShow.length === 0) {
             tableBody.innerHTML = '<tr><td colspan="3">No lost items available.</td></tr>';
         } else {
-            lostItems.forEach(item => {
+            itemsToShow.forEach(item => {
                 const row = document.createElement('tr');
                 row.innerHTML = `
                     <td>${item.itemName}</td>
@@ -901,10 +998,10 @@ function loadMatchedItems() {
         const endIndex = startIndex + matchedItemsPerPage;
         const itemsToShow = matchedItems.slice(startIndex, endIndex);
 
-        container.innerHTML = '<h1>Matched Items</h1><p class="matched">Matched Items processing.</p>';
+        container.innerHTML = '<h1>Matched Items</h1><p class="matched">Collection of items paired between lost and found reports.</p>';
 
         if (matchedItems.length === 0) {
-            container.innerHTML += '<p>No matched items yet.</p>';
+            container.innerHTML += '<p class="request-container">No matched items yet.</p>';
             return;
         }
 
@@ -1015,10 +1112,10 @@ function loadClaimedItems() {
         const endIndex = startIndex + claimedItemsPerPage;
         const itemsToShow = claimedItems.slice(startIndex, endIndex);
 
-        container.innerHTML = '<h1>Claimed Items</h1><p class="claimed">Claimed Items processing.</p>';
+        container.innerHTML = '<h1>Claimed Items</h1><p class="claimed">For releasing items to users who confirmed a match.</p>';
 
         if (claimedItems.length === 0) {
-            container.innerHTML += '<p>No claimed items yet.</p>';
+            container.innerHTML += '<p class="request-container">No claimed items yet.</p>';
             return;
         }
 

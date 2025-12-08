@@ -136,7 +136,8 @@ body {
 #searchBarStudent {
     width: 50%;
     padding: 8px 12px;
-    margin-top: 5px;
+    margin-top: 15px;
+    margin-bottom: 10px;
     border-radius: 6px;
     border: 1px solid #ccc;
     font-size: 16px;
@@ -344,7 +345,7 @@ table th {
     display: flex;
     justify-content: space-around;
     flex-wrap: wrap;
-    margin-top: 40px;
+    margin-top: 20px;
     gap: 20px;
 }
 
@@ -1281,7 +1282,8 @@ table th {
         flex-direction: column;
         align-items: center;
         justify-content: center;
-        padding: 25px;
+        margin: 20px;
+        padding: 10px;
         position: relative;
     }
     .divider-left {
@@ -1476,6 +1478,28 @@ table th {
 #lostItemsModal .modal-content {
     max-width: 600px; 
     padding: 20px;
+}
+
+#lostItemsTable tbody {
+    display: block;
+    max-height: 200px; 
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
+#lostItemsTable thead,
+#lostItemsTable tbody tr {
+    display: table;
+    width: 100%;
+    table-layout: fixed;
+}
+
+#lostItemsTable thead {
+    width: calc(100% - 1em);
+}
+
+#lostItemsTable tbody tr {
+    width: 100%;
 }
 
 .request-container {
@@ -1863,7 +1887,8 @@ table th {
 }
 
 .matched {
-    margin-top: 10px;
+    margin-top: 5px;
+    margin-bottom: -10px;
 }
 
 #recordsTable {
@@ -2052,6 +2077,8 @@ table th {
 }
 
 .action-buttons {
+    margin-left: 20px;
+    margin-right: -110px;
     display: flex;
     flex-direction: column;
     gap: 5px;
@@ -2069,66 +2096,88 @@ table th {
 #studentTable .unrestrict-btn,
 #studentTable .remove-btn {
     flex: 1;
-    padding: 6px 8px;
-    font-size: 11px;
-    border-radius: 4px;
+    padding: 8px 10px;
+    font-size: 12px;
+    border-radius: 8px;
     border: none;
     cursor: pointer;
-    transition: background-color 0.3s ease;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
 }
 
 #studentTable .view-btn {
-    background: #007bff;
-    color: white;
+    background: linear-gradient(135deg, #199705, #199705);
+    border: 1px solid #000;
+    color: rgb(0, 0, 0);
 }
 
 #studentTable .view-btn:hover {
-    background: #0056b3;
+    background: linear-gradient(135deg, #199705, #199705);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
 #studentTable .ban-btn {
-    background: #dc3545;
-    color: white;
+    background: linear-gradient(135deg, #dc3545, #c82333);
+    border: 1px solid #000;
+    color: rgb(0, 0, 0);
 }
 
 #studentTable .ban-btn:hover {
-    background: #c82333;
+    background: linear-gradient(135deg, #c82333, #a71e2a);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
 #studentTable .restrict-btn {
-    background: #ffc107;
+    background: linear-gradient(135deg, #ffc107, #e0a800);
+    border: 1px solid #000;
     color: black;
 }
 
 #studentTable .restrict-btn:hover {
-    background: #e0a800;
+    background: linear-gradient(135deg, #e0a800, #d39e00);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
 #studentTable .unban-btn {
-    background: #28a745;
-    color: white;
+    background: linear-gradient(135deg, #28a745, #218838);
+    border: 1px solid #000;
+    color: rgb(0, 0, 0);
 }
 
 #studentTable .unban-btn:hover {
-    background: #218838;
+    background: linear-gradient(135deg, #218838, #1e7e34);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
 #studentTable .unrestrict-btn {
-    background: #17a2b8;
-    color: white;
+    background: linear-gradient(135deg, #b14700, #b14700);
+    border: 1px solid #000;
+    color: rgb(255, 255, 255);
 }
 
 #studentTable .unrestrict-btn:hover {
-    background: #138496;
+    background: linear-gradient(135deg, #b14700, #b14700);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
 #studentTable .remove-btn {
-    background: #6c757d;
-    color: white;
+    background: linear-gradient(135deg, #6c757d, #5a6268);
+    border: 1px solid #000;
+    color: rgb(0, 0, 0);
 }
 
 #studentTable .remove-btn:hover {
-    background: #5a6268;
+    background: linear-gradient(135deg, #5a6268, #495057);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
 @media (max-width: 768px) {
@@ -2147,9 +2196,22 @@ table th {
     #studentTable .unrestrict-btn,
     #studentTable .remove-btn {
         font-size: 10px;
+        padding: 6px 8px;
+    }
+}
+
+@media (max-width: 480px) {
+    #studentTable .view-btn,
+    #studentTable .ban-btn,
+    #studentTable .restrict-btn,
+    #studentTable .unban-btn,
+    #studentTable .unrestrict-btn,
+    #studentTable .remove-btn {
+        font-size: 9px;
         padding: 4px 6px;
     }
 }
+
 
 #paginationItemRecords {
     display: flex;
@@ -2230,5 +2292,10 @@ table th {
     display: table;  
     width: 100%;
     table-layout: fixed; 
+}
+
+.par {
+    margin-top: 10px;
+    margin-bottom: 50px;
 }
 
