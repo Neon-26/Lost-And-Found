@@ -319,7 +319,7 @@ function loadLostItems() {
                 card.setAttribute('data-date', item.date);
                 card.setAttribute('data-status', item.status);
                 card.innerHTML = `
-                    <img src="${item.image || 'placeholder.png'}" alt="${item.itemName}" class="lost-item-image" />
+                    <img src="${item.image || 'logo.png'}" alt="${item.itemName}" class="lost-item-image" />
                     <h2 class="lost-item-title">${item.itemName}</h2>
                     <p class="lost-item-description">${item.description}</p>
                     <div class="lost-item-buttons">
@@ -353,7 +353,7 @@ function loadFoundItems() {
                 card.setAttribute('data-date', item.date);
                 card.setAttribute('data-status', item.status);
                 card.innerHTML = `
-                    <img src="${item.image || 'placeholder.png'}" alt="${item.itemName}" class="found-item-image" />
+                    <img src="${item.image || 'logo.png'}" alt="${item.itemName}" class="found-item-image" />
                     <h2 class="found-item-title">${item.itemName}</h2>
                     <p class="found-item-description">${item.description}</p>
                     <div class="found-item-buttons">
@@ -641,7 +641,7 @@ function loadLostRequests() {
                 const card = document.createElement('div');
                 card.className = 'item-card';
                 card.innerHTML = `
-                    <img src="${item.image || 'placeholder.png'}" alt="${item.itemName}" style="width: 100px; height: 100px;">
+                    <img src="${item.image || 'logo.png'}" alt="${item.itemName}" style="width: 100px; height: 100px;">
                     <h3>${item.itemName}</h3>
                     <ul class="request-details">
                         <li><strong>Description:</strong> ${item.description}</li>
@@ -698,7 +698,7 @@ function loadFoundRequests() {
                 const card = document.createElement('div');
                 card.className = 'item-card';
                 card.innerHTML = `
-                    <img src="${item.image || 'placeholder.png'}" alt="${item.itemName}" style="width: 100px; height: 100px;">
+                    <img src="${item.image || 'logo.png'}" alt="${item.itemName}" style="width: 100px; height: 100px;">
                     <h3>${item.itemName}</h3>
                     <ul class="request-details">
                         <li><strong>Description:</strong> ${item.description}</li>
@@ -753,7 +753,7 @@ function openRequestModal(id, type) {
         `;
         const modalImg = document.getElementById('requestModalImage');
         if (modalImg) {
-            modalImg.src = item.image || 'placeholder.png';
+            modalImg.src = item.image || 'logo.png';
             modalImg.style.display = 'block';
         }
         document.getElementById('requestModal').style.display = 'flex';
@@ -981,11 +981,16 @@ function confirmMatch(lostItemName) {
         closeLostItemsModal();
         showPage('matcheditems');
         updateDashboard();
+
+        if (document.querySelector('.page.active')?.id === 'listoff') {
+            loadFoundItems();
+        }
     } catch (error) {
         console.error('Error confirming match:', error);
         alert('An error occurred while matching: ' + error.message);
     }
 }
+
 
 let matchedItemsCurrentPage = 1;
 const matchedItemsPerPage = 2;
@@ -1017,7 +1022,7 @@ function loadMatchedItems() {
                 <div class="item found">
                     <h2>Found Item</h2>
                     <div class="item-content">
-                        <img src="${match.foundItem.image || 'placeholder.png'}" alt="${match.foundItem.itemName}">
+                        <img src="${match.foundItem.image || 'logo.png'}" alt="${match.foundItem.itemName}">
                         <div class="details">
                             <ul>
                                 <li><strong>Description:</strong> ${match.foundItem.description}</li>
@@ -1034,11 +1039,12 @@ function loadMatchedItems() {
                     <h3>Matched</h3>
                     <div class="status">Status: Processing...</div>
                     <button class="claim-btn" onclick="claimMatch(${match.id})">Claim</button>
+                    <button class="claim-btn" onclick="notMatch(${match.id})">Not Matched</button>
                 </div>
                 <div class="item lost">
                     <h2>Lost Item</h2>
                     <div class="item-content">
-                        <img src="${match.lostItem.image || 'placeholder.png'}" alt="${match.lostItem.itemName}">
+                        <img src="${match.lostItem.image || 'logo.png'}" alt="${match.lostItem.itemName}">
                         <div class="details">
                             <ul>
                                 <li><strong>Description:</strong> ${match.lostItem.description}</li>
@@ -1065,6 +1071,40 @@ function loadMatchedItems() {
         console.error('Error loading matched items:', error);
     }
 }
+
+function notMatch(matchId) {
+    try {
+        const matchedItems = JSON.parse(localStorage.getItem('matchedItems')) || [];
+        const lostItems = JSON.parse(localStorage.getItem('lostItems')) || [];
+        const foundItems = JSON.parse(localStorage.getItem('foundItems')) || [];
+        const matchIndex = matchedItems.findIndex(m => m.id === matchId);
+
+        if (matchIndex === -1) {
+            alert('Match not found.');
+            return;
+        }
+
+        const match = matchedItems.splice(matchIndex, 1)[0];
+
+        lostItems.push(match.lostItem);
+        localStorage.setItem('lostItems', JSON.stringify(lostItems));
+
+        foundItems.push(match.foundItem);
+        localStorage.setItem('foundItems', JSON.stringify(foundItems));
+
+        localStorage.setItem('matchedItems', JSON.stringify(matchedItems));
+
+        addNotification(`Your lost item "${match.lostItem.itemName}" match was incorrect. It has been returned to the list.`, 'warning', match.lostItem.user);
+
+        alert('Match undone. Items returned to lists.');
+        loadMatchedItems();
+        updateDashboard();
+    } catch (error) {
+        console.error('Error undoing match:', error);
+        alert('An error occurred while undoing the match.');
+    }
+}
+
 
 function changeMatchedItemsPage(page) {
     matchedItemsCurrentPage = page;
@@ -1132,7 +1172,7 @@ function loadClaimedItems() {
                 <div class="item found">
                     <h2>Found Item</h2>
                     <div class="item-content">
-                        <img src="${claim.foundItem.image || 'placeholder.png'}" alt="${claim.foundItem.itemName}">
+                        <img src="${claim.foundItem.image || 'logo.png'}" alt="${claim.foundItem.itemName}">
                         <div class="details">
                             <ul>
                                 <li><strong>Description:</strong> ${claim.foundItem.description}</li>
@@ -1153,7 +1193,7 @@ function loadClaimedItems() {
                 <div class="item lost">
                     <h2>Lost Item</h2>
                     <div class="item-content">
-                        <img src="${claim.lostItem.image || 'placeholder.png'}" alt="${claim.lostItem.itemName}">
+                        <img src="${claim.lostItem.image || 'logo.png'}" alt="${claim.lostItem.itemName}">
                         <div class="details">
                             <ul>
                                 <li><strong>Description:</strong> ${claim.lostItem.description}</li>
