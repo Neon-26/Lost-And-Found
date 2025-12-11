@@ -914,17 +914,16 @@ function showLostItemsTable() {
         if (!tableBody) return;
         tableBody.innerHTML = '';
 
-        const itemsToShow = lostItems.slice(0, 5);
-
-        if (itemsToShow.length === 0) {
+        if (lostItems.length === 0) {
             tableBody.innerHTML = '<tr><td colspan="3">No lost items available.</td></tr>';
         } else {
-            itemsToShow.forEach(item => {
+            lostItems.forEach(item => {
+                const escapedItemName = item.itemName.replace(/'/g, "\\'").replace(/"/g, '\\"');
                 const row = document.createElement('tr');
                 row.innerHTML = `
                     <td>${item.itemName}</td>
                     <td>${item.description.substring(0, 100)}...</td>
-                    <td><button class="match-confirm-btn" onclick="confirmMatch('${item.itemName}')">Match</button></td>
+                    <td><button class="match-confirm-btn" onclick="confirmMatch('${escapedItemName}')">Match</button></td>
                 `;
                 tableBody.appendChild(row);
             });
@@ -947,6 +946,7 @@ function confirmMatch(lostItemName) {
 
     try {
         const lostItems = JSON.parse(localStorage.getItem('lostItems')) || [];
+        const foundItems = JSON.parse(localStorage.getItem('foundItems')) || [];
         const lostItem = lostItems.find(item => item.itemName === lostItemName);
         if (!lostItem) {
             alert('Lost item not found.');
@@ -970,6 +970,11 @@ function confirmMatch(lostItemName) {
         matchedItems.push(match);
         localStorage.setItem('matchedItems', JSON.stringify(matchedItems));
 
+        const updatedLostItems = lostItems.filter(item => item.itemName !== lostItemName);
+        const updatedFoundItems = foundItems.filter(item => item.itemName !== currentFoundItem.itemName);
+        localStorage.setItem('lostItems', JSON.stringify(updatedLostItems));
+        localStorage.setItem('foundItems', JSON.stringify(updatedFoundItems));
+
         addNotification(`Your lost item "${lostItem.itemName}" has been matched with a found item. Please wait while we verify the details.`, 'info', lostItem.user);
 
         alert(`Match confirmed!`);
@@ -978,7 +983,7 @@ function confirmMatch(lostItemName) {
         updateDashboard();
     } catch (error) {
         console.error('Error confirming match:', error);
-        alert('An error occurred while matching.');
+        alert('An error occurred while matching: ' + error.message);
     }
 }
 
